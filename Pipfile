@@ -6,8 +6,8 @@ verify_ssl = true
 [dev-packages]
 twine = "*"
 setuptools-git-version = "*"
-yamllint = "*"
 green = "*"
+pylama = "*"
 
 [packages]
 path-py = "*"

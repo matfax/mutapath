@@ -13,9 +13,6 @@ orbs:
 workflows:
   test_and_deploy:
     jobs:
-      - python/preflight:
-          name: preflight
-          version: '3.7'
       - python/run-tests:
           name: tests
           version: '3.7'
@@ -23,4 +20,4 @@ workflows:
           version: '3.7'
           context: pypi
           <<: [*tag_filter]
-          requires: [preflight, tests]
+          requires: [tests]

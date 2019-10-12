@@ -10,9 +10,9 @@ class TestPath(unittest.TestCase):
         self.assertEqual(expected.normpath(), actual.normpath())
 
     def test_with_name_win(self):
-        expected = Path("C:\\B\\other")
+        expected = Path("C:/B/other")
         actual = Path("C:/B/test1.txt").with_name("other")
-        self.assertEqual(expected.normpath(), actual.normpath())
+        self.assertEqual(expected.abspath(), actual.abspath())
 
     def test_with_base_posix(self):
         expected = Path("/home/joe/folder/sub")
@@ -30,6 +30,6 @@ class TestPath(unittest.TestCase):
         self.assertEqual(expected.normpath(), actual.normpath())
 
     def test_with_base_length_win(self):
-        expected = Path("C:/Users/joe/doe/folder/sub")
-        actual = Path("C:/Users/doe/folder/sub").with_base("C:/Users/joe", 1)
+        expected = Path("C:/Users/joe/doe/folder/sub").abspath()
+        actual = Path("C:/Users/doe/folder/sub").abspath().with_base("C:/Users/joe", 1)
         self.assertEqual(expected.normpath(), actual.normpath())
