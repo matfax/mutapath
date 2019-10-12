@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mutapath.mutapath import MutaPath
+from mutapath import MutaPath
 
 
 class TestMutaPath(TestCase):

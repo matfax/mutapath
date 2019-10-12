@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from mutapath.immutapath import Path
+from mutapath import Path
 
 
 @dataclass
