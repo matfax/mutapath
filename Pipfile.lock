@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "275017f95b7a61342fd6da448c09a1f3fe9ef25737b191305a8e9a2b4019bf7d"
+            "sha256": "6aa7bc3c77cbaf54d315546eff1c283812aee3fbce28b61f01a12d0f2ceebfc0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,6 +36,13 @@
             ],
             "index": "pypi",
             "version": "==12.0.1"
+        },
+        "setuptools-git-version": {
+            "hashes": [
+                "sha256:82cf7ab80272e20b7cae81d907e0adf295ef7a1f735418c046ae7f40f5861e15"
+            ],
+            "index": "pypi",
+            "version": "==1.0.3"
         },
         "zipp": {
             "hashes": [

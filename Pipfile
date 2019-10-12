@@ -8,6 +8,7 @@ twine = "*"
 
 [packages]
 path-py = "*"
+setuptools-git-version = "*"
 
 [requires]
 python_version = "3.7"

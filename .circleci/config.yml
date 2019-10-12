@@ -1,23 +1,11 @@
 version: 2.1
 
-master_filter: &master_filter
-  filters:
-    branches:
-      only:
-        - master
-
 tag_filter: &tag_filter
   filters:
     tags:
       only: /.*/
     branches:
       ignore: /.*/
-
-pr_filter: &pr_filter
-  filters:
-    branches:
-      ignore:
-        - master
 
 orbs:
   python: broadinstitute/bits-python@0.2.0
@@ -26,10 +14,8 @@ workflows:
     jobs:
       - python/preflight:
           version: '3.7'
-          <<: [*pr_filter, *tag_filter, *master_filter]
       - python/run-tests:
           version: '3.7'
-          <<: [*pr_filter, *tag_filter, *master_filter]
       - python/deploy:
           version: '3.7'
           context: pypi
