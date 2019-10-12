@@ -1,6 +1,6 @@
-from setuptools import setup, find_packages
+from pathlib import Path
 
-from mutapath import Path
+from setuptools import setup, find_packages
 
 setup(
     name='mutapath',
@@ -8,7 +8,7 @@ setup(
     version_format='{tag}',
     license='lgpl-3.0',
     description='Mutable Pathlib',
-    long_description=Path("README.md").text(),
+    long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
     author='matfax',
     author_email='matthias.fax@gmail.com',
