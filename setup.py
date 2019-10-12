@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
 
+from mutapath import Path
+
 setup(
     name='mutapath',
     packages=find_packages(),
     version_format='{tag}',
     license='lgpl-3.0',
     description='Mutable Pathlib',
+    long_description=Path("README.md").text(),
+    long_description_content_type="text/markdown",
     author='matfax',
     author_email='matthias.fax@gmail.com',
     url='https://github.com/matfax/mutapath',
