@@ -1,9 +1,9 @@
-from unittest import TestCase
+import unittest
 
 from mutapath import MutaPath
 
 
-class TestMutaPath(TestCase):
+class TestMutaPath(unittest.TestCase):
     def _gen_start_path(self):
         self.test_base = MutaPath.getcwd().joinpath("mutapath_test")
         self.test_base.mkdir()

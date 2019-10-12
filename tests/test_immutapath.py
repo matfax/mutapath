@@ -1,9 +1,9 @@
-from unittest import TestCase
+import unittest
 
 from mutapath import Path
 
 
-class TestPath(TestCase):
+class TestPath(unittest.TestCase):
     def test_with_name_posix(self):
         expected = Path("/A/B/other")
         actual = Path("/A/B/test1.txt").with_name("other")

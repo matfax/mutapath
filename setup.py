@@ -10,7 +10,10 @@ setup(
     author_email='matthias.fax@gmail.com',
     url='https://github.com/matfax/mutapath',
     keywords=['pathlib', 'mutable', 'path'],
-    setup_requires=['setuptools-git-version'],
+    setup_requires=[
+        'setuptools-git-version',
+        'green',
+    ],
     install_requires=[
         'path-py',
     ],
