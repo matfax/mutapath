@@ -16,7 +16,7 @@ setup(
         'wheel',
     ],
     install_requires=[
-        'path-py',
+        'path.py',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
