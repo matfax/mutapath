@@ -3,13 +3,14 @@ from distutils.core import setup
 setup(
     name='mutapath',
     packages=['mutapath'],
-    version='0.1',
+    version_format='{tag}',
     license='lgpl-3.0',
     description='Mutable Pathlib',
     author='matfax',
     author_email='matthias.fax@gmail.com',
     url='https://github.com/matfax/mutapath',
     keywords=['pathlib', 'mutable', 'path'],
+    setup_requires=['setuptools-git-version'],
     install_requires=[
         'path-py',
     ],
