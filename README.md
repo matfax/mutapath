@@ -6,7 +6,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/matfax/mutapath/badge)](https://www.codefactor.io/repository/github/matfax/mutapath)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath)](https://pypi.org/project/mutapath/)
 [![PyPI](https://img.shields.io/pypi/v/mutapath)](https://pypi.org/project/mutapath/)
-[![PyPI](https://img.shields.io/pypi/v/mutapath)](https://pypi.org/project/mutapath/)
 [![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg)](https://github.com/matfax/mutapath/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath.svg)](https://github.com/matfax/mutapath/commits/master)
 
