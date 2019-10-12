@@ -7,7 +7,7 @@ verify_ssl = true
 twine = "*"
 setuptools-git-version = "*"
 green = "*"
-pylama = "*"
+coverage = "*"
 
 [packages]
 path-py = "*"
