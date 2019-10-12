@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 twine = "*"
+setuptools = "*"
 setuptools-git-version = "*"
 green = "*"
 coverage = "*"

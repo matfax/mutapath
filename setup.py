@@ -1,8 +1,8 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='mutapath',
-    packages=['mutapath'],
+    packages=find_packages(),
     version_format='{tag}',
     license='lgpl-3.0',
     description='Mutable Pathlib',
@@ -13,6 +13,7 @@ setup(
     setup_requires=[
         'setuptools-git-version',
         'green',
+        'wheel',
     ],
     install_requires=[
         'path-py',
