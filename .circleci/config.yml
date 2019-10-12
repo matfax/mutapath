@@ -1,23 +1,23 @@
 ---
 version: 2.1
 
-tag_filter: &tag_filter
-  filters:
-    tags:
-      only: /.*/
-    branches:
-      ignore: /.*/
-
 orbs:
   python: broadinstitute/bits-python@0.2.0
 workflows:
-  test_and_deploy:
+  test_deploy:
     jobs:
       - python/run-tests:
           name: tests
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
           version: '3.7'
       - python/deploy:
           version: '3.7'
           context: pypi
-          <<: [*tag_filter]
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
           requires: [tests]
