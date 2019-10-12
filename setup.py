@@ -9,7 +9,6 @@ setup(
     author='matfax',
     author_email='matthias.fax@gmail.com',
     url='https://github.com/matfax/mutapath',
-    download_url='https://github.com/user/reponame/archive/v_01.tar.gz',
     keywords=['pathlib', 'mutable', 'path'],
     install_requires=[
         'path-py',
