@@ -14,6 +14,7 @@ workflows:
           version: '3.7'
       - python/deploy:
           version: '3.7'
+          verify_tag: false
           context: pypi
           filters:
             branches:
