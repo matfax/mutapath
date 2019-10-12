@@ -8,6 +8,7 @@ twine = "*"
 setuptools-git-version = "*"
 green = "*"
 coverage = "*"
+codecov = "*"
 
 [packages]
 path-py = "*"
