@@ -9,6 +9,7 @@ setuptools-git-version = "*"
 green = "*"
 coverage = "*"
 codecov = "*"
+wheel = "*"
 
 [packages]
 path-py = "*"
