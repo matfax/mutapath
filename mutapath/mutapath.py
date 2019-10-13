@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Union
 
 from mutapath import Path
 
@@ -6,7 +7,7 @@ from mutapath import Path
 @dataclass
 class MutaPath(Path):
     """Mutable Path"""
-    _contained: Path
+    _contained: Union[str, Path] = ""
 
     def __post_init__(self):
         if isinstance(self._contained, str):
