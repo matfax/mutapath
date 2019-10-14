@@ -285,19 +285,21 @@ class Path(object):
     def _op_context(self, name: str, op: Callable):
         self.__mutable = mutapath.MutaPath(self)
         yield self.__mutable
-        target = self._contained
-        next_name = getattr(self.__mutable, "_contained")
+        current_file = self._contained
+        target_file = getattr(self.__mutable, "_contained")
         try:
-            target = op(target, next_name)
+            current_file = op(current_file, target_file)
         except FileExistsError as e:
-            raise PathException(f"{name.capitalize()} to {target.normpath()} failed because the file already exists. "
+            raise PathException(
+                f"{name.capitalize()} to {current_file.normpath()} failed because the file already exists. "
                                 f"Falling back to original value {self._contained}.") from e
         else:
-            if not target.exists():
-                raise PathException(f"{name.capitalize()} to {target.normpath()} failed because can not be found. "
+            if not current_file.exists():
+                raise PathException(
+                    f"{name.capitalize()} to {current_file.normpath()} failed because can not be found. "
                                     f"Falling back to original value {self._contained}.")
 
-        self._contained = target
+        self._contained = current_file
 
     def renaming(self):
         """
@@ -309,7 +311,14 @@ class Path(object):
         Path('/home/doe/folder/b.txt')
 
         """
-        return self._op_context("Renaming", path.Path.rename)
+
+        def checked_rename(cls: path.Path, target: path.Path):
+            if target.exists():
+                raise FileExistsError(f"{target.name} already exists.")
+            else:
+                return cls.rename(target)
+
+        return self._op_context("Renaming", checked_rename)
 
     def moving(self):
         """
