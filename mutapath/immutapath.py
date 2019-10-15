@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import pathlib
 from contextlib import contextmanager
@@ -99,7 +101,7 @@ class Path(object):
     def _norm(pathly: path.Path):
         return path.Path(path.Path.module.normpath(pathly))
 
-    def with_name(self, new_name):
+    def with_name(self, new_name) -> Path:
         """
         Clone this path with a new name
 
@@ -107,11 +109,11 @@ class Path(object):
         """
         return self.base.joinpath(str(new_name))
 
-    def with_stem(self, new_stem):
+    def with_stem(self, new_stem) -> Path:
         """Clone this path with a new stem"""
         return self.base.joinpath(str(new_stem)).with_suffix(self.ext)
 
-    def with_parent(self, new_parent):
+    def with_parent(self, new_parent) -> Path:
         """Clone this path with a new parent"""
         return Path(new_parent).joinpath(str(self.name))
 
@@ -142,17 +144,35 @@ class Path(object):
         return base.joinpath(stripped)
 
     @classmethod
-    def getcwd(cls):
+    def getcwd(cls) -> Path:
         return Path(os.getcwd())
 
     @path.multimethod
-    def joinpath(self, first, *others):
+    def joinpath(self, first, *others) -> Path:
         contained_others = map(str, list(others))
         joined = path.Path.joinpath(self._contained, str(first), *contained_others)
         return Path(joined)
 
     @property
-    def suffix(self):
+    def home(self) -> Path:
+        """
+        Get the home path of the current path representation.
+
+        >>> Path("/home/doe/folder/sub").home
+        Path("home")
+
+        :return: the home path
+        """
+        split = self.splitall()
+        if len(split) <= 1:
+            return self.drive
+        for parent in self.parents:
+            if parent.name == split[1]:
+                return parent.name
+        return self.drive
+
+    @property
+    def suffix(self) -> str:
         """Get file suffix"""
         return self.ext
 
@@ -162,12 +182,12 @@ class Path(object):
         self._contained = self.with_suffix(value)
 
     @property
-    def ext(self):
+    def ext(self) -> str:
         """Get file name"""
-        return Path(self._contained.ext)
+        return self._contained.ext
 
     @property
-    def name(self):
+    def name(self) -> Path:
         """Get file name"""
         return Path(self._contained.name)
 
@@ -177,7 +197,7 @@ class Path(object):
         self._contained = self.with_name(value)
 
     @property
-    def base(self):
+    def base(self) -> Path:
         """
         Get path base (i.e., the parent of the file)
 
@@ -195,7 +215,7 @@ class Path(object):
         self._contained = self.with_base(value)
 
     @property
-    def uncshare(self):
+    def uncshare(self) -> Path:
         """
         Get this path as UNC mount point
 
@@ -204,13 +224,13 @@ class Path(object):
         return Path(self._contained.uncshare)
 
     @property
-    def stem(self):
+    def stem(self) -> str:
         """
         Get path stem
 
         seealso:: :func:`pathlib.Path.stem`
         """
-        return Path(self._contained.stem)
+        return self._contained.stem
 
     @stem.setter
     def stem(self, value):
@@ -222,7 +242,7 @@ class Path(object):
         self._contained = self.with_stem(value)
 
     @property
-    def drive(self):
+    def drive(self) -> Path:
         """
         Get path drive
 
@@ -231,7 +251,7 @@ class Path(object):
         return Path(self._contained.drive)
 
     @property
-    def parent(self):
+    def parent(self) -> Path:
         """
         Get the parent path
 
@@ -249,17 +269,17 @@ class Path(object):
         self._contained = self.with_parent(value)
 
     @property
-    def parents(self):
+    def parents(self) -> Iterable[Path]:
         """
         Get a list of all parent paths
 
         seealso:: :func:`pathlib.Path.parents`
         """
         result = pathlib.Path(self._contained).parents
-        return map(Path, result)
+        return iter(map(Path, result))
 
     @property
-    def dirname(self):
+    def dirname(self) -> Path:
         """
         Get the parent path
 

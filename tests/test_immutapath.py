@@ -116,3 +116,14 @@ class TestPath(unittest.TestCase):
     def test_repr(self):
         excpected = Path("/A/B")
         self.assertTrue(repr(excpected).startswith("Path"))
+
+    def test_parents(self):
+        excpected = [Path("/A/B/C"), Path("/A/B"), Path("/A"), Path("/")]
+        actual = list(Path("/A/B/C/D").parents)
+        self.assertEqual(excpected, actual)
+
+    def test_home(self):
+        excpected = Path("B")
+        actual = Path("/A/B/C").relpath("/A").home
+        self.assertEqual(excpected, actual)
+        self.assertEqual(excpected.abspath(), actual.abspath())
