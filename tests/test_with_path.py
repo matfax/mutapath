@@ -16,6 +16,26 @@ class TestWithPath(unittest.TestCase):
     def _clean(self):
         self.test_base.rmtree_p()
 
+    def test_wrapped_iterable(self):
+        try:
+            test_file = self._gen_start_path()
+            expected = [test_file]
+            actual = self.test_base.listdir()
+            self.assertEqual(expected, actual)
+            self.assertIsInstance(actual[0], Path)
+        finally:
+            self._clean()
+
+    def test_wrapped_generator(self):
+        try:
+            test_file = self._gen_start_path()
+            expected = [test_file]
+            actual = list(self.test_base.walk())
+            self.assertEqual(expected, actual)
+            self.assertIsInstance(actual[0], Path)
+        finally:
+            self._clean()
+
     def test_mutate(self):
         try:
             test_file = self._gen_start_path()
@@ -25,6 +45,7 @@ class TestWithPath(unittest.TestCase):
                 mut.suffix = ".txt"
             actual = test_file
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
         finally:
             self._clean()
 
@@ -37,6 +58,7 @@ class TestWithPath(unittest.TestCase):
                 mut.suffix = ".txt"
             actual = test_file
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
             self.assertTrue(actual.exists(), "File has to exist")
         finally:
             self._clean()
@@ -49,6 +71,7 @@ class TestWithPath(unittest.TestCase):
                 mut.rename(expected)
             actual = test_file
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
             self.assertTrue(actual.exists(), "File has to exist")
         finally:
             self._clean()
@@ -64,6 +87,7 @@ class TestWithPath(unittest.TestCase):
                     mut.name = wrong.name
             actual = test_file
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
             self.assertTrue(actual.exists(), "File has to exist")
         finally:
             self._clean()
@@ -78,6 +102,7 @@ class TestWithPath(unittest.TestCase):
             actual = test_file
             self.assertEqual(expected, actual)
             self.assertEqual(test_file.text(), actual.text())
+            self.assertIsInstance(actual, Path)
             self.assertTrue(actual.exists(), "File has to exist")
         finally:
             self._clean()
@@ -92,6 +117,7 @@ class TestWithPath(unittest.TestCase):
             with from_here.moving() as mut:
                 mut.joinpath(self.test_base, "to")
             self.assertEqual(expected, from_here)
+            self.assertIsInstance(from_here, Path)
             self.assertTrue(from_here.exists(), "File has to exist")
         finally:
             self._clean()

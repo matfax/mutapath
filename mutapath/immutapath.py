@@ -4,12 +4,14 @@ import os
 import pathlib
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Union, Iterable, ClassVar, Callable
+from types import GeneratorType
+from typing import Union, Iterable, ClassVar, Callable, List
+from xml.dom.minicompat import StringTypes
 
 import path
 
 import mutapath
-from mutapath.decorator import path_wrap
+from mutapath.decorator import path_wrap, _convert_path
 from mutapath.exceptions import PathException
 
 
@@ -36,8 +38,23 @@ class Path(object):
     def __dir__(self) -> Iterable[str]:
         return sorted(super(Path, self).__dir__()) + dir(path.Path)
 
+    @staticmethod
+    def __wrap_attribute(orig_func):
+        def __wrap_decorator(*args, **kwargs):
+            result = orig_func(*args, **kwargs)
+            if isinstance(result, List) and not isinstance(result, StringTypes):
+                return list(map(_convert_path, result))
+            if isinstance(result, Iterable) and not isinstance(result, StringTypes):
+                return iter(map(_convert_path, result))
+            if isinstance(result, GeneratorType):
+                return map(_convert_path, result)
+            return _convert_path(result)
+
+        return __wrap_decorator
+
     def __getattr__(self, item):
-        return getattr(self._contained, item)
+        attr = getattr(self._contained, item)
+        return Path.__wrap_attribute(attr)
 
     def __setattr__(self, key, value):
         if key == "_contained":
@@ -152,7 +169,7 @@ class Path(object):
 
     @path.multimethod
     def joinpath(self, first, *others) -> Path:
-        contained_others = map(str, list(others))
+        contained_others = map(str, others)
         joined = path.Path.joinpath(self._contained, str(first), *contained_others)
         return Path(joined)
 
@@ -315,12 +332,12 @@ class Path(object):
         except FileExistsError as e:
             raise PathException(
                 f"{name.capitalize()} to {current_file.normpath()} failed because the file already exists. "
-                                f"Falling back to original value {self._contained}.") from e
+                f"Falling back to original value {self._contained}.") from e
         else:
             if not current_file.exists():
                 raise PathException(
                     f"{name.capitalize()} to {current_file.normpath()} failed because can not be found. "
-                                    f"Falling back to original value {self._contained}.")
+                    f"Falling back to original value {self._contained}.")
 
         self._contained = current_file
 

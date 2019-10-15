@@ -21,20 +21,21 @@ def __is_def(member):
     return inspect.isroutine(member)
 
 
+def _convert_path(result):
+    if isinstance(result, path.Path):
+        return mutapath.Path(result)
+    return result
+
+
 def __path_func(orig_func):
     def wrap_decorator(*args, **kwargs):
         result = orig_func(*args, **kwargs)
-        if isinstance(result, path.Path):
-            return mutapath.Path(result)
-        return result
+        return _convert_path(result)
 
     return wrap_decorator
 
 
 def path_wrap(cls):
-    for name, method in inspect.getmembers(path.Path, __is_def):
-        if not name.startswith("__"):
-            setattr(path.Path, name, __path_func(method))
     for name, method in inspect.getmembers(cls, __is_def):
         if name not in __EXCLUDE_FROM_WRAPPING:
             setattr(cls, name, __path_func(method))
@@ -48,8 +49,11 @@ def __mutate_func(cls, method_name):
         orig_func = getattr(path.Path, method_name)
         if isinstance(self, Path):
             result = orig_func(self._contained, *args, **kwargs)
-            if isinstance(result, mutapath.Path):
-                self._contained = result._contained
+            if isinstance(result, path.Path):
+                self._contained = result
+                return self
+            elif isinstance(result, mutapath.Path):
+                self._contained = getattr(result, "_contained")
                 return self
             return result
         else:

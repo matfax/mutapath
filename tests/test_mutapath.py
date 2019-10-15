@@ -6,6 +6,7 @@ from mutapath import MutaPath, Path
 class TestMutaPath(unittest.TestCase):
     def _gen_start_path(self):
         self.test_base = Path.getcwd() / "mutapath_test"
+        self.test_base.rmtree_p()
         self.test_base.mkdir()
         new_file = self.test_base / "test.file"
         new_file.touch()
@@ -39,6 +40,7 @@ class TestMutaPath(unittest.TestCase):
             expected = "test.file"
             actual = test_file.name
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
         finally:
             self._clean()
 
@@ -49,6 +51,7 @@ class TestMutaPath(unittest.TestCase):
             test_file.name = expected
             actual = test_file.name
             self.assertEqual(expected, actual)
+            self.assertIsInstance(test_file, MutaPath)
         finally:
             self._clean()
 
@@ -58,6 +61,7 @@ class TestMutaPath(unittest.TestCase):
             expected = self.test_base
             actual = test_file.base
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, Path)
         finally:
             self._clean()
 
@@ -66,26 +70,29 @@ class TestMutaPath(unittest.TestCase):
         actual = MutaPath("/A/B/other.txt")
         actual.base = "/A/D"
         self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, MutaPath)
 
     def test_set_stem(self):
         expected = Path("/A/B/other2.txt")
         actual = MutaPath("/A/B/other.txt")
         actual.stem += "2"
         self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, MutaPath)
 
     def test_set_parent(self):
         expected = Path("/A/B/C/other.txt")
         actual = MutaPath("/A/other.txt")
         actual.parent /= "B/C"
         self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, MutaPath)
 
     def test_rename(self):
         try:
             test_file = self._gen_start_path()
             expected = test_file.with_name("new.txt")
             test_file.rename(expected)
-            actual = test_file
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, test_file)
+            self.assertIsInstance(test_file, MutaPath)
         finally:
             self._clean()
 
@@ -94,8 +101,8 @@ class TestMutaPath(unittest.TestCase):
             test_file = self._gen_start_path()
             expected = test_file.parent / "other/new"
             test_file.renames(expected)
-            actual = test_file
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, test_file)
+            self.assertIsInstance(test_file, MutaPath)
         finally:
             self._clean()
 
@@ -104,8 +111,8 @@ class TestMutaPath(unittest.TestCase):
             test_file = self._gen_start_path()
             expected = test_file.with_name("new.txt")
             test_file.copy(expected)
-            actual = test_file
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, test_file)
+            self.assertIsInstance(test_file, MutaPath)
         finally:
             self._clean()
 
@@ -115,8 +122,8 @@ class TestMutaPath(unittest.TestCase):
             expected = test_file.parent / "other/new"
             expected.parent.mkdir()
             test_file.copy2(expected)
-            actual = test_file
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, test_file)
+            self.assertIsInstance(test_file, MutaPath)
         finally:
             self._clean()
 
@@ -127,6 +134,7 @@ class TestMutaPath(unittest.TestCase):
             test_file.copyfile(expected)
             actual = test_file
             self.assertEqual(expected, actual)
+            self.assertIsInstance(actual, MutaPath)
         finally:
             self._clean()
 
@@ -139,6 +147,7 @@ class TestMutaPath(unittest.TestCase):
             expected = self.test_base / "to"
             from_here.copytree(expected)
             self.assertEqual(expected, from_here)
+            self.assertIsInstance(from_here, MutaPath)
         finally:
             self._clean()
 
@@ -151,6 +160,7 @@ class TestMutaPath(unittest.TestCase):
             expected = self.test_base / "to"
             from_here.move(expected)
             self.assertEqual(expected, from_here)
+            self.assertIsInstance(from_here, MutaPath)
         finally:
             self._clean()
 
@@ -163,6 +173,7 @@ class TestMutaPath(unittest.TestCase):
             expected = self.test_base / "to"
             from_here.merge_tree(expected)
             self.assertEqual(expected, from_here)
+            self.assertIsInstance(from_here, MutaPath)
         finally:
             self._clean()
 
@@ -170,11 +181,13 @@ class TestMutaPath(unittest.TestCase):
         expected = MutaPath("/A/B/C/D/other.txt")
         actual = MutaPath.joinpath("/A/B", "C/", MutaPath("D"), Path("other.txt"))
         self.assertEqual(expected.normpath(), actual.normpath())
+        self.assertIsInstance(actual, MutaPath)
 
     def test_joinpath(self):
         expected = MutaPath("/A/B/C/D/other.txt")
         actual = MutaPath("/A/B").joinpath("C", MutaPath("D"), Path("other.txt"))
         self.assertEqual(expected.normpath(), actual.normpath())
+        self.assertIsInstance(actual, MutaPath)
 
     def test_capsulation(self):
         expected = MutaPath("/A/B")
