@@ -7,6 +7,18 @@ workflows:
   test_deploy:
     jobs:
       - python/run-tests:
+          name: tests-3-4
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+          version: '3.4'
+      - python/run-tests:
+          name: tests-3-5
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+          version: '3.5'
+      - python/run-tests:
           name: tests-3-6
           filters:
             tags:
@@ -23,7 +35,7 @@ workflows:
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
-          version: '3.8'
+          version: '3.8.0rc1'
       - python/deploy:
           version: '3.7'
           verify_tag: false
@@ -33,4 +45,4 @@ workflows:
               ignore: /.*/
             tags:
               only: /^\d+\.\d+\.\d+$/
-          requires: [tests-3-6, tests-3-7, tests-3-8]
+          requires: [tests-3-4, tests-3-5, tests-3-6, tests-3-7, tests-3-8]
