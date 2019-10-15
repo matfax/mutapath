@@ -36,6 +36,46 @@ class TestWithPath(unittest.TestCase):
         finally:
             self._clean()
 
+    def test_size(self):
+        try:
+            test_file = self._gen_start_path()
+            expected = 0
+            actual = test_file.size
+            self.assertEqual(expected, actual)
+            self.assertIsInstance(test_file, Path)
+        finally:
+            self._clean()
+
+    def test_ctime(self):
+        try:
+            test_file = self._gen_start_path()
+            actual = test_file.ctime
+            other = test_file.copyfile(test_file.with_name("other.txt"))
+            later = other.ctime
+            self.assertGreater(later, actual)
+        finally:
+            self._clean()
+
+    def test_mtime(self):
+        try:
+            test_file = self._gen_start_path()
+            actual = test_file.mtime
+            other = test_file.copyfile(test_file.with_name("other.txt"))
+            later = other.mtime
+            self.assertGreater(later, actual)
+        finally:
+            self._clean()
+
+    def test_atime(self):
+        try:
+            test_file = self._gen_start_path()
+            actual = test_file.atime
+            other = test_file.copyfile(test_file.with_name("other.txt"))
+            later = other.atime
+            self.assertGreater(later, actual)
+        finally:
+            self._clean()
+
     def test_mutate(self):
         try:
             test_file = self._gen_start_path()

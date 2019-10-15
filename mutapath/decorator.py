@@ -7,7 +7,8 @@ import mutapath
 
 __EXCLUDE_FROM_WRAPPING = ["__dir__", "__eq__", "__format__", "__repr__", "__str__", "__sizeof__", "__init__",
                            "__post_init__", "__getattribute__", "__delattr__", "__setattr__", "__getattr__",
-                           "__fspath__", "_norm"]
+                           "__exit__", "__fspath__", "'_Path__wrap_attribute'", "__wrap_decorator", "_op_context",
+                           "__hash__", "_norm"]
 
 __MUTABLE_FUNCTIONS = {"rename", "renames", "copy", "copy2", "copyfile", "copymode", "copystat", "copytree", "move",
                        "basename", "abspath", "join", "joinpath", "normpath", "relpath", "realpath", "relpathto"}

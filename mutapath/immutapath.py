@@ -307,6 +307,49 @@ class Path(object):
         """
         return Path(self._contained.dirname())
 
+    @property
+    def size(self) -> int:
+        """
+        Get the size of the file
+
+        seealso:: :func:`path.Path.size`
+        """
+        return self._contained.size
+
+    @property
+    def ctime(self) -> float:
+        """
+        Get the creation time of the file
+
+        seealso:: :func:`os.path.getctime`
+        """
+        return self._contained.ctime
+
+    @property
+    def mtime(self) -> float:
+        """
+        Get the mtime of the file
+
+        seealso:: :func:`os.path.getmtime`
+        """
+        return self._contained.mtime
+
+    @property
+    def atime(self) -> float:
+        """
+        Get the atime of the file
+
+        seealso:: :func:`os.path.getatime`
+        """
+        return self._contained.atime
+
+    @property
+    def owner(self):
+        """
+        Get the owner of the file
+        """
+        return self._contained.owner
+
     @contextmanager
     def mutate(self):
         """
