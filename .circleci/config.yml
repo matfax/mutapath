@@ -17,7 +17,7 @@ workflows:
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
-          version: '3.8.0rc1'
+          version: '3.8-rc'
       - python/deploy:
           version: '3.7'
           verify_tag: false
