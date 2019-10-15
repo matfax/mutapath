@@ -50,7 +50,7 @@ class TestWithPath(unittest.TestCase):
         try:
             test_file = self._gen_start_path()
             actual = test_file.ctime
-            other = test_file.copyfile(test_file.with_name("other.txt"))
+            other = test_file.copy2(test_file.with_name("other.txt"))
             later = other.ctime
             self.assertGreater(later, actual)
         finally:
@@ -60,9 +60,9 @@ class TestWithPath(unittest.TestCase):
         try:
             test_file = self._gen_start_path()
             actual = test_file.mtime
-            other = test_file.copyfile(test_file.with_name("other.txt"))
+            other = test_file.copy2(test_file.with_name("other.txt"))
             later = other.mtime
-            self.assertGreater(later, actual)
+            self.assertEqual(later, actual)
         finally:
             self._clean()
 
@@ -70,9 +70,9 @@ class TestWithPath(unittest.TestCase):
         try:
             test_file = self._gen_start_path()
             actual = test_file.atime
-            other = test_file.copyfile(test_file.with_name("other.txt"))
+            other = test_file.copy2(test_file.with_name("other.txt"))
             later = other.atime
-            self.assertGreater(later, actual)
+            self.assertEqual(later, actual)
         finally:
             self._clean()
 
