@@ -125,10 +125,6 @@ class TestPath(unittest.TestCase):
         self.assertEqual(excpected, actual)
         self.assertIsInstance(actual, Path)
 
-    def test_repr(self):
-        excpected = Path("/A/B")
-        self.assertTrue(repr(excpected).startswith("Path"))
-
     def test_parents(self):
         excpected = [Path("/A/B/C"), Path("/A/B"), Path("/A"), Path("/")]
         actual = list(Path("/A/B/C/D").parents)
