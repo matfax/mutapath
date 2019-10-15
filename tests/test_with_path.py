@@ -37,6 +37,18 @@ class TestWithPath(unittest.TestCase):
         finally:
             self._clean()
 
+    def test_open(self):
+        try:
+            test_file = self._gen_start_path()
+            expected = "test"
+            with test_file.open("w") as w:
+                w.write(expected)
+            actual = test_file.text()
+            self.assertEqual(expected, actual)
+            self.assertIsInstance(test_file, Path)
+        finally:
+            self._clean()
+
     def test_size(self):
         try:
             test_file = self._gen_start_path()

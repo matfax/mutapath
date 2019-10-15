@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import os
 import pathlib
 from contextlib import contextmanager
@@ -111,10 +112,10 @@ class Path(object):
     __rtruediv__ = __rdiv__
 
     def __enter__(self):
-        return self._contained.__enter__()
+        return Path(self._contained.__enter__())
 
     def __exit__(self, *_):
-        return self._contained.__exit__()
+        self._contained.__exit__()
 
     def __fspath__(self):
         return self._contained.__fspath__()
@@ -356,6 +357,14 @@ class Path(object):
         Get the owner of the file
         """
         return self._contained.owner
+
+    def open(self, *args, **kwargs):
+        """
+        Open a file and return a stream to its content.
+
+        seealso:: :func:`io.open`
+        """
+        return io.open(str(self), *args, **kwargs)
 
     @contextmanager
     def mutate(self):
