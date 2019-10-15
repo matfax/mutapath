@@ -7,11 +7,17 @@ workflows:
   test_deploy:
     jobs:
       - python/run-tests:
-          name: tests
+          name: tests-3-7
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
           version: '3.7'
+      - python/run-tests:
+          name: tests-3-8
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+          version: '3.8.0rc1'
       - python/deploy:
           version: '3.7'
           verify_tag: false
@@ -21,4 +27,4 @@ workflows:
               ignore: /.*/
             tags:
               only: /^\d+\.\d+\.\d+$/
-          requires: [tests]
+          requires: [tests-3-7, tests-3-8]
