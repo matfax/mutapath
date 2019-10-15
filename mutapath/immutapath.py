@@ -315,8 +315,7 @@ class Path(object):
         def checked_rename(cls: path.Path, target: path.Path):
             if target.exists():
                 raise FileExistsError(f"{target.name} already exists.")
-            else:
-                return cls.rename(target)
+            return cls.rename(target)
 
         return self._op_context("Renaming", checked_rename)
 

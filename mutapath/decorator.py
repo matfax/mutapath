@@ -26,8 +26,7 @@ def __path_func(orig_func):
         result = orig_func(*args, **kwargs)
         if isinstance(result, path.Path):
             return mutapath.Path(result)
-        else:
-            return result
+        return result
 
     return wrap_decorator
 
@@ -52,8 +51,7 @@ def __mutate_func(cls, method_name):
             if isinstance(result, mutapath.Path):
                 self._contained = result._contained
                 return self
-            else:
-                return result
+            return result
         else:
             result = orig_func(self, *args, **kwargs)
             return cls(result)
