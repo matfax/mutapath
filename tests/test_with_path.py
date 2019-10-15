@@ -1,3 +1,4 @@
+import time
 import unittest
 
 from mutapath import Path
@@ -50,6 +51,7 @@ class TestWithPath(unittest.TestCase):
         try:
             test_file = self._gen_start_path()
             actual = test_file.mtime
+            time.sleep(0.1)
             other = test_file.with_name("other.txt").touch()
             later = other.mtime
             self.assertGreater(later, actual)
@@ -63,6 +65,7 @@ class TestWithPath(unittest.TestCase):
         try:
             test_file = self._gen_start_path()
             actual = test_file.ctime
+            time.sleep(0.1)
             other = test_file.with_name("other.txt").touch()
             later = other.ctime
             self.assertGreater(later, actual)
