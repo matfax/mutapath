@@ -87,6 +87,13 @@ class Path(object):
             return str(self) == str(other)
         return super(Path, self).__eq__(other)
 
+    def __lt__(self, other):
+        if isinstance(other, Path):
+            return self.splitall() < other.splitall()
+        left = str(self).replace("\\\\", "\\").replace("\\", "/")
+        right = str(other).replace("\\\\", "\\").replace("\\", "/")
+        return left < right
+
     def __add__(self, other):
         return self._contained.__add__(Path(other)._contained)
 

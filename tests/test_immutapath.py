@@ -152,3 +152,26 @@ class TestPath(unittest.TestCase):
         expected = hash(Path("/A") / "B")
         actual = hash(Path("/A/B/"))
         self.assertEqual(expected, actual)
+
+    def test_lt_last(self):
+        lesser = Path("/A/B/")
+        greater = Path("/A/C")
+        self.assertLess(lesser, greater)
+
+    def test_lt_first(self):
+        lesser = Path("/A/D")
+        greater = Path("/B/C")
+        self.assertLess(lesser, greater)
+
+    def test_sort(self):
+        first = Path("/A/B/C")
+        second = Path("/A/C")
+        third = Path("/B/A/A")
+        expected = [first, second, third]
+        actual = sorted([third, first, second])
+        self.assertEqual(expected, actual)
+
+    def test_lt_str(self):
+        lesser = Path("/A/B/")
+        greater = "/A/C"
+        self.assertLess(lesser, greater)
