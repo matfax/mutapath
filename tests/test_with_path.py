@@ -46,23 +46,26 @@ class TestWithPath(unittest.TestCase):
         finally:
             self._clean()
 
-    def test_ctime(self):
-        try:
-            test_file = self._gen_start_path()
-            actual = test_file.ctime
-            other = test_file.copy2(test_file.with_name("other.txt"))
-            later = other.ctime
-            self.assertGreater(later, actual)
-        finally:
-            self._clean()
-
     def test_mtime(self):
         try:
             test_file = self._gen_start_path()
             actual = test_file.mtime
-            other = test_file.copy2(test_file.with_name("other.txt"))
+            other = test_file.with_name("other.txt").touch()
+            later = other.mtime
+            self.assertGreater(later, actual)
+            test_file.copystat(other)
             later = other.mtime
             self.assertEqual(later, actual)
+        finally:
+            self._clean()
+
+    def test_ctime(self):
+        try:
+            test_file = self._gen_start_path()
+            actual = test_file.ctime
+            other = test_file.with_name("other.txt").touch()
+            later = other.ctime
+            self.assertGreater(later, actual)
         finally:
             self._clean()
 
