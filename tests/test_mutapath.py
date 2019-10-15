@@ -177,10 +177,15 @@ class TestMutaPath(unittest.TestCase):
         self.assertEqual(expected.normpath(), actual.normpath())
 
     def test_capsulation(self):
-        excpected = MutaPath("/A/B")
-        actual = MutaPath(MutaPath(excpected))
-        self.assertEqual(excpected, actual)
+        expected = MutaPath("/A/B")
+        actual = MutaPath(MutaPath(expected))
+        self.assertEqual(expected, actual)
 
     def test_repr(self):
         excpected = MutaPath("/A/B")
         self.assertTrue(repr(excpected).startswith("Path"))
+
+    def test_hash(self):
+        expected = hash(Path("/A/B"))
+        actual = hash(MutaPath("/A/B/"))
+        self.assertEqual(expected, actual)

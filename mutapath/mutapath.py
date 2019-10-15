@@ -30,6 +30,9 @@ class MutaPath(mutapath.Path):
     def __str__(self):
         return self._contained
 
+    def __hash__(self):
+        return hash(self._contained)
+
     def merge_tree(self, other, *args, **kwargs):
         """Move, merge and mutate this path to the given other path."""
         self._contained.merge_tree(other, *args, **kwargs)

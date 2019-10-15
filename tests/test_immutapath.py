@@ -133,3 +133,8 @@ class TestPath(unittest.TestCase):
         actual = Path("/").home
         self.assertEqual(excpected, actual)
         self.assertEqual(excpected.abspath(), actual.abspath())
+
+    def test_hash(self):
+        expected = hash(Path("/A") / "B")
+        actual = hash(Path("/A/B/"))
+        self.assertEqual(expected, actual)

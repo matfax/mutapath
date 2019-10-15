@@ -56,6 +56,9 @@ class Path(object):
     def __str__(self):
         return self._contained
 
+    def __hash__(self):
+        return hash(self._contained)
+
     def __eq__(self, other):
         if isinstance(other, Path):
             return self._contained == other._contained
