@@ -114,15 +114,19 @@ class TestMutaPath(PathTest):
         self.assertEqual(expected, from_here)
         self.assertIsInstance(from_here, MutaPath)
 
-    @file_test(equal=False)
+    @file_test(equal=False, exists=False)
     def test_move(self, test_file: Path):
-        from_here = ~ (self.test_base / "from/here")
-        from_here.makedirs()
-        test_file.copy(from_here)
+        from_here = self.test_base / "from/here"
+        current = ~ from_here
+        current.makedirs()
+        test_file.copy(current)
         expected = self.test_base / "to"
-        from_here.move(expected)
-        self.assertEqual(expected, from_here)
-        self.assertIsInstance(from_here, MutaPath)
+        current.move(expected)
+        self.assertEqual(expected, current)
+        self.assertIsInstance(current, MutaPath)
+        self.assertTrue(not from_here.exists(), "The moved file still exists in the source folder.")
+        target_not_empty = len(current.files("test.file*")) > 0
+        self.assertTrue(target_not_empty, "The target file does not exist.")
 
     @file_test(equal=False)
     def test_merge_tree(self, test_file: Path):
