@@ -21,6 +21,8 @@ setup(
     ],
     install_requires=[
         'path.py',
+        'filelock',
+        'cached-property'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
