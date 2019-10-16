@@ -186,7 +186,13 @@ class Path(object):
 
     @classmethod
     def getcwd(cls) -> Path:
+        """Get the current working directory"""
         return Path(os.getcwd())
+
+    @property
+    def cwd(self):
+        """Get the current working directory"""
+        return self.getcwd()
 
     @path.multimethod
     def joinpath(self, first, *others) -> Path:

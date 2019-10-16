@@ -175,3 +175,7 @@ class TestPath(unittest.TestCase):
         lesser = Path("/A/B/")
         greater = "/A/C"
         self.assertLess(lesser, greater)
+
+    def test_cwd(self):
+        start = Path("/A/B/")
+        self.assertEqual(start.cwd, Path.getcwd())
