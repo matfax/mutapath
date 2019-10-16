@@ -13,4 +13,6 @@ codecov = "*"
 wheel = "*"
 
 [packages]
-path-py = "*"
+path-py = "==12.0.1"
+filelock = "==3.0.12"
+cached-property = "==1.5.1"

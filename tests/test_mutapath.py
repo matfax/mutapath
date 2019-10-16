@@ -1,69 +1,51 @@
-import unittest
-
 from mutapath import MutaPath, Path
+from tests.helper import PathTest, file_test
+
+file_test_no_asserts = file_test(equal=False, instance=False, exists=False)
 
 
-class TestMutaPath(unittest.TestCase):
+class TestMutaPath(PathTest):
+    def __init__(self, *args):
+        self.test_path = "mutapath_test"
+        super().__init__(*args)
+
     def _gen_start_path(self):
-        self.test_base = Path.getcwd() / "mutapath_test"
-        self.test_base.rmtree_p()
-        self.test_base.mkdir()
-        new_file = self.test_base / "test.file"
-        new_file.touch()
-        return MutaPath(new_file)
+        return MutaPath(super(TestMutaPath, self)._gen_start_path())
 
-    def _clean(self):
-        self.test_base.rmtree_p()
+    @file_test_no_asserts
+    def test_suffix(self, test_file: Path):
+        expected = ".file"
+        actual = test_file.suffix
+        self.assertEqual(expected, actual)
 
-    def test_suffix(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = ".file"
-            actual = test_file.suffix
-            self.assertEqual(expected, actual)
-        finally:
-            self._clean()
+    @file_test_no_asserts
+    def test_set_suffix(self, test_file: Path):
+        expected = ".txt"
+        test_file.suffix = expected
+        actual = test_file.suffix
+        self.assertEqual(expected, actual)
 
-    def test_set_suffix(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = ".txt"
-            test_file.suffix = expected
-            actual = test_file.suffix
-            self.assertEqual(expected, actual)
-        finally:
-            self._clean()
+    @file_test_no_asserts
+    def test_name(self, test_file: Path):
+        expected = "test.file"
+        actual = test_file.name
+        self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, Path)
 
-    def test_name(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = "test.file"
-            actual = test_file.name
-            self.assertEqual(expected, actual)
-            self.assertIsInstance(actual, Path)
-        finally:
-            self._clean()
+    @file_test_no_asserts
+    def test_set_name(self, test_file: Path):
+        expected = "new.txt"
+        test_file.name = expected
+        actual = test_file.name
+        self.assertEqual(expected, actual)
+        self.assertIsInstance(test_file, MutaPath)
 
-    def test_set_name(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = "new.txt"
-            test_file.name = expected
-            actual = test_file.name
-            self.assertEqual(expected, actual)
-            self.assertIsInstance(test_file, MutaPath)
-        finally:
-            self._clean()
-
-    def test_base(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = self.test_base
-            actual = test_file.base
-            self.assertEqual(expected, actual)
-            self.assertIsInstance(actual, Path)
-        finally:
-            self._clean()
+    @file_test_no_asserts
+    def test_base(self, test_file: Path):
+        expected = self.test_base
+        actual = test_file.base
+        self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, Path)
 
     def test_set_base(self):
         expected = Path("/A/D/other.txt")
@@ -86,96 +68,71 @@ class TestMutaPath(unittest.TestCase):
         self.assertEqual(expected, actual)
         self.assertIsInstance(actual, MutaPath)
 
-    def test_rename(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = test_file.with_name("new.txt")
-            test_file.rename(expected)
-            self.assertEqual(expected, test_file)
-            self.assertIsInstance(test_file, MutaPath)
-        finally:
-            self._clean()
+    @file_test()
+    def test_rename(self, test_file: Path):
+        expected = test_file.with_name("new.txt")
+        test_file.rename(expected)
+        self.assertIsInstance(test_file, MutaPath)
+        return expected
 
-    def test_renames(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = test_file.parent / "other/new"
-            test_file.renames(expected)
-            self.assertEqual(expected, test_file)
-            self.assertIsInstance(test_file, MutaPath)
-        finally:
-            self._clean()
+    @file_test()
+    def test_renames(self, test_file: Path):
+        expected = test_file.parent / "other/new"
+        test_file.renames(expected)
+        self.assertIsInstance(test_file, MutaPath)
+        return expected
 
-    def test_copy(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = test_file.with_name("new.txt")
-            test_file.copy(expected)
-            self.assertEqual(expected, test_file)
-            self.assertIsInstance(test_file, MutaPath)
-        finally:
-            self._clean()
+    @file_test()
+    def test_copy(self, test_file: Path):
+        expected = test_file.with_name("new.txt")
+        test_file.copy(expected)
+        self.assertIsInstance(test_file, MutaPath)
+        return expected
 
-    def test_copy2(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = test_file.parent / "other/new"
-            expected.parent.mkdir()
-            test_file.copy2(expected)
-            self.assertEqual(expected, test_file)
-            self.assertIsInstance(test_file, MutaPath)
-        finally:
-            self._clean()
+    @file_test()
+    def test_copy2(self, test_file: Path):
+        expected = test_file.parent / "other/new"
+        expected.parent.mkdir()
+        test_file.copy2(expected)
+        self.assertIsInstance(test_file, MutaPath)
+        return expected
 
-    def test_copyfile(self):
-        try:
-            test_file = self._gen_start_path()
-            expected = test_file.parent / "new.file"
-            test_file.copyfile(expected)
-            actual = test_file
-            self.assertEqual(expected, actual)
-            self.assertIsInstance(actual, MutaPath)
-        finally:
-            self._clean()
+    @file_test()
+    def test_copyfile(self, test_file: Path):
+        expected = test_file.parent / "new.file"
+        test_file.copyfile(expected)
+        self.assertIsInstance(test_file, MutaPath)
+        return expected
 
-    def test_copytree(self):
-        try:
-            test_file = self._gen_start_path()
-            from_here = ~ (self.test_base / "from/here")
-            from_here.makedirs()
-            test_file.copy(from_here)
-            expected = self.test_base / "to"
-            from_here.copytree(expected)
-            self.assertEqual(expected, from_here)
-            self.assertIsInstance(from_here, MutaPath)
-        finally:
-            self._clean()
+    @file_test(equal=False)
+    def test_copytree(self, test_file: Path):
+        from_here = ~ (self.test_base / "from/here")
+        from_here.makedirs()
+        test_file.copy(from_here)
+        expected = self.test_base / "to"
+        from_here.copytree(expected)
+        self.assertEqual(expected, from_here)
+        self.assertIsInstance(from_here, MutaPath)
 
-    def test_move(self):
-        try:
-            test_file = self._gen_start_path()
-            from_here = ~ (self.test_base / "from/here")
-            from_here.makedirs()
-            test_file.copy(from_here)
-            expected = self.test_base / "to"
-            from_here.move(expected)
-            self.assertEqual(expected, from_here)
-            self.assertIsInstance(from_here, MutaPath)
-        finally:
-            self._clean()
+    @file_test(equal=False)
+    def test_move(self, test_file: Path):
+        from_here = ~ (self.test_base / "from/here")
+        from_here.makedirs()
+        test_file.copy(from_here)
+        expected = self.test_base / "to"
+        from_here.move(expected)
+        self.assertEqual(expected, from_here)
+        self.assertIsInstance(from_here, MutaPath)
 
-    def test_merge_tree(self):
-        try:
-            test_file = self._gen_start_path()
-            from_here = ~ (self.test_base / "from/here")
-            from_here.makedirs()
-            test_file.copy(from_here)
-            expected = self.test_base / "to"
-            from_here.merge_tree(expected)
-            self.assertEqual(expected, from_here)
-            self.assertIsInstance(from_here, MutaPath)
-        finally:
-            self._clean()
+    @file_test(equal=False)
+    def test_merge_tree(self, test_file: Path):
+        from_here = ~ (self.test_base / "from/here")
+        from_here.makedirs()
+        test_file.copy(from_here)
+        expected = self.test_base / "to"
+        from_here.merge_tree(expected)
+        self.assertEqual(expected, from_here)
+        self.assertIsInstance(from_here, MutaPath)
 
     def test_static_joinpath(self):
         expected = MutaPath("/A/B/C/D/other.txt")

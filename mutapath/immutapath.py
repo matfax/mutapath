@@ -1,19 +1,25 @@
 from __future__ import annotations
 
+import contextlib
 import io
 import os
 import pathlib
+import shutil
 from contextlib import contextmanager
 from dataclasses import dataclass
 from types import GeneratorType
 from typing import Union, Iterable, ClassVar, Callable, List
 from xml.dom.minicompat import StringTypes
 
+import filelock
 import path
+from cached_property import cached_property
+from filelock import SoftFileLock
 
 import mutapath
 from mutapath.decorator import path_wrap, _convert_path
 from mutapath.exceptions import PathException
+from mutapath.lock_dummy import DummyFileLock
 
 
 @path_wrap
@@ -59,6 +65,13 @@ class Path(object):
 
     def __setattr__(self, key, value):
         if key == "_contained":
+            lock = self.__dict__.get("lock", None)
+            if lock is not None:
+                if self.lock.is_locked:
+                    self.lock.release()
+                    Path(self.lock.lock_file).remove_p()
+                del self.__dict__['lock']
+
             if isinstance(value, Path):
                 value = value._contained
             super(Path, self).__setattr__(key, value)
@@ -354,7 +367,7 @@ class Path(object):
     @property
     def owner(self):
         """
-        Get the owner of the file
+        Get the owner of the file.
         """
         return self._contained.owner
 
@@ -365,6 +378,16 @@ class Path(object):
         seealso:: :func:`io.open`
         """
         return io.open(str(self), *args, **kwargs)
+
+    @cached_property
+    def lock(self) -> SoftFileLock:
+        """
+        Get a file lock holder for this file.
+        """
+        lock_file = self._contained.with_suffix(self.suffix + ".lock")
+        if not self.isfile():
+            return DummyFileLock(lock_file)
+        return SoftFileLock(lock_file)
 
     @contextmanager
     def mutate(self):
@@ -381,30 +404,63 @@ class Path(object):
         self._contained = getattr(self.__mutable, "_contained")
 
     @contextmanager
-    def _op_context(self, name: str, op: Callable):
-        self.__mutable = mutapath.MutaPath(self)
-        yield self.__mutable
-        current_file = self._contained
-        target_file = getattr(self.__mutable, "_contained")
+    def _op_context(self, name: str, timeout: float, lock: bool,
+                    operation:
+                    Callable[[Union[os.PathLike, path.Path], Union[os.PathLike, path.Path]], Union[str, path.Path]]):
+        """
+        Acquire a file mutation context that is bound to a file.
+        
+        :param name: the human readable name of the operation
+        :param timeout: the timeout in seconds how long the lock file should be acquired
+        :param lock: if the source file should be locked as long as this context is open
+        :param operation: the callable operation that gets the source and target file passed as argument
+        """
+        if not self._contained.exists():
+            raise PathException(f"{name.capitalize()} {self._contained} failed because the file does not exist.")
+
         try:
-            current_file = op(current_file, target_file)
-        except FileExistsError as e:
-            raise PathException(
-                f"{name.capitalize()} to {current_file.normpath()} failed because the file already exists. "
-                f"Falling back to original value {self._contained}.") from e
-        else:
+            if lock:
+                try:
+                    self.lock.acquire(timeout)
+                except filelock.Timeout as t:
+                    raise PathException(
+                        f"{name.capitalize()} {self._contained} failed because the file could not be locked.") from t
+
+            self.__mutable = mutapath.MutaPath(self)
+            yield self.__mutable
+
+            current_file = self._contained
+            target_file = getattr(self.__mutable, "_contained")
+
+            try:
+                current_file = path.Path(operation(current_file, target_file))
+
+            except FileExistsError as e:
+                raise PathException(
+                    f"{name.capitalize()} to {current_file.normpath()} failed because the file already exists. "
+                    f"Falling back to original value {self._contained}.") from e
+
             if not current_file.exists():
                 raise PathException(
-                    f"{name.capitalize()} to {current_file.normpath()} failed because can not be found. "
+                    f"{name.capitalize()} to {current_file.normpath()} failed because it can not be found. "
                     f"Falling back to original value {self._contained}.")
 
-        self._contained = current_file
+            self._contained = current_file
 
-    def renaming(self):
+        finally:
+            if self.lock.is_locked:
+                self.lock.release()
+
+    def renaming(self, lock=True, timeout=1, method: Callable[[str, str], None] = os.rename):
         """
         Create a renaming context for this immutable path.
         The external value is only changed if the renaming succeeds.
 
+        :param timeout: the timeout in seconds how long the lock file should be acquired
+        :param lock: if the source file should be locked as long as this context is open
+        :param method: an alternative method that renames the path (e.g., os.renames)
+
+        :Example:
         >>> with Path('/home/doe/folder/a.txt').renaming() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
@@ -412,32 +468,54 @@ class Path(object):
         """
 
         def checked_rename(cls: path.Path, target: path.Path):
-            if target.exists():
-                raise FileExistsError(f"{target.name} already exists.")
-            return cls.rename(target)
+            target_lock_file = target.with_suffix(target.ext + ".lock")
+            target_lock = SoftFileLock(target_lock_file)
+            if lock and cls.isfile():
+                try:
+                    target_lock.acquire(timeout)
+                except filelock.Timeout as t:
+                    raise PathException(
+                        f"Renaming {self._contained} failed because the target {target} could not be locked.") from t
+            try:
+                if target.exists():
+                    raise FileExistsError(f"{target.name} already exists.")
+                method(cls, target)
+            finally:
+                target_lock.release()
+                with contextlib.suppress(PermissionError):
+                    target_lock_file.remove_p()
+            return target
 
-        return self._op_context("Renaming", checked_rename)
+        return self._op_context("Renaming", lock=lock, timeout=timeout, operation=checked_rename)
 
-    def moving(self):
+    def moving(self, lock=True, timeout=1, method: Callable[[os.PathLike, os.PathLike], str] = shutil.move):
         """
         Create a moving context for this immutable path.
         The external value is only changed if the moving succeeds.
+
+        :param timeout: the timeout in seconds how long the lock file should be acquired
+        :param lock: if the source file should be locked as long as this context is open
+        :param method: an alternative method that moves the path and returns the new path
 
         >>> with Path('/home/doe/folder/a.txt').moving() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
 
         """
-        return self._op_context("Moving", path.Path.move)
+        return self._op_context("Moving", operation=method, lock=lock, timeout=timeout)
 
-    def copying(self):
+    def copying(self, lock=True, timeout=1, method: Callable[[Path, Path], Path] = shutil.copy):
         """
         Create a copying context for this immutable path.
         The external value is only changed if the copying succeeds.
+
+        :param timeout: the timeout in seconds how long the lock file should be acquired
+        :param lock: if the source file should be locked as long as this context is open
+        :param method: an alternative method that copies the path and returns the new path (e.g., shutil.copy2)
 
         >>> with Path('/home/doe/folder/a.txt').copying() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
 
         """
-        return self._op_context("Copying", path.Path.copy)
+        return self._op_context("Copying", operation=method, lock=lock, timeout=timeout)
