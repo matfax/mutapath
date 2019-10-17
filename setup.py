@@ -1,6 +1,10 @@
+import os
 from pathlib import Path
 
+from requirementslib import Lockfile
 from setuptools import setup, find_packages
+
+lockfile = Lockfile.create(os.getcwd())
 
 setup(
     name="mutapath",
@@ -15,15 +19,7 @@ setup(
     url="https://github.com/matfax/mutapath",
     keywords=["pathlib", "mutable", "path"],
     setup_requires=["setuptools-git-version"],
-    install_requires=[
-        "cached-property==1.5.1",
-        "filelock==3.0.12",
-        "importlib-metadata==0.23",
-        "more-itertools==7.2.0",
-        "path-py==11.5.2",
-        "zipp==0.6.0",
-    ],
-    dependency_links=[],
+    install_requires=lockfile.as_requirements(dev=False),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
