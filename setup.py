@@ -1,10 +1,14 @@
-import os
 from pathlib import Path
 
-from requirementslib import Lockfile
+import toml
 from setuptools import setup, find_packages
 
-lockfile = Lockfile.create(os.getcwd())
+
+def get_dependencies():
+    with open('Pipfile', 'r') as fh:
+        pipfile = fh.read()
+    return toml.loads(pipfile).values()
+
 
 setup(
     name="mutapath",
@@ -18,8 +22,8 @@ setup(
     author_email="matthias.fax@gmail.com",
     url="https://github.com/matfax/mutapath",
     keywords=["pathlib", "mutable", "path"],
-    setup_requires=["setuptools-git-version", "requirementslib"],
-    install_requires=lockfile.as_requirements(dev=False),
+    setup_requires=["setuptools-git-version"],
+    install_requires=get_dependencies(),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
