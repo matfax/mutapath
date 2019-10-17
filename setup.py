@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import List
 
 from setuptools import setup, find_packages
 
@@ -8,7 +9,13 @@ def get_dependencies(pipfile_lock=None):
     if pipfile_lock is None:
         pipfile_lock = Path("Pipfile.lock")
     lock_data = json.load(pipfile_lock.open())
-    return [package_name for package_name in lock_data.get('default', {}).keys()]
+    result: List[str] = [package_name for package_name in lock_data.get('default', {}).keys()]
+    for k in result:
+        if "path-py" in k:
+            new_key = k.replace("path-py", "path.py")
+            result.remove(k)
+            result.append(new_key)
+    return result
 
 
 setup(
@@ -34,4 +41,5 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
+    python_requires=">=3.7"
 )
