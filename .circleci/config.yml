@@ -4,7 +4,7 @@ version: 2.1
 orbs:
   python: broadinstitute/bits-python@0.2.0
 workflows:
-  test_deploy:
+  main:
     jobs:
       - python/run-tests:
           name: tests-3-7

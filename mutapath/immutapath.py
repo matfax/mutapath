@@ -7,9 +7,7 @@ import pathlib
 import shutil
 from contextlib import contextmanager
 from dataclasses import dataclass
-from types import GeneratorType
-from typing import Union, Iterable, ClassVar, Callable, List
-from xml.dom.minicompat import StringTypes
+from typing import Union, Iterable, ClassVar, Callable
 
 import filelock
 import path
@@ -17,12 +15,12 @@ from cached_property import cached_property
 from filelock import SoftFileLock
 
 import mutapath
-from mutapath.decorator import path_wrap, _convert_path
+from mutapath.decorator import path_wrapper, wrap_attribute
 from mutapath.exceptions import PathException
 from mutapath.lock_dummy import DummyFileLock
 
 
-@path_wrap
+@path_wrapper
 @dataclass(repr=False, eq=False)
 class Path(object):
     """Immutable Path"""
@@ -45,23 +43,9 @@ class Path(object):
     def __dir__(self) -> Iterable[str]:
         return sorted(super(Path, self).__dir__()) + dir(path.Path)
 
-    @staticmethod
-    def __wrap_attribute(orig_func):
-        def __wrap_decorator(*args, **kwargs):
-            result = orig_func(*args, **kwargs)
-            if isinstance(result, List) and not isinstance(result, StringTypes):
-                return list(map(_convert_path, result))
-            if isinstance(result, Iterable) and not isinstance(result, StringTypes):
-                return iter(map(_convert_path, result))
-            if isinstance(result, GeneratorType):
-                return map(_convert_path, result)
-            return _convert_path(result)
-
-        return __wrap_decorator
-
     def __getattr__(self, item):
         attr = getattr(self._contained, item)
-        return Path.__wrap_attribute(attr)
+        return wrap_attribute(attr)
 
     def __setattr__(self, key, value):
         if key == "_contained":
@@ -146,7 +130,7 @@ class Path(object):
         """
         Clone this path with a new name
 
-        .. seealso:: :func:`pathlib.Path.with_name`
+        .. seealso:: :py:func:`pathlib.Path.with_name`
         """
         return self.base.joinpath(str(new_name))
 
@@ -156,7 +140,7 @@ class Path(object):
 
     def with_parent(self, new_parent) -> Path:
         """Clone this path with a new parent"""
-        return Path(new_parent).joinpath(str(self.name))
+        return Path(new_parent) / self.name
 
     def with_base(self, base, strip_length: int = 0):
         """
@@ -248,7 +232,7 @@ class Path(object):
         """
         Get path base (i.e., the parent of the file)
 
-        seealso:: :func:`pathlib.Path.parent`
+        .. seealso:: :py:func:`pathlib.Path.parent`
         """
         return Path(self._contained.parent)
 
@@ -257,7 +241,7 @@ class Path(object):
         """
         Set a new file base
 
-        seealso:: :func:`mutapath.Path.with_base`
+        .. seealso:: :func:`mutapath.Path.with_base`
         """
         self._contained = self.with_base(value)
 
@@ -266,7 +250,7 @@ class Path(object):
         """
         Get this path as UNC mount point
 
-        seealso:: :func:`pathlib.Path.uncshare`
+        .. seealso:: :py:func:`pathlib.Path.uncshare`
         """
         return Path(self._contained.uncshare)
 
@@ -275,17 +259,12 @@ class Path(object):
         """
         Get path stem
 
-        seealso:: :func:`pathlib.Path.stem`
+        .. seealso:: :py:func:`pathlib.Path.stem`
         """
         return self._contained.stem
 
     @stem.setter
     def stem(self, value):
-        """
-        Set a new file stem
-
-        seealso:: :func:`mutapath.Path.with_stem`
-        """
         self._contained = self.with_stem(value)
 
     @property
@@ -293,7 +272,7 @@ class Path(object):
         """
         Get path drive
 
-        seealso:: :func:`pathlib.Path.drive`
+        .. seealso:: :py:func:`pathlib.Path.drive`
         """
         return Path(self._contained.drive)
 
@@ -302,17 +281,12 @@ class Path(object):
         """
         Get the parent path
 
-        seealso:: :func:`pathlib.Path.parent`
+        .. seealso:: :attr:`pathlib.PurePath.parent`, :func:`os.path.dirname`
         """
         return Path(self._contained.parent)
 
     @parent.setter
     def parent(self, value):
-        """
-        Set a new file parent
-
-        seealso:: :func:`mutapath.Path.with_parent`
-        """
         self._contained = self.with_parent(value)
 
     @property
@@ -320,7 +294,7 @@ class Path(object):
         """
         Get a list of all parent paths
 
-        seealso:: :func:`pathlib.Path.parents`
+        .. seealso:: :py:func:`pathlib.Path.parents`
         """
         result = pathlib.Path(self._contained).parents
         return iter(map(Path, result))
@@ -330,7 +304,7 @@ class Path(object):
         """
         Get the parent path
 
-        seealso:: :func:`pathlib.Path.dirname`
+        .. seealso:: :attr:`parent`, :func:`os.path.dirname`
         """
         return Path(self._contained.dirname())
 
@@ -339,7 +313,7 @@ class Path(object):
         """
         Get the size of the file
 
-        seealso:: :func:`path.Path.size`
+        .. seealso:: :func:`path.Path.size`
         """
         return self._contained.size
 
@@ -348,7 +322,7 @@ class Path(object):
         """
         Get the creation time of the file
 
-        seealso:: :func:`os.path.getctime`
+        .. seealso:: :func:`os.path.getctime`
         """
         return self._contained.ctime
 
@@ -357,7 +331,7 @@ class Path(object):
         """
         Get the mtime of the file
 
-        seealso:: :func:`os.path.getmtime`
+        .. seealso:: :func:`os.path.getmtime`
         """
         return self._contained.mtime
 
@@ -366,7 +340,7 @@ class Path(object):
         """
         Get the atime of the file
 
-        seealso:: :func:`os.path.getatime`
+        .. seealso:: :func:`os.path.getatime`
         """
         return self._contained.atime
 
@@ -381,14 +355,20 @@ class Path(object):
         """
         Open a file and return a stream to its content.
 
-        seealso:: :func:`io.open`
+        .. seealso:: :func:`io.open`
         """
         return io.open(str(self), *args, **kwargs)
 
     @cached_property
-    def lock(self) -> SoftFileLock:
+    def lock(self) -> filelock.BaseFileLock:
         """
-        Get a file lock holder for this file.
+        Generate a cached file locker for this file with the additional suffix '.lock'.
+        If this path refers not to an existing file or to an existing folder,
+        a dummy lock is returned that does not do anything.
+
+        Once this path os modified (cloning is not modifying), the lock is released and regenerated for the new path.
+
+        .. seealso:: :class:`~filelock.SoftFileLock`, :class:`~mutapath.lock_dummy.DummyFileLock`
         """
         lock_file = self._contained.with_suffix(self.suffix + ".lock")
         if not self.isfile():
@@ -407,7 +387,7 @@ class Path(object):
         """
         self.__mutable = mutapath.MutaPath(self)
         yield self.__mutable
-        self._contained = getattr(self.__mutable, "_contained")
+        self._contained = self.__mutable._contained
 
     @contextmanager
     def _op_context(self, name: str, timeout: float, lock: bool,
@@ -436,7 +416,7 @@ class Path(object):
             yield self.__mutable
 
             current_file = self._contained
-            target_file = getattr(self.__mutable, "_contained")
+            target_file = self.__mutable._contained
 
             try:
                 current_file = path.Path(operation(current_file, target_file))
@@ -470,7 +450,6 @@ class Path(object):
         >>> with Path('/home/doe/folder/a.txt').renaming() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
-
         """
 
         def checked_rename(cls: path.Path, target: path.Path):

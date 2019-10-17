@@ -4,15 +4,20 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-twine = "*"
-setuptools = "*"
-setuptools-git-version = "*"
-green = "*"
-coverage = "*"
-codecov = "*"
-wheel = "*"
+twine = "==2.0.0"
+setuptools = "==41.4.0"
+setuptools-git-version = "==1.0.3"
+green = "==3.0.0"
+coverage = "==4.5.4"
+codecov = "==2.0.15"
+wheel = "==0.33.6"
+sphinx = "==2.2.0"
+pipenv-setup = "==2.1.6"
+sphinx-rtd-theme = "==0.4.3"
+sphinx-fakeinv = "==1.0.0"
+m2r = "==0.2.1"
 
 [packages]
-path-py = "==12.0.1"
+path-py = "==12.0.0"
 filelock = "==3.0.12"
 cached-property = "==1.5.1"

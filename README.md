@@ -20,21 +20,24 @@ The MutaPath Class allows direct manipulation of its attributes at any time, jus
 Once a file operation is called that is intended to modify its path, the underlying path is also mutated.
 
 ```python
-
 >>> from mutapath import MutaPath
-
+```
+```python
 >>> folder = MutaPath("/home/joe/doe/folder/sub")
 >>> folder
 Path('/home/joe/doe/folder/sub')
-
+```
+```python
 >>> folder.name = "top"
 >>> folder
 Path('/home/joe/doe/folder/top')
-
+```
+```python
 >>> next = MutaPath("/home/joe/doe/folder/next")
 >>> next
 Path('/home/joe/doe/folder/next')
-
+```
+```python
 >>> next.rename(folder)
 >>> next
 Path('/home/joe/doe/folder/top')
@@ -42,7 +45,6 @@ Path('/home/joe/doe/folder/top')
 True
 >>> Path('/home/joe/doe/folder/sub').exists()
 False
-
 ```
 
 ## Path Class
@@ -52,23 +54,26 @@ Moreover, there are additional contexts for file operations. They update the fil
 If the file operations don't succeed, they throw an exception and fall back to the original path value.
 
 ```python
-
 >>> from mutapath import Path
-
+```
+```python
 >>> folder = Path("/home/joe/doe/folder/sub")
 >>> folder
 Path('/home/joe/doe/folder/sub')
-
+```
+```python
 >>> folder.name = "top"
 AttributeError: mutapath.Path is an immutable class, unless mutate() context is used.
 >>> folder
 Path('/home/joe/doe/folder/sub')
-
+```
+```python
 >>> with folder.mutate() as m:
 ...     m.name = "top"
 >>> folder
 Path('/home/joe/doe/folder/top')
-
+```
+```python
 >>> next = Path("/home/joe/doe/folder/next")
 >>> next.copy(folder)
 >>> next
@@ -76,7 +81,8 @@ Path('/home/joe/doe/folder/next')
 >>> folder.exists()
 True
 >>> folder.remove()
-
+```
+```python
 >>> with next.renaming() as m:
 ...     m.stem = folder.stem
 ...     m.suffix = ".txt"
@@ -86,5 +92,4 @@ Path("/home/joe/doe/folder/sub.txt")
 True
 >>> next.with_name("next").exists()
 False
-
 ```

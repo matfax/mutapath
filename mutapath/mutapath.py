@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
 import mutapath
-from mutapath.decorator import path_mutable
+from mutapath.decorator import mutable_path_wrapper
 
 
-@path_mutable
+@mutable_path_wrapper
 @dataclass(repr=False, eq=False)
 class MutaPath(mutapath.Path):
     """Mutable Path"""
