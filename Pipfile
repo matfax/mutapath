@@ -18,6 +18,6 @@ sphinx-fakeinv = "==1.0.0"
 m2r = "==0.2.1"
 
 [packages]
-path-py = "==12.0.0"
+path-py = "==11.5.2"
 filelock = "==3.0.12"
 cached-property = "==1.5.1"
