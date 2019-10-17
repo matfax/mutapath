@@ -20,7 +20,7 @@ setup(
         "filelock==3.0.12",
         "importlib-metadata==0.23",
         "more-itertools==7.2.0",
-        "path-py==12.0.0",
+        "path-py==11.5.2",
         "zipp==0.6.0",
     ],
     dependency_links=[],
