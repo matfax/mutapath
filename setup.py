@@ -18,7 +18,7 @@ setup(
     author_email="matthias.fax@gmail.com",
     url="https://github.com/matfax/mutapath",
     keywords=["pathlib", "mutable", "path"],
-    setup_requires=["setuptools-git-version"],
+    setup_requires=["setuptools-git-version", "requirementslib"],
     install_requires=lockfile.as_requirements(dev=False),
     classifiers=[
         "Development Status :: 4 - Beta",
