@@ -10,7 +10,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath.svg)](https://github.com/matfax/mutapath/commits/master)
 
 This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases where paths are often changed.
-mutapath solves this by wrapping the extended pathlib library path.py and updating the encapsulated object every time the path might be changed.
+mutapath solves this by wrapping the extended pathlib library [path.py](https://pypi.org/project/path.py/) and updating the encapsulated object every time the path might be changed.
 
 mutapath also adds the possibility to delimit file and path modifications to a safe fallback context.
 
@@ -93,3 +93,5 @@ True
 >>> next.with_name("next").exists()
 False
 ```
+
+For more in-depth examples, check the tests folder.

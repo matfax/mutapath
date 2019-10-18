@@ -118,7 +118,7 @@ class Path(object):
         return self._contained.__fspath__()
 
     def __invert__(self):
-        """Create a MutaPath from immutable Path"""
+        """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
         return MutaPath(self._contained)
 
@@ -127,19 +127,15 @@ class Path(object):
         return path.Path(path.Path.module.normpath(pathly))
 
     def with_name(self, new_name) -> Path:
-        """
-        Clone this path with a new name
-
-        .. seealso:: :py:func:`pathlib.Path.with_name`
-        """
+        """ .. seealso:: :func:`pathlib.PurePath.with_name` """
         return self.base.joinpath(str(new_name))
 
     def with_stem(self, new_stem) -> Path:
-        """Clone this path with a new stem"""
+        """Clone this path with a new stem."""
         return self.base.joinpath(str(new_stem)).with_suffix(self.ext)
 
     def with_parent(self, new_parent) -> Path:
-        """Clone this path with a new parent"""
+        """Clone this path with a new parent."""
         return Path(new_parent) / self.name
 
     def with_base(self, base, strip_length: int = 0):
@@ -147,15 +143,17 @@ class Path(object):
         Clone this path with a new base.
 
         The given path is used in its full length as base of this path, if strip_length is not specified.
-        If strip_length is specified, the given number of path elements are stripped from the left side,
-        and the given base is prepended.
 
+        :Example:
         >>> Path('/home/doe/folder/sub').with_base("/home/joe")
         Path('/home/joe/folder/sub')
 
+        If strip_length is specified, the given number of path elements are stripped from the left side,
+        and the given base is prepended.
+
+        :Example:
         >>> Path('/home/doe/folder/sub').with_base("/home/joe", strip_length=1)
         Path('/home/joe/doe/folder/sub')
-
         """
         base = Path(base)
         if not strip_length:
@@ -170,16 +168,17 @@ class Path(object):
 
     @classmethod
     def getcwd(cls) -> Path:
-        """Get the current working directory"""
+        """ .. seealso:: :func:`pathlib.Path.cwd` """
         return Path(os.getcwd())
 
     @property
     def cwd(self):
-        """Get the current working directory"""
+        """ .. seealso:: :func:`pathlib.Path.cwd` """
         return self.getcwd()
 
     @path.multimethod
     def joinpath(self, first, *others) -> Path:
+        """ .. seealso:: :func:`pathlib.PurePath.joinpath` """
         contained_others = map(str, others)
         joined = path.Path.joinpath(self._contained, str(first), *contained_others)
         return Path(joined)
@@ -189,10 +188,11 @@ class Path(object):
         """
         Get the home path of the current path representation.
 
+        :return: the home path
+
+        :Example:
         >>> Path("/home/doe/folder/sub").home
         Path("home")
-
-        :return: the home path
         """
         split = self.splitall()
         if len(split) <= 1:
@@ -204,63 +204,48 @@ class Path(object):
 
     @property
     def suffix(self) -> str:
-        """Get file suffix"""
+        """ .. seealso:: :attr:`pathlib.PurePath.suffix` """
         return self.ext
 
     @suffix.setter
     def suffix(self, value):
-        """Set file suffix"""
         self._contained = self.with_suffix(value)
 
     @property
     def ext(self) -> str:
-        """Get file name"""
+        """ .. seealso:: :attr:`~mutapath.Path.suffix` """
         return self._contained.ext
 
     @property
     def name(self) -> Path:
-        """Get file name"""
+        """ .. seealso:: :attr:`pathlib.PurePath.name` """
         return Path(self._contained.name)
 
     @name.setter
     def name(self, value):
-        """Set file name"""
         self._contained = self.with_name(value)
 
     @property
     def base(self) -> Path:
         """
-        Get path base (i.e., the parent of the file)
+        Get the path base (i.e., the parent of the file).
 
-        .. seealso:: :py:func:`pathlib.Path.parent`
+        .. seealso:: :attr:`parent`
         """
         return Path(self._contained.parent)
 
     @base.setter
     def base(self, value):
-        """
-        Set a new file base
-
-        .. seealso:: :func:`mutapath.Path.with_base`
-        """
         self._contained = self.with_base(value)
 
     @property
     def uncshare(self) -> Path:
-        """
-        Get this path as UNC mount point
-
-        .. seealso:: :py:func:`pathlib.Path.uncshare`
-        """
+        """ .. seealso:: :attr:`path.Path.uncshare` """
         return Path(self._contained.uncshare)
 
     @property
     def stem(self) -> str:
-        """
-        Get path stem
-
-        .. seealso:: :py:func:`pathlib.Path.stem`
-        """
+        """ .. seealso:: :attr:`pathlib.PurePath.stem` """
         return self._contained.stem
 
     @stem.setter
@@ -269,20 +254,12 @@ class Path(object):
 
     @property
     def drive(self) -> Path:
-        """
-        Get path drive
-
-        .. seealso:: :py:func:`pathlib.Path.drive`
-        """
+        """ .. seealso:: :attr:`pathlib.PurePath.drive` """
         return Path(self._contained.drive)
 
     @property
     def parent(self) -> Path:
-        """
-        Get the parent path
-
-        .. seealso:: :attr:`pathlib.PurePath.parent`, :func:`os.path.dirname`
-        """
+        """ .. seealso:: :attr:`pathlib.PurePath.parent` """
         return Path(self._contained.parent)
 
     @parent.setter
@@ -291,72 +268,42 @@ class Path(object):
 
     @property
     def parents(self) -> Iterable[Path]:
-        """
-        Get a list of all parent paths
-
-        .. seealso:: :py:func:`pathlib.Path.parents`
-        """
+        """ .. seealso:: :attr:`pathlib.Path.parents` """
         result = pathlib.Path(self._contained).parents
         return iter(map(Path, result))
 
     @property
     def dirname(self) -> Path:
-        """
-        Get the parent path
-
-        .. seealso:: :attr:`parent`, :func:`os.path.dirname`
-        """
+        """ .. seealso:: :func:`os.path.dirname` """
         return Path(self._contained.dirname())
 
     @property
     def size(self) -> int:
-        """
-        Get the size of the file
-
-        .. seealso:: :func:`path.Path.size`
-        """
+        """ .. seealso:: :func:`os.path.getsize` """
         return self._contained.size
 
     @property
     def ctime(self) -> float:
-        """
-        Get the creation time of the file
-
-        .. seealso:: :func:`os.path.getctime`
-        """
+        """ .. seealso:: :func:`os.path.getctime` """
         return self._contained.ctime
 
     @property
     def mtime(self) -> float:
-        """
-        Get the mtime of the file
-
-        .. seealso:: :func:`os.path.getmtime`
-        """
+        """ .. seealso:: :func:`os.path.getmtime` """
         return self._contained.mtime
 
     @property
     def atime(self) -> float:
-        """
-        Get the atime of the file
-
-        .. seealso:: :func:`os.path.getatime`
-        """
+        """ .. seealso:: :func:`os.path.getatime` """
         return self._contained.atime
 
     @property
     def owner(self):
-        """
-        Get the owner of the file.
-        """
+        """ .. seealso:: :meth:`get_owner` """
         return self._contained.owner
 
     def open(self, *args, **kwargs):
-        """
-        Open a file and return a stream to its content.
-
-        .. seealso:: :func:`io.open`
-        """
+        """ .. seealso:: :func:`pathlib.Path.open` """
         return io.open(str(self), *args, **kwargs)
 
     @cached_property
@@ -366,7 +313,12 @@ class Path(object):
         If this path refers not to an existing file or to an existing folder,
         a dummy lock is returned that does not do anything.
 
-        Once this path os modified (cloning is not modifying), the lock is released and regenerated for the new path.
+        Once this path is modified (cloning != modifying), the lock is released and regenerated for the new path.
+
+        :Example:
+        >>> my_path = Path('/home/doe/folder/sub')
+        >>> with my_path.lock:
+        ...     my_path.write_text("I can write")
 
         .. seealso:: :class:`~filelock.SoftFileLock`, :class:`~mutapath.lock_dummy.DummyFileLock`
         """
@@ -380,10 +332,10 @@ class Path(object):
         """
         Create a mutable context for this immutable path.
 
+        :Example:
         >>> with Path('/home/doe/folder/sub').mutate() as mut:
         ...     mut.name = "top"
         Path('/home/doe/folder/top')
-
         """
         self.__mutable = mutapath.MutaPath(self)
         yield self.__mutable
@@ -400,6 +352,7 @@ class Path(object):
         :param timeout: the timeout in seconds how long the lock file should be acquired
         :param lock: if the source file should be locked as long as this context is open
         :param operation: the callable operation that gets the source and target file passed as argument
+        
         """
         if not self._contained.exists():
             raise PathException(f"{name.capitalize()} {self._contained} failed because the file does not exist.")
@@ -482,10 +435,10 @@ class Path(object):
         :param lock: if the source file should be locked as long as this context is open
         :param method: an alternative method that moves the path and returns the new path
 
+        :Example:
         >>> with Path('/home/doe/folder/a.txt').moving() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
-
         """
         return self._op_context("Moving", operation=method, lock=lock, timeout=timeout)
 
@@ -498,9 +451,9 @@ class Path(object):
         :param lock: if the source file should be locked as long as this context is open
         :param method: an alternative method that copies the path and returns the new path (e.g., shutil.copy2)
 
+        :Example:
         >>> with Path('/home/doe/folder/a.txt').copying() as mut:
         ...     mut.stem = "b"
         Path('/home/doe/folder/b.txt')
-
         """
         return self._op_context("Copying", operation=method, lock=lock, timeout=timeout)
