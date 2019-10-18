@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
@@ -9,12 +10,16 @@ project = "'mutapath'"
 copyright = "2019, 'matfax'"
 author = "'matfax'"
 
+release = re.sub('^', '', os.popen('git describe').read().strip())
+version = release
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'm2r',
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.napoleon',
@@ -23,11 +28,10 @@ extensions = [
     'sphinx_rtd_theme',
     'sphinx.ext.linkcode',
     'sphinx.ext.intersphinx',
-    'm2r',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

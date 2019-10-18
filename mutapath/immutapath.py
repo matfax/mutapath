@@ -92,11 +92,11 @@ class Path(object):
         right = str(other).replace("\\\\", "\\").replace("\\", "/")
         return left < right
 
-    def __add__(self, other):
-        return self._contained.__add__(Path(other)._contained)
+    def __add__(self, other) -> str:
+        return str(self._contained.__add__(Path(other)._contained))
 
-    def __radd__(self, other):
-        return self._contained.__radd__(Path(other)._contained)
+    def __radd__(self, other) -> str:
+        return str(self._contained.__radd__(Path(other)._contained))
 
     def __div__(self, other):
         return self._contained.__div__(Path(other)._contained)
