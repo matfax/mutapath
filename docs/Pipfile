@@ -21,4 +21,4 @@ wheel = "==0.33.6"
 [packages]
 path-py = "==12.0.1"
 filelock = "==3.0.12"
-cached-property = "==1.4.3"
+cached-property = "==1.5.1"
