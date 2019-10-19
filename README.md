@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/matfax/mutapath/tree/master.svg?style=shield)](https://circleci.com/gh/matfax/mutapath/tree/master)
 [![codecov](https://codecov.io/gh/matfax/mutapath/branch/master/graph/badge.svg)](https://codecov.io/gh/matfax/mutapath)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=matfax/mutapath)](https://dependabot.com)
+[![Renovate Status](https://badges.renovateapi.com/github/matfax/mutapath)](https://renovatebot.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/matfax/mutapath/badge)](https://www.codefactor.io/repository/github/matfax/mutapath)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath)](https://pypi.org/project/mutapath/)
 [![PyPI](https://img.shields.io/pypi/v/mutapath)](https://pypi.org/project/mutapath/)
