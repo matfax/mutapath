@@ -12,7 +12,7 @@
   },
   "lockFileMaintenance": {
     "automerge": true
-  }
+  },
   "pipenv": {
     "enabled": true
   }
