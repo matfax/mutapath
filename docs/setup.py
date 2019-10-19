@@ -1,9 +1,8 @@
 import json
+from pathlib import Path
 from typing import List, Optional
 
 from setuptools import setup, find_packages
-
-from mutapath import Path
 
 
 def get_dependencies(pipfile_lock: Optional[str] = None, develop: bool = False):
