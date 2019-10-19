@@ -55,6 +55,8 @@ html_css_files = [
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['static']
 
+master_doc = 'index'
+
 m2r_parse_relative_links = True
 m2r_anonymous_references = True
 
