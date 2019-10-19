@@ -1,7 +1,7 @@
 from mutapath import MutaPath, Path
 from tests.helper import PathTest, file_test
 
-file_test_no_asserts = file_test(equal=False, instance=False, exists=False)
+file_test_no_asserts = file_test(equal=False, instance=False, exists=False, posix_test=False)
 
 
 class TestMutaPath(PathTest):
@@ -9,8 +9,8 @@ class TestMutaPath(PathTest):
         self.test_path = "mutapath_test"
         super().__init__(*args)
 
-    def _gen_start_path(self):
-        return MutaPath(super(TestMutaPath, self)._gen_start_path())
+    def _gen_start_path(self, posix: bool = False):
+        return MutaPath(super(TestMutaPath, self)._gen_start_path(posix), posix)
 
     @file_test_no_asserts
     def test_suffix(self, test_file: Path):
@@ -65,6 +65,13 @@ class TestMutaPath(PathTest):
         expected = Path("/A/B/C/other.txt")
         actual = MutaPath("/A/other.txt")
         actual.parent /= "B/C"
+        self.assertEqual(expected, actual)
+        self.assertIsInstance(actual, MutaPath)
+
+    def test_set_posix_enabled(self):
+        expected = Path("/A/B/C/other.txt", posix=True)
+        actual = MutaPath("/A/B/C/other.txt")
+        actual.posix_enabled = True
         self.assertEqual(expected, actual)
         self.assertIsInstance(actual, MutaPath)
 

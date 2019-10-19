@@ -6,8 +6,7 @@ import os
 import pathlib
 import shutil
 from contextlib import contextmanager
-from dataclasses import dataclass
-from typing import Union, Iterable, ClassVar, Callable
+from typing import Union, Iterable, ClassVar, Callable, Optional
 
 import filelock
 import path
@@ -19,26 +18,37 @@ from mutapath.decorator import path_wrapper, wrap_attribute
 from mutapath.exceptions import PathException
 from mutapath.lock_dummy import DummyFileLock
 
+POSIX_ENABLED_DEFAULT = False
+
 
 @path_wrapper
-@dataclass(repr=False, eq=False)
 class Path(object):
     """Immutable Path"""
+    _contained: Union[path.Path, pathlib.Path, str] = path.Path("")
+    __always_posix_format: bool
     __mutable: ClassVar[object]
-    _contained: Union[path.Path, pathlib.Path, str] = ""
 
-    def __post_init__(self):
-        if isinstance(self._contained, path.Path):
-            normalized = self._norm(self._contained)
-            if not self._contained == normalized:
-                self._contained = normalized
-        else:
-            if isinstance(self._contained, str):
-                self._contained = path.Path(self._contained)
-            if isinstance(self._contained, Path):
-                self._contained = self._contained._contained
-            if isinstance(self._contained, pathlib.Path):
-                self._contained = path.Path(str(self._contained))
+    def __init__(self, contained: Union[Path, path.Path, pathlib.Path, str] = "", posix: bool = POSIX_ENABLED_DEFAULT):
+        self.__always_posix_format = posix
+        self._set_contained(contained, posix)
+
+    def _set_contained(self, contained: Union[Path, path.Path, pathlib.Path, str], posix: Optional[bool] = None):
+        if contained:
+            if isinstance(contained, Path):
+                contained = contained._contained
+            elif isinstance(contained, pathlib.Path):
+                contained = str(contained)
+
+            normalized = path.Path.module.normpath(contained)
+            if posix is None:
+                if self.__always_posix_format:
+                    normalized = Path.posix_string(normalized)
+            elif posix:
+                normalized = Path.posix_string(normalized)
+
+            contained = path.Path(normalized)
+
+            super(Path, self).__setattr__("_contained", contained)
 
     def __dir__(self) -> Iterable[str]:
         return sorted(super(Path, self).__dir__()) + dir(path.Path)
@@ -58,45 +68,55 @@ class Path(object):
 
             if isinstance(value, Path):
                 value = value._contained
-            super(Path, self).__setattr__(key, value)
-            self.__post_init__()
-        elif key == "_Path__mutable":
+            self._set_contained(value)
+        elif key in ["_Path__mutable", "_Path__always_posix_format"]:
             super(Path, self).__setattr__(key, value)
         else:
-            raise AttributeError("mutapath.Path is an immutable class, unless mutate() context is used.")
+            raise AttributeError(f"attribute {key} can not be set because mutapath.Path is an immutable class.")
 
     def __repr__(self):
         return repr(self._contained)
 
     def __str__(self):
+        if self.posix_enabled:
+            return self.posix_string()
         return self._contained
+
+    def __eq__(self, other):
+        if isinstance(other, pathlib.Path):
+            other = str(other)
+        elif isinstance(other, Path):
+            other = other._contained
+
+        if isinstance(other, str):
+            if self._contained == other:
+                return True
+            other = path.Path(other)
+        if isinstance(other, path.Path):
+            if self._contained == other:
+                return True
+            other = Path(other, posix=self.__always_posix_format)
+
+        if not isinstance(other, Path):
+            return NotImplemented
+
+        return str(self) == str(other)
 
     def __hash__(self):
         return hash(self._contained)
 
-    def __eq__(self, other):
-        if isinstance(other, Path):
-            return self._contained == other._contained
-        if isinstance(other, path.Path):
-            return self._contained == self._norm(other)
-        if isinstance(other, pathlib.Path):
-            return self._contained == Path(other)._contained
-        if isinstance(other, str):
-            return str(self) == str(other)
-        return super(Path, self).__eq__(other)
-
     def __lt__(self, other):
         if isinstance(other, Path):
             return self.splitall() < other.splitall()
-        left = str(self).replace("\\\\", "\\").replace("\\", "/")
+        left = self.posix_string()
         right = str(other).replace("\\\\", "\\").replace("\\", "/")
         return left < right
 
     def __add__(self, other) -> str:
-        return str(self._contained.__add__(Path(other)._contained))
+        return str(self.clone(self._contained.__add__(Path(other)._contained)))
 
     def __radd__(self, other) -> str:
-        return str(self._contained.__radd__(Path(other)._contained))
+        return str(self.clone(self._contained.__radd__(Path(other)._contained)))
 
     def __div__(self, other):
         return self._contained.__div__(Path(other)._contained)
@@ -109,7 +129,7 @@ class Path(object):
     __rtruediv__ = __rdiv__
 
     def __enter__(self):
-        return Path(self._contained.__enter__())
+        return self.clone(self._contained.__enter__())
 
     def __exit__(self, *_):
         self._contained.__exit__()
@@ -120,11 +140,38 @@ class Path(object):
     def __invert__(self):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
-        return MutaPath(self._contained)
+        return MutaPath(self._contained, self.posix_enabled)
 
-    @staticmethod
-    def _norm(pathly: path.Path):
-        return path.Path(path.Path.module.normpath(pathly))
+    def clone(self, contained) -> Path:
+        """
+        Clone this path with a new given wrapped path representation, having the same remaining attributes.
+        :param contained: the new contained path element
+        :return: the cloned path
+        """
+        return Path(contained, posix=self.__always_posix_format)
+
+    @path.multimethod
+    def posix_string(self, input_path: str = "") -> str:
+        """
+        Get this path as string with posix-like separators (i.e., '/').
+
+        :Example:
+        >>> Path("\\home\\\\doe/folder\\sub").with_poxis_enabled()
+        '/home/joe/doe/folder/sub'
+        """
+        if isinstance(input_path, Path):
+            input_path = input_path._contained
+        return input_path.replace('\\\\', '\\').replace('\\', '/')
+
+    def with_poxis_enabled(self, enable: bool = True):
+        """
+        Clone this path in posix format with posix-like separators (i.e., '/').
+
+        :Example:
+        >>> Path("\\home\\\\doe/folder\\sub").with_poxis_enabled()
+        Path('/home/joe/doe/folder/sub')
+        """
+        return Path(self, posix=enable)
 
     def with_name(self, new_name) -> Path:
         """ .. seealso:: :func:`pathlib.PurePath.with_name` """
@@ -180,8 +227,11 @@ class Path(object):
     def joinpath(self, first, *others) -> Path:
         """ .. seealso:: :func:`pathlib.PurePath.joinpath` """
         contained_others = map(str, others)
-        joined = path.Path.joinpath(self._contained, str(first), *contained_others)
-        return Path(joined)
+        safe_instance = first
+        if not isinstance(safe_instance, Path):
+            safe_instance = Path(safe_instance)
+        joined = path.Path.joinpath(safe_instance._contained, *contained_others)
+        return Path(joined, posix=safe_instance.posix_enabled)
 
     @property
     def home(self) -> Path:
@@ -203,6 +253,17 @@ class Path(object):
         return self.drive
 
     @property
+    def posix_enabled(self) -> bool:
+        """
+        If set to True, the the representation of this path will always follow the posix format, even on NT filesystems.
+        """
+        return self.__always_posix_format
+
+    @posix_enabled.setter
+    def posix_enabled(self, value: bool):
+        self.__always_posix_format = value
+
+    @property
     def suffix(self) -> str:
         """ .. seealso:: :attr:`pathlib.PurePath.suffix` """
         return self.ext
@@ -219,7 +280,7 @@ class Path(object):
     @property
     def name(self) -> Path:
         """ .. seealso:: :attr:`pathlib.PurePath.name` """
-        return Path(self._contained.name)
+        return self.clone(self._contained.name)
 
     @name.setter
     def name(self, value):
@@ -232,7 +293,7 @@ class Path(object):
 
         .. seealso:: :attr:`parent`
         """
-        return Path(self._contained.parent)
+        return self.clone(self._contained.parent)
 
     @base.setter
     def base(self, value):
@@ -255,12 +316,12 @@ class Path(object):
     @property
     def drive(self) -> Path:
         """ .. seealso:: :attr:`pathlib.PurePath.drive` """
-        return Path(self._contained.drive)
+        return self.clone(self._contained.drive)
 
     @property
     def parent(self) -> Path:
         """ .. seealso:: :attr:`pathlib.PurePath.parent` """
-        return Path(self._contained.parent)
+        return self.clone(self._contained.parent)
 
     @parent.setter
     def parent(self, value):
@@ -270,12 +331,12 @@ class Path(object):
     def parents(self) -> Iterable[Path]:
         """ .. seealso:: :attr:`pathlib.Path.parents` """
         result = pathlib.Path(self._contained).parents
-        return iter(map(Path, result))
+        return iter(map(self.clone, result))
 
     @property
     def dirname(self) -> Path:
         """ .. seealso:: :func:`os.path.dirname` """
-        return Path(self._contained.dirname())
+        return self.clone(self._contained.dirname())
 
     @property
     def size(self) -> int:

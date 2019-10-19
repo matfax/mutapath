@@ -1,17 +1,19 @@
 import functools
 import inspect
 from types import GeneratorType
-from typing import List, Iterable
+from typing import List, Iterable, Callable
 
 import path
 
 import mutapath
 
-__EXCLUDE_FROM_WRAPPING = ["__dir__", "__eq__", "__format__", "__repr__", "__str__", "__sizeof__", "__init__",
-                           "__post_init__", "__getattribute__", "__delattr__", "__setattr__", "__getattr__",
-                           "__exit__", "__fspath__", "'_Path__wrap_attribute'", "__wrap_decorator", "_op_context",
-                           "__hash__", "__enter__", "_norm", "open", "lock", "getcwd", "dirname", "owner", "uncshare",
-                           "joinpath"]
+__EXCLUDE_FROM_WRAPPING = [
+    "__dir__", "__eq__", "__format__", "__repr__", "__str__", "__sizeof__", "__init__", "__getattribute__",
+    "__delattr__", "__setattr__", "__getattr__", "joinpath", "clone", "__exit__", "__fspath__",
+    "'_Path__wrap_attribute'", "__wrap_decorator", "_op_context", "__hash__", "__enter__", "_norm", "open", "lock",
+    "getcwd", "dirname", "owner", "uncshare", "posix_format", "posix_string", "__add__", "__radd__", "_set_contained",
+    "with_poxis_enabled"
+]
 
 __MUTABLE_FUNCTIONS = {"rename", "renames", "copy", "copy2", "copyfile", "copymode", "copystat", "copytree", "move",
                        "basename", "abspath", "join", "joinpath", "normpath", "relpath", "realpath", "relpathto"}
@@ -25,17 +27,20 @@ def __is_def(member):
     return inspect.isroutine(member)
 
 
-def __convert_path(result):
-    if isinstance(result, path.Path):
-        return mutapath.Path(result)
-    return result
+def __path_converter(const: Callable):
+    def convert_path(result):
+        if isinstance(result, path.Path):
+            return const(result)
+        return result
+
+    return convert_path
 
 
 def __path_func(orig_func):
     @functools.wraps(orig_func)
-    def wrap_decorator(*args, **kwargs):
-        result = orig_func(*args, **kwargs)
-        return __convert_path(result)
+    def wrap_decorator(cls, *args, **kwargs):
+        result = orig_func(cls, *args, **kwargs)
+        return __path_converter(cls.clone)(result)
 
     return wrap_decorator
 
@@ -45,12 +50,12 @@ def wrap_attribute(orig_func):
     def __wrap_decorator(cls, *args, **kwargs):
         result = orig_func(cls._contained, *args, **kwargs)
         if isinstance(result, List) and not isinstance(result, str):
-            return list(map(__convert_path, result))
+            return list(map(__path_converter(cls.clone), result))
         if isinstance(result, Iterable) and not isinstance(result, str):
-            return iter(map(__convert_path, result))
+            return iter(map(__path_converter(cls.clone), result))
         if isinstance(result, GeneratorType):
-            return map(__convert_path, result)
-        return __convert_path(result)
+            return map(__path_converter(cls.clone), result)
+        return __path_converter(cls.clone)(result)
 
     return __wrap_decorator
 
