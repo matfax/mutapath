@@ -11,10 +11,6 @@ green = "==3.0.0"
 coverage = "==4.5.4"
 codecov = "==2.0.15"
 wheel = "==0.33.6"
-sphinx = "==2.2.0"
-sphinx-rtd-theme = "==0.4.3"
-sphinx-fakeinv = "==1.0.0"
-m2r = "==0.2.1"
 
 [packages]
 path-py = "==12.0.1"

@@ -1,0 +1,10 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+sphinx = "==2.2.0"
+sphinx-rtd-theme = "==0.4.3"
+sphinx-fakeinv = "==1.0.0"
+m2r = "==0.2.1"
