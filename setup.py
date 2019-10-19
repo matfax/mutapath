@@ -2,7 +2,7 @@ from pathlib import Path
 
 from setuptools import setup, find_packages
 
-from docs.setup import get_dependencies
+from docs.setup_helper import get_dependencies
 
 setup(
     name="mutapath",
