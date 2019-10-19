@@ -1,0 +1,18 @@
+ci:
+  platform:
+    pypi:
+      sphinxcontrib-applehelp:
+        tests:
+          unlicensed: skip
+      sphinxcontrib-devhelp:
+        tests:
+          unlicensed: skip
+      sphinxcontrib-htmlhelp:
+        tests:
+          unlicensed: skip
+      sphinxcontrib-qthelp:
+        tests:
+          unlicensed: skip
+      sphinxcontrib-serializinghtml:
+        tests:
+          unlicensed: skip
