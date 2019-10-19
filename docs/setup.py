@@ -7,6 +7,6 @@ setup(
     version_format="{tag}",
     license="lgpl-3.0",
     setup_requires=["setuptools-git-version"],
-    install_requires=get_dependencies("../Pipfile.lock", develop=True) + get_dependencies(develop=True),
+    install_requires=get_dependencies(develop=True),
     python_requires=">=3.7"
 )
