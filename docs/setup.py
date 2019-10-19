@@ -1,6 +1,5 @@
+from setup_helper import get_dependencies
 from setuptools import setup, find_packages
-
-from docs.setup_helper import get_dependencies
 
 setup(
     name="mutapath",
