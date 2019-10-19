@@ -33,7 +33,7 @@ def _import_wrapped_members(cls, member_name, member, cls_name=''):
 
 def setup(app: Sphinx):
     LOG.info("[attributes] starting attributes extension")
-    app.add_autodocumenter(AppDocumenter, override=True)
+    app.add_autodocumenter(AppDocumenter)
 
     for name, member in inspect.safe_getmembers(mutapath.Path):
         _import_wrapped_members(mutapath.Path, name, member, 'mutapath.Path')
