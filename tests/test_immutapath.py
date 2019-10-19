@@ -116,11 +116,9 @@ class TestPath(PathTest):
 
         constructors = [posix_path, Path, MutaPath]
         comparable_constructors = constructors + [path.Path, pathlib.Path, str]
-        containers = [
-            "/A\\B/other.txt",
-            "/A/B/other.txt",
-            "\\A\\B\\other.txt"
-        ]
+        containers = ["/A/B/other.txt"]
+        if os.name == 'nt':
+            containers += ["/A\\B/other.txt", "\\A\\B\\other.txt"]
 
         paths = list()
         comparables = list()
