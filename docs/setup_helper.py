@@ -9,7 +9,7 @@ def get_dependencies(pipfile_lock: Optional[str] = None, develop: bool = False):
     lock_data = json.load(Path(pipfile_lock).open())
     result: List[str] = [package_name for package_name in lock_data.get('default', {}).keys()]
     if develop:
-        result += [package_name for package_name in lock_data.get('default', {}).keys()]
+        result += [package_name for package_name in lock_data.get('develop', {}).keys()]
     for k in result:
         if "path-py" in k:
             new_key = k.replace("path-py", "path.py")
