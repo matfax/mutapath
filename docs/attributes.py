@@ -16,7 +16,7 @@ def _import_wrapped_members(cls, member_name, member, cls_name=''):
     LOG.debug(f"[attributes] inspecting {cls_name}.{member_name}")
     if not member_name.startswith("_"):
         see_other_matched = _DOC_REF_MATCHER.match(str(member.__doc__))
-        if see_other_matched:
+        if see_other_matched is not None:
             other_ref = see_other_matched.group(1)
             LOG.info(f"[attributes] importing referenced doc for member {cls_name}.{member_name} from {other_ref}")
             try:
