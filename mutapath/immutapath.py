@@ -5,6 +5,7 @@ import io
 import os
 import pathlib
 import shutil
+import warnings
 from contextlib import contextmanager
 from typing import Union, Iterable, ClassVar, Callable, Optional
 
@@ -100,6 +101,13 @@ class Path(object):
         return str(self) == str(other)
 
     def __hash__(self):
+        warnings.warn(f"It is not advised to hash mutable path objects or to use them in sets or dicts. "
+                      f"Please use hash(str(path)) instead to make the actual hashing input transparent.",
+                      category=SyntaxWarning)
+        return self._hash_cache
+
+    @cached_property
+    def _hash_cache(self) -> int:
         return hash(self._contained)
 
     def __lt__(self, other):

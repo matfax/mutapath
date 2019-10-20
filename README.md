@@ -96,4 +96,27 @@ True
 False
 ```
 
+
 For more in-depth examples, check the tests folder.
+
+## Hashing
+
+mutapath paths are hashable by caching the generated hash the first time it is accessed.
+However, it also adds a warning so that unintended hash usage is avoided.
+Once mutated after that, the generated hashes don't provide collision detection in binary trees anymore.
+Don't use them in sets or as keys in dicts.
+Use the explicit string representation instead, to make the hashing input transparent.
+
+```python
+>>> p = Path("/home")
+>>> hash(p)
+1083235232
+>>> hash(Path("/home")) == hash(p)
+True
+>>> with p.mutate() as m:
+...     m.name = "home4"
+>>> hash(p) # same hash
+1083235232
+>>> hash(Path("/home")) == hash(p) # they are not equal anymore
+True
+```
