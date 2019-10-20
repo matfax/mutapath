@@ -14,7 +14,7 @@ from mutapath.immutapath import POSIX_ENABLED_DEFAULT
 class MutaPath(mutapath.Path):
     """Mutable Path"""
 
-    def __init__(self, contained: Union[MutaPath, mutapath.Path, path.Path, pathlib.Path, str] = "",
+    def __init__(self, contained: Union[MutaPath, mutapath.Path, path.Path, pathlib.PurePath, str] = "",
                  posix: Optional[bool] = POSIX_ENABLED_DEFAULT):
         if isinstance(contained, MutaPath):
             contained = contained._contained

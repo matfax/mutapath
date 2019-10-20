@@ -14,7 +14,7 @@ from cached_property import cached_property
 from filelock import SoftFileLock
 
 import mutapath
-from mutapath.decorator import path_wrapper, wrap_attribute
+from mutapath.decorator import path_wrapper
 from mutapath.exceptions import PathException
 from mutapath.lock_dummy import DummyFileLock
 
@@ -24,19 +24,20 @@ POSIX_ENABLED_DEFAULT = False
 @path_wrapper
 class Path(object):
     """Immutable Path"""
-    _contained: Union[path.Path, pathlib.Path, str] = path.Path("")
+    _contained: Union[path.Path, pathlib.PurePath, str] = path.Path("")
     __always_posix_format: bool
     __mutable: ClassVar[object]
 
-    def __init__(self, contained: Union[Path, path.Path, pathlib.Path, str] = "", posix: bool = POSIX_ENABLED_DEFAULT):
+    def __init__(self, contained: Union[Path, path.Path, pathlib.PurePath, str] = "",
+                 posix: bool = POSIX_ENABLED_DEFAULT):
         self.__always_posix_format = posix
         self._set_contained(contained, posix)
 
-    def _set_contained(self, contained: Union[Path, path.Path, pathlib.Path, str], posix: Optional[bool] = None):
+    def _set_contained(self, contained: Union[Path, path.Path, pathlib.PurePath, str], posix: Optional[bool] = None):
         if contained:
             if isinstance(contained, Path):
                 contained = contained._contained
-            elif isinstance(contained, pathlib.Path):
+            elif isinstance(contained, pathlib.PurePath):
                 contained = str(contained)
 
             normalized = path.Path.module.normpath(contained)
@@ -52,10 +53,6 @@ class Path(object):
 
     def __dir__(self) -> Iterable[str]:
         return sorted(super(Path, self).__dir__()) + dir(path.Path)
-
-    def __getattr__(self, item):
-        attr = getattr(self._contained, item)
-        return wrap_attribute(attr)
 
     def __setattr__(self, key, value):
         if key == "_contained":
@@ -83,7 +80,7 @@ class Path(object):
         return self._contained
 
     def __eq__(self, other):
-        if isinstance(other, pathlib.Path):
+        if isinstance(other, pathlib.PurePath):
             other = str(other)
         elif isinstance(other, Path):
             other = other._contained
@@ -141,6 +138,14 @@ class Path(object):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
         return MutaPath(self._contained, self.posix_enabled)
+
+    @property
+    def to_pathlib(self) -> pathlib.Path:
+        """
+        Return the contained path as pathlib.Path representation.
+        :return: the converted path
+        """
+        return pathlib.Path(self._contained)
 
     def clone(self, contained) -> Path:
         """
@@ -273,11 +278,6 @@ class Path(object):
         self._contained = self.with_suffix(value)
 
     @property
-    def ext(self) -> str:
-        """ .. seealso:: :attr:`~mutapath.Path.suffix` """
-        return self._contained.ext
-
-    @property
     def name(self) -> Path:
         """ .. seealso:: :attr:`pathlib.PurePath.name` """
         return self.clone(self._contained.name)
@@ -300,11 +300,6 @@ class Path(object):
         self._contained = self.with_base(value)
 
     @property
-    def uncshare(self) -> Path:
-        """ .. seealso:: :attr:`path.Path.uncshare` """
-        return Path(self._contained.uncshare)
-
-    @property
     def stem(self) -> str:
         """ .. seealso:: :attr:`pathlib.PurePath.stem` """
         return self._contained.stem
@@ -312,11 +307,6 @@ class Path(object):
     @stem.setter
     def stem(self, value):
         self._contained = self.with_stem(value)
-
-    @property
-    def drive(self) -> Path:
-        """ .. seealso:: :attr:`pathlib.PurePath.drive` """
-        return self.clone(self._contained.drive)
 
     @property
     def parent(self) -> Path:
@@ -328,44 +318,18 @@ class Path(object):
         self._contained = self.with_parent(value)
 
     @property
-    def parents(self) -> Iterable[Path]:
-        """ .. seealso:: :attr:`pathlib.Path.parents` """
-        result = pathlib.Path(self._contained).parents
-        return iter(map(self.clone, result))
-
-    @property
     def dirname(self) -> Path:
         """ .. seealso:: :func:`os.path.dirname` """
         return self.clone(self._contained.dirname())
 
-    @property
-    def size(self) -> int:
-        """ .. seealso:: :func:`os.path.getsize` """
-        return self._contained.size
-
-    @property
-    def ctime(self) -> float:
-        """ .. seealso:: :func:`os.path.getctime` """
-        return self._contained.ctime
-
-    @property
-    def mtime(self) -> float:
-        """ .. seealso:: :func:`os.path.getmtime` """
-        return self._contained.mtime
-
-    @property
-    def atime(self) -> float:
-        """ .. seealso:: :func:`os.path.getatime` """
-        return self._contained.atime
-
-    @property
-    def owner(self):
-        """ .. seealso:: :meth:`get_owner` """
-        return self._contained.owner
-
     def open(self, *args, **kwargs):
         """ .. seealso:: :func:`pathlib.Path.open` """
         return io.open(str(self), *args, **kwargs)
+
+    def glob(self, pattern):
+        """ .. seealso:: :func:`pathlib.Path.glob` """
+        paths = self.to_pathlib.glob(pattern)
+        return (self.clone(g) for g in paths)
 
     @cached_property
     def lock(self) -> filelock.BaseFileLock:
