@@ -1,3 +1,10 @@
+"""
+The decorators convert all returning types to mutapath.Path, or mutapath.MutaPath instances, respectively.
+The following types are covered:
+* Internal routines returning non-iterable types in mutapath
+* All types returned from routines and properties from pathlib
+* All types returned from routines and properties from path
+"""
 import functools
 import inspect
 import pathlib
@@ -35,7 +42,7 @@ def __is_def(member):
 
 def __path_converter(const: Callable):
     def convert_path(result):
-        if isinstance(result, path.Path) or isinstance(result, pathlib.PurePath):
+        if isinstance(result, (path.Path, pathlib.PurePath)):
             return const(result)
         return result
 
@@ -113,13 +120,13 @@ def __mutate_func(cls, method_name):
             if isinstance(result, path.Path):
                 self._contained = result
                 return self
-            elif isinstance(result, mutapath.Path):
+            if isinstance(result, mutapath.Path):
                 self._contained = result._contained
                 return self
             return result
-        else:
-            result = orig_func(self, *args, **kwargs)
-            return cls(result)
+
+        result = orig_func(self, *args, **kwargs)
+        return cls(result)
 
     return mutation_decorator
 
