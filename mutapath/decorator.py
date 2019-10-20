@@ -81,7 +81,7 @@ def wrap_attribute(orig_attr, fetcher: Optional[Callable] = None):
         return __path_converter(self.clone)(result)
 
     if isinstance(orig_attr, property):
-        return property(fget=__wrap_decorator)
+        return property(fget=__wrap_decorator, doc=orig_attr.__doc__)
 
     return __wrap_decorator
 
