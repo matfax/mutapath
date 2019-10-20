@@ -220,9 +220,11 @@ class TestPath(PathTest):
         self.typed_instance_test(actual)
 
     def test_hash(self):
-        expected = Path("/A") / "B"
-        actual = Path("/A/B/")
-        self.assertEqual(hash(expected), hash(actual))
+        with self.assertWarns(SyntaxWarning):
+            expected = hash(Path("/A") / "B")
+        with self.assertWarns(SyntaxWarning):
+            actual = hash(Path("/A/B/"))
+        self.assertEqual(expected, actual)
 
     def test_lt_last(self):
         lesser = Path("/A/B/")
