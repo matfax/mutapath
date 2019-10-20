@@ -1,5 +1,7 @@
 import os
 import time
+from types import GeneratorType
+from typing import List
 
 from mutapath import Path
 from mutapath.exceptions import PathException
@@ -12,20 +14,43 @@ class TestWithPath(PathTest):
         super().__init__(*args)
 
     @file_test(equal=False)
-    def test_wrapped_iterable(self, test_file: Path):
-        """Verify that iterable nested functions have been mapped to the correct types"""
+    def test_wrapped_list(self, test_file: Path):
+        """Verify that nested functions returning lists have been mapped to the correct types"""
         expected = [test_file]
         actual = self.test_base.listdir()
         self.assertEqual(expected, actual)
         self.typed_instance_test(actual[0])
+        self.assertIsInstance(actual, List)
 
     @file_test(equal=False)
     def test_wrapped_generator(self, test_file: Path):
         """Verify that nested generators have been mapped to the correct types"""
         expected = [test_file]
-        actual = list(self.test_base.walk())
-        self.assertEqual(expected, actual)
-        self.typed_instance_test(actual[0])
+        actual = self.test_base.walk()
+        actual_list = list(actual)
+        self.assertEqual(expected, actual_list)
+        self.typed_instance_test(actual_list[0])
+        self.assertIsInstance(actual, GeneratorType)
+
+    @file_test(equal=False)
+    def test_glob(self, test_file: Path):
+        """Verify that glob is returning the correct types"""
+        expected = [test_file]
+        actual = self.test_base.glob("*.file")
+        actual_list = list(actual)
+        self.assertEqual(expected, actual_list)
+        self.typed_instance_test(actual_list[0])
+        self.assertIsInstance(actual, GeneratorType)
+
+    @file_test(equal=False)
+    def test_rglob(self, test_file: Path):
+        """Verify that rglob (which is fetched from pathlib.Path) is returning the correct types"""
+        expected = [test_file]
+        actual = self.test_base.rglob("*.file")
+        actual_list = list(actual)
+        self.assertEqual(expected, actual_list)
+        self.typed_instance_test(actual_list[0])
+        self.assertIsInstance(actual, GeneratorType)
 
     @file_test(equal=False)
     def test_open(self, test_file: Path):

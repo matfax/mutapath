@@ -179,6 +179,31 @@ class TestPath(PathTest):
         excpected = [Path("/A/B/C"), Path("/A/B"), Path("/A"), Path("/")]
         actual = list(Path("/A/B/C/D").parents)
         self.assertEqual(excpected, actual)
+        self.typed_instance_test(actual[0])
+
+    def test_anchor(self):
+        if os.name == 'nt':
+            excpected = "C:\\"
+            actual = Path("C:/A/B/C").anchor
+        else:
+            excpected = "/"
+            actual = Path("/A/B/C").anchor
+        self.assertEqual(excpected, actual)
+
+    def test_suffix(self):
+        excpected = ".bak"
+        actual = Path("file.txt.bak").suffix
+        self.assertEqual(excpected, actual)
+
+    def test_ext(self):
+        excpected = ".bak"
+        actual = Path("file.txt.bak").ext
+        self.assertEqual(excpected, actual)
+
+    def test_suffixes(self):
+        excpected = [".txt", ".bak"]
+        actual = Path("file.txt.bak").suffixes
+        self.assertEqual(excpected, actual)
 
     def test_home(self):
         excpected = Path("B")
