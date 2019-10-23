@@ -5,10 +5,11 @@
 [![Renovate Status](https://badges.renovateapi.com/github/matfax/mutapath)](https://renovatebot.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/matfax/mutapath/badge)](https://www.codefactor.io/repository/github/matfax/mutapath)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath)](https://pypi.org/project/mutapath/)
-[![PyPI](https://img.shields.io/pypi/v/mutapath)](https://pypi.org/project/mutapath/)
+[![PyPI](https://img.shields.io/pypi/v/mutapath?color=%2339A7A6)](https://pypi.org/project/mutapath/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/mutapath?color=%231447F9)](https://pypistats.org/packages/mutapath)
 [![Documentation Status](https://readthedocs.org/projects/mutapath/badge/?version=latest)](https://mutapath.readthedocs.io/en/latest/?badge=latest)
 [![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg)](https://github.com/matfax/mutapath/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath.svg)](https://github.com/matfax/mutapath/commits/master)
+[![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath?color=%232954A5)](https://github.com/matfax/mutapath/commits/master)
 
 
 This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases where paths are often changed.
