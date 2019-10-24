@@ -23,6 +23,8 @@ try:
     from mashumaro.types import SerializableType
 except ImportError:
     SerializableType = object
+except NotImplementedError:
+    SerializableType = object
 
 POSIX_ENABLED_DEFAULT = False
 
