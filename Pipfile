@@ -11,6 +11,7 @@ green = "==3.0.0"
 coverage = "==4.5.4"
 codecov = "==2.0.15"
 wheel = "==0.33.6"
+mashumaro = "==1.7"
 
 [packages]
 path-py = "==12.0.1"
