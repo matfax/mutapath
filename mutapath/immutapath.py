@@ -27,6 +27,7 @@ except NotImplementedError:
     SerializableType = object
 
 POSIX_ENABLED_DEFAULT = False
+STRING_REPR = False
 
 
 @path_wrapper
@@ -34,12 +35,15 @@ class Path(SerializableType):
     """Immutable Path"""
     _contained: Union[path.Path, pathlib.PurePath, str] = path.Path("")
     __always_posix_format: bool
+    __string_repr: bool
     __mutable: ClassVar[object]
 
-    def __init__(self, contained: Union[Path, path.Path, pathlib.PurePath, str] = "",
-                 posix: bool = POSIX_ENABLED_DEFAULT):
+    def __init__(self, contained: Union[Path, path.Path, pathlib.PurePath, str] = "", *,
+                 posix: bool = POSIX_ENABLED_DEFAULT, string_repr: bool = STRING_REPR):
         self.__always_posix_format = posix
+        self.__string_repr = string_repr
         self._set_contained(contained, posix)
+        super().__init__()
 
     def _set_contained(self, contained: Union[Path, path.Path, pathlib.PurePath, str], posix: Optional[bool] = None):
         if contained:
@@ -62,6 +66,12 @@ class Path(SerializableType):
     def __dir__(self) -> Iterable[str]:
         return sorted(super(Path, self).__dir__()) + dir(path.Path)
 
+    def __getitem__(self, item):
+        return self._contained.__getitem__(item)
+
+    def __getattr__(self, item):
+        return getattr(self._contained, item)
+
     def __setattr__(self, key, value):
         if key == "_contained":
             lock = self.__dict__.get("lock", None)
@@ -74,12 +84,14 @@ class Path(SerializableType):
             if isinstance(value, Path):
                 value = value._contained
             self._set_contained(value)
-        elif key in ["_Path__mutable", "_Path__always_posix_format"]:
+        elif key in ["_Path__mutable", "_Path__always_posix_format", "_Path__string_repr"]:
             super(Path, self).__setattr__(key, value)
         else:
             raise AttributeError(f"attribute {key} can not be set because mutapath.Path is an immutable class.")
 
     def __repr__(self):
+        if self.__string_repr:
+            return self.__str__()
         return repr(self._contained)
 
     def __str__(self):
@@ -121,8 +133,29 @@ class Path(SerializableType):
         if isinstance(other, Path):
             return self.splitall() < other.splitall()
         left = self.posix_string()
-        right = str(other).replace("\\\\", "\\").replace("\\", "/")
+        right = Path.posix_string(str(other))
         return left < right
+
+    def __le__(self, other):
+        if isinstance(other, Path):
+            return self.splitall() <= other.splitall()
+        left = self.posix_string()
+        right = Path.posix_string(str(other))
+        return left <= right
+
+    def __gt__(self, other):
+        if isinstance(other, Path):
+            return self.splitall() > other.splitall()
+        left = self.posix_string()
+        right = Path.posix_string(str(other))
+        return left > right
+
+    def __ge__(self, other):
+        if isinstance(other, Path):
+            return self.splitall() >= other.splitall()
+        left = self.posix_string()
+        right = Path.posix_string(str(other))
+        return left >= right
 
     def __add__(self, other) -> str:
         return str(self.clone(self._contained.__add__(Path(other)._contained)))
@@ -152,7 +185,7 @@ class Path(SerializableType):
     def __invert__(self):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
-        return MutaPath(self._contained, self.posix_enabled)
+        return MutaPath(self._contained, posix=self.posix_enabled)
 
     def _serialize(self) -> str:
         return str(self._contained)

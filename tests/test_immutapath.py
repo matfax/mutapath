@@ -170,6 +170,11 @@ class TestPath(PathTest):
         actual = Path("\\A\\B", posix=True)
         self.assertEqual(repr(actual), expected)
 
+    def test_string_repr(self):
+        expected = "/A/B"
+        actual = Path("\\A\\B", posix=True, string_repr=True)
+        self.assertEqual(repr(actual), expected)
+
     def test_str(self):
         expected = "/A/B"
         actual = Path("\\A\\B", posix=True)
@@ -226,15 +231,35 @@ class TestPath(PathTest):
             actual = hash(Path("/A/B/"))
         self.assertEqual(expected, actual)
 
-    def test_lt_last(self):
+    def test_lt_gt_last(self):
         lesser = Path("/A/B/")
+        lesser2 = Path("/A/B")
         greater = Path("/A/C")
+        # lt gt
+        self.assertFalse(lesser < lesser2)
+        self.assertFalse(lesser > lesser2)
         self.assertLess(lesser, greater)
+        self.assertGreater(greater, lesser)
+        # le ge
+        self.assertLessEqual(lesser, lesser2)
+        self.assertGreaterEqual(lesser, lesser2)
+        self.assertLessEqual(lesser, greater)
+        self.assertGreaterEqual(greater, lesser)
 
-    def test_lt_first(self):
+    def test_lt_gt_le_ge_first(self):
         lesser = Path("/A/D")
+        lesser2 = Path("/A/D/")
         greater = Path("/B/C")
+        # lt gt
+        self.assertFalse(lesser < lesser2)
+        self.assertFalse(lesser > lesser2)
         self.assertLess(lesser, greater)
+        self.assertGreater(greater, lesser)
+        # le ge
+        self.assertLessEqual(lesser, lesser2)
+        self.assertGreaterEqual(lesser, lesser2)
+        self.assertLessEqual(lesser, greater)
+        self.assertGreaterEqual(greater, lesser)
 
     def test_sort(self):
         first = Path("/A/B/C")
@@ -244,10 +269,26 @@ class TestPath(PathTest):
         actual = sorted([third, first, second])
         self.assertEqual(expected, actual)
 
-    def test_lt_str(self):
-        lesser = Path("/A/B/")
+    def test_lt_gt_le_ge_str(self):
+        path = Path("/A/B/")
         greater = "/A/C"
-        self.assertLess(lesser, greater)
+        lesser = "/A/A"
+        equal = "/A/B"
+        self.assertGreater(path, lesser)
+        self.assertGreaterEqual(path, lesser)
+        self.assertLess(path, greater)
+        self.assertLessEqual(path, greater)
+        self.assertLessEqual(path, equal)
+        self.assertLessEqual(path, greater)
+        self.assertGreaterEqual(path, equal)
+        self.assertGreaterEqual(path, lesser)
+
+    def test_getitem(self):
+        expected = "A"
+        actual_root = Path("/A/B/")[1]
+        actual_name = Path("/B/A/").name[0]
+        self.assertEqual(expected, actual_root)
+        self.assertEqual(expected, actual_name)
 
     def test_static_posix_string(self):
         expected = "/A/B/C"
@@ -256,8 +297,8 @@ class TestPath(PathTest):
 
     def test_posix_string(self):
         expected = "/A/B/C"
-        actual = Path("\\A\\B/C", False).posix_string()
-        actual2 = Path("/A\\B\\C", True).posix_string()
+        actual = Path("\\A\\B/C", posix=False).posix_string()
+        actual2 = Path("/A\\B\\C", posix=True).posix_string()
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual2)
 

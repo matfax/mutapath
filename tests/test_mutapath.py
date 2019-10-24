@@ -10,7 +10,7 @@ class TestMutaPath(PathTest):
         super().__init__(*args)
 
     def _gen_start_path(self, posix: bool = False):
-        return MutaPath(super(TestMutaPath, self)._gen_start_path(posix), posix)
+        return MutaPath(super(TestMutaPath, self)._gen_start_path(posix), posix=posix)
 
     @file_test_no_asserts
     def test_suffix(self, test_file: Path):
