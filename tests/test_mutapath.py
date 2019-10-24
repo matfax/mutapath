@@ -163,8 +163,9 @@ class TestMutaPath(PathTest):
         self.assertEqual(expected, actual)
 
     def test_repr(self):
-        excpected = MutaPath("/A/B")
-        self.assertTrue(repr(excpected).startswith("Path"))
+        expected = "Path('/A/B')"
+        actual = MutaPath("/A/B", posix=True)
+        self.assertEqual(expected, repr(actual))
 
     def test_hash(self):
         expected = hash(Path("/A/B"))

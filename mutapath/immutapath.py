@@ -40,16 +40,14 @@ class Path(SerializableType):
                  posix: Optional[bool] = None,
                  string_repr: Optional[bool] = None):
         if posix is None:
-            self.__always_posix_format = PathDefaults().posix
-        else:
-            self.__always_posix_format = posix
+            posix = PathDefaults().posix
+        self.__always_posix_format = posix
 
         if string_repr is None:
-            self.__string_repr = PathDefaults().string_repr
-        else:
-            self.__string_repr = string_repr
+            string_repr = PathDefaults().string_repr
+        self.__string_repr = string_repr
 
-        self._set_contained(contained, self.__always_posix_format)
+        self._set_contained(contained, posix)
         super().__init__()
 
     def _set_contained(self, contained: Union[Path, path.Path, pathlib.PurePath, str], posix: Optional[bool] = None):
@@ -214,7 +212,7 @@ class Path(SerializableType):
         :param contained: the new contained path element
         :return: the cloned path
         """
-        return Path(contained, posix=self.__always_posix_format)
+        return Path(contained, posix=self.__always_posix_format, string_repr=self.__string_repr)
 
     @path.multimethod
     def _shorten_duplicates(self, input_path: str = "") -> str:

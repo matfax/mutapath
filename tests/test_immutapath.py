@@ -64,11 +64,14 @@ class TestPath(PathTest):
         self.assertEqual(expected, actual)
         self.typed_instance_test(actual)
 
+    @staticmethod
+    def _string_repr_enabled(path: Path):
+        return path.string_repr_enabled
+
     def test_with_string_repr_enabled(self):
-        getter = lambda p: p.string_repr_enabled
-        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False)
-        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False, posix=False)
-        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False, posix=True)
+        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False)
+        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False, posix=False)
+        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False, posix=True)
 
     def test_defaults_with_string_repr(self):
         getter = lambda p: p.string_repr_enabled

@@ -104,3 +104,5 @@ class PathTest(unittest.TestCase):
                 self.assertFalse(test_func(disabled))
                 self.assertTrue(test_func(with_enabled))
                 self.assertFalse(test_func(with_disabled))
+                self.assertTrue(test_func(with_enabled.clone("/")))
+                self.assertFalse(test_func(with_disabled.clone("/")))
