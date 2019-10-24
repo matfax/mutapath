@@ -7,38 +7,6 @@ import path
 from mutapath import Path
 
 
-def file_test(equal=True, instance=True, exists=True, posix_test=True, string_test=True):
-    def file_test_decorator(func):
-        @wraps(func)
-        def func_wrapper(cls: PathTest):
-            def test_case(use_posix: bool = False, use_string: bool = False) -> Path:
-                actual = cls._gen_start_path(use_posix, use_string)
-                expected = func(cls, actual)
-                if equal:
-                    cls.assertIsNotNone(expected, "This test does not return the expected value. Fix the test.")
-                    cls.assertEqual(expected, actual)
-                if instance:
-                    cls.typed_instance_test(actual)
-                if exists:
-                    cls.assertTrue(actual.exists(), "The tested file does not exist.")
-                return actual
-
-            try:
-                test_case()
-                if posix_test:
-                    test_path = test_case(use_posix=True)
-                    cls.assertTrue(test_path.posix_enabled, "the test file is not in posix format")
-                if string_test:
-                    test_path = test_case(use_string=True)
-                    cls.assertTrue(test_path.string_repr_enabled, "the test file is not using string representation")
-            finally:
-                cls._clean()
-
-        return func_wrapper
-
-    return file_test_decorator
-
-
 class PathTest(unittest.TestCase):
     test_path = "test_path"
 
@@ -106,3 +74,35 @@ class PathTest(unittest.TestCase):
                 self.assertFalse(test_func(with_disabled))
                 self.assertTrue(test_func(with_enabled.clone("/")))
                 self.assertFalse(test_func(with_disabled.clone("/")))
+
+
+def file_test(equal=True, instance=True, exists=True, posix_test=True, string_test=True):
+    def file_test_decorator(func):
+        @wraps(func)
+        def func_wrapper(cls: PathTest):
+            def test_case(use_posix: bool = False, use_string: bool = False) -> Path:
+                actual = cls._gen_start_path(use_posix, use_string)
+                expected = func(cls, actual)
+                if equal:
+                    cls.assertIsNotNone(expected, "This test does not return the expected value. Fix the test.")
+                    cls.assertEqual(expected, actual)
+                if instance:
+                    cls.typed_instance_test(actual)
+                if exists:
+                    cls.assertTrue(actual.exists(), "The tested file does not exist.")
+                return actual
+
+            try:
+                test_case()
+                if posix_test:
+                    test_path = test_case(use_posix=True)
+                    cls.assertTrue(test_path.posix_enabled, "the test file is not in posix format")
+                if string_test:
+                    test_path = test_case(use_string=True)
+                    cls.assertTrue(test_path.string_repr_enabled, "the test file is not using string representation")
+            finally:
+                cls._clean()
+
+        return func_wrapper
+
+    return file_test_decorator
