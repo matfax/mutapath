@@ -1,16 +1,14 @@
 from dataclasses import dataclass
 
-from mashumaro import DataClassDictMixin
-
 from mutapath import Path
 from tests.helper import PathTest
 
 try:
-    from mashumaro.types import SerializableType
+    from mashumaro.types import DataClassDictMixin
 except ImportError:
-    SerializableType = object
+    DataClassDictMixin = object
 except NotImplementedError:
-    SerializableType = object
+    DataClassDictMixin = object
 else:
 
     @dataclass
