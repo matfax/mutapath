@@ -19,11 +19,16 @@ from mutapath.decorator import path_wrapper
 from mutapath.exceptions import PathException
 from mutapath.lock_dummy import DummyFileLock
 
+try:
+    from mashumaro.types import SerializableType
+except ImportError:
+    SerializableType = object
+
 POSIX_ENABLED_DEFAULT = False
 
 
 @path_wrapper
-class Path(object):
+class Path(SerializableType):
     """Immutable Path"""
     _contained: Union[path.Path, pathlib.PurePath, str] = path.Path("")
     __always_posix_format: bool
@@ -146,6 +151,13 @@ class Path(object):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
         return MutaPath(self._contained, self.posix_enabled)
+
+    def _serialize(self) -> str:
+        return str(self._contained)
+
+    @classmethod
+    def _deserialize(cls, value: str) -> Path:
+        return cls(value)
 
     @property
     def to_pathlib(self) -> pathlib.Path:

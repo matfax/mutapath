@@ -19,7 +19,7 @@ __EXCLUDE_FROM_WRAPPING = [
     "__delattr__", "__setattr__", "__getattr__", "joinpath", "clone", "__exit__", "__fspath__",
     "'_Path__wrap_attribute'", "__wrap_decorator", "_op_context", "__hash__", "__enter__", "_norm", "open", "lock",
     "getcwd", "dirname", "owner", "uncshare", "posix_format", "posix_string", "__add__", "__radd__", "_set_contained",
-    "with_poxis_enabled", "_hash_cache"
+    "with_poxis_enabled", "_hash_cache", "_serialize", "_deserialize"
 ]
 
 __MUTABLE_FUNCTIONS = {"rename", "renames", "copy", "copy2", "copyfile", "copymode", "copystat", "copytree", "move",
