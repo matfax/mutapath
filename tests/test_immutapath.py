@@ -3,7 +3,7 @@ import pathlib
 
 import path
 
-from mutapath import Path, MutaPath
+from mutapath import Path, MutaPath, PathDefaults
 from tests.helper import PathTest
 
 
@@ -64,18 +64,33 @@ class TestPath(PathTest):
         self.assertEqual(expected, actual)
         self.typed_instance_test(actual)
 
+    def test_with_string_repr_enabled(self):
+        getter = lambda p: p.string_repr_enabled
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False)
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False, posix=False)
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=False, posix=True)
+
+    def test_defaults_with_string_repr(self):
+        getter = lambda p: p.string_repr_enabled
+        PathDefaults().string_repr = True
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True)
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True, posix=False)
+        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True, posix=True)
+        PathDefaults().reset()
+
     def test_with_posix_enabled(self):
-        other = Path("/A/B/other.txt")
-        expected = Path("/A/B/other.txt", posix=True)
-        actual = other.with_poxis_enabled()
-        actual2 = other.with_poxis_enabled(True)
-        actual3 = other.with_poxis_enabled(False)
-        self.assertEqual(expected, actual)
-        self.assertEqual(expected, actual2)
-        self.assertEqual(other, actual3)
-        self.typed_instance_test(actual)
-        self.typed_instance_test(actual2)
-        self.typed_instance_test(actual3)
+        getter = lambda p: p.posix_enabled
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False)
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False, string_repr=False)
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False, string_repr=True)
+
+    def test_defaults_with_posix(self):
+        getter = lambda p: p.posix_enabled
+        PathDefaults().posix = True
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True)
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True, string_repr=False)
+        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True, string_repr=True)
+        PathDefaults().reset()
 
     def test_static_joinpath(self):
         expected = Path("/A/B/C/D/other.txt")

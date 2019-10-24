@@ -7,7 +7,7 @@ import pathlib
 import shutil
 import warnings
 from contextlib import contextmanager
-from typing import Union, Iterable, ClassVar, Callable, Optional
+from typing import Union, Iterable, Callable, Optional
 
 import filelock
 import path
@@ -16,6 +16,7 @@ from filelock import SoftFileLock
 
 import mutapath
 from mutapath.decorator import path_wrapper
+from mutapath.defaults import PathDefaults
 from mutapath.exceptions import PathException
 from mutapath.lock_dummy import DummyFileLock
 
@@ -26,9 +27,6 @@ except ImportError:
 except NotImplementedError:
     SerializableType = object
 
-POSIX_ENABLED_DEFAULT = False
-STRING_REPR = False
-
 
 @path_wrapper
 class Path(SerializableType):
@@ -36,13 +34,22 @@ class Path(SerializableType):
     _contained: Union[path.Path, pathlib.PurePath, str] = path.Path("")
     __always_posix_format: bool
     __string_repr: bool
-    __mutable: ClassVar[object]
+    __mutable: object
 
     def __init__(self, contained: Union[Path, path.Path, pathlib.PurePath, str] = "", *,
-                 posix: bool = POSIX_ENABLED_DEFAULT, string_repr: bool = STRING_REPR):
-        self.__always_posix_format = posix
-        self.__string_repr = string_repr
-        self._set_contained(contained, posix)
+                 posix: Optional[bool] = None,
+                 string_repr: Optional[bool] = None):
+        if posix is None:
+            self.__always_posix_format = PathDefaults().posix
+        else:
+            self.__always_posix_format = posix
+
+        if string_repr is None:
+            self.__string_repr = PathDefaults().string_repr
+        else:
+            self.__string_repr = string_repr
+
+        self._set_contained(contained, self.__always_posix_format)
         super().__init__()
 
     def _set_contained(self, contained: Union[Path, path.Path, pathlib.PurePath, str], posix: Optional[bool] = None):
@@ -53,11 +60,10 @@ class Path(SerializableType):
                 contained = str(contained)
 
             normalized = path.Path.module.normpath(contained)
-            if posix is None:
-                if self.__always_posix_format:
-                    normalized = Path.posix_string(normalized)
-            elif posix:
+            if (posix is None and self.__always_posix_format) or posix:
                 normalized = Path.posix_string(normalized)
+            else:
+                normalized = Path._shorten_duplicates(normalized)
 
             contained = path.Path(normalized)
 
@@ -92,12 +98,12 @@ class Path(SerializableType):
     def __repr__(self):
         if self.__string_repr:
             return self.__str__()
-        return repr(self._contained)
+        return Path._shorten_duplicates(repr(self._contained))
 
     def __str__(self):
         if self.posix_enabled:
             return self.posix_string()
-        return self._contained
+        return self._shorten_duplicates()
 
     def __eq__(self, other):
         if isinstance(other, pathlib.PurePath):
@@ -211,6 +217,12 @@ class Path(SerializableType):
         return Path(contained, posix=self.__always_posix_format)
 
     @path.multimethod
+    def _shorten_duplicates(self, input_path: str = "") -> str:
+        if isinstance(input_path, Path):
+            input_path = input_path._contained
+        return input_path.replace('\\\\', '\\')
+
+    @path.multimethod
     def posix_string(self, input_path: str = "") -> str:
         """
         Get this path as string with posix-like separators (i.e., '/').
@@ -223,7 +235,7 @@ class Path(SerializableType):
             input_path = input_path._contained
         return input_path.replace('\\\\', '\\').replace('\\', '/')
 
-    def with_poxis_enabled(self, enable: bool = True):
+    def with_poxis_enabled(self, enable: bool = True) -> Path:
         """
         Clone this path in posix format with posix-like separators (i.e., '/').
 
@@ -231,7 +243,17 @@ class Path(SerializableType):
         >>> Path("\\home\\\\doe/folder\\sub").with_poxis_enabled()
         Path('/home/joe/doe/folder/sub')
         """
-        return Path(self, posix=enable)
+        return Path(self, posix=enable, string_repr=self.__string_repr)
+
+    def with_string_repr_enabled(self, enable: bool = True) -> Path:
+        """
+        Clone this path in with string representation enabled.
+
+        :Example:
+        >>> Path("/home/doe/folder/sub").with_string_repr_enabled()
+        '/home/joe/doe/folder/sub'
+        """
+        return Path(self, posix=self.__always_posix_format, string_repr=enable)
 
     def with_name(self, new_name) -> Path:
         """ .. seealso:: :func:`pathlib.PurePath.with_name` """
@@ -311,6 +333,13 @@ class Path(SerializableType):
             if parent.name == split[1]:
                 return parent.name
         return self.drive
+
+    @property
+    def string_repr_enabled(self) -> bool:
+        """
+        If set to True, the the representation of this path will always be returned unwrapped as the path's string.
+        """
+        return self.__string_repr
 
     @property
     def posix_enabled(self) -> bool:
