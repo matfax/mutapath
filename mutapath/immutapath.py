@@ -414,6 +414,28 @@ class Path(SerializableType):
         return (self.clone(g) for g in paths)
 
     @cached_property
+    def text(self):
+        """
+        Read the file as text stream and return its content.
+        This property caches the returned value.
+        Clone this object to have a new path with a cleared cache or simply use :meth:`~pathlib.Path.read_text`.
+
+        .. seealso:: :meth:`pathlib.Path.read_text`
+        """
+        return self.read_text()
+
+    @cached_property
+    def bytes(self):
+        """
+        Read the file as bytes stream and return its content.
+        This property caches the returned value.
+        Clone this object to have a new path with a cleared cache or simply use :meth:`~pathlib.Path.read_bytes`.
+
+        .. seealso:: :meth:`pathlib.Path.read_bytes`
+        """
+        return self.read_bytes()
+
+    @cached_property
     def lock(self) -> filelock.BaseFileLock:
         """
         Generate a cached file locker for this file with the additional suffix '.lock'.
