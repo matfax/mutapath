@@ -74,9 +74,9 @@ def wrap_attribute(orig_attr, fetcher: Optional[Callable] = None):
             return None
 
         converter = __path_converter(self.clone)
-        if isinstance(result, List) and not isinstance(result, str):
+        if isinstance(result, List) and not isinstance(result, (str, bytes, bytearray)):
             return list(map(converter, result))
-        if isinstance(result, Iterable) and not isinstance(result, str):
+        if isinstance(result, Iterable) and not isinstance(result, (str, bytes, bytearray)):
             return (converter(g) for g in result)
         return __path_converter(self.clone)(result)
 
