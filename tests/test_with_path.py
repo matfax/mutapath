@@ -215,6 +215,12 @@ class TestWithPath(PathTest):
         actual2 = test_file.read_text()
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual2)
+        with test_file.open("w") as w:
+            w.write("test2")
+        updated = test_file.text
+        updated2 = test_file.read_text()
+        self.assertEqual(expected, updated)
+        self.assertNotEqual(expected, updated2)
 
     @file_test(equal=False)
     def test_bytes(self, test_file: Path):
