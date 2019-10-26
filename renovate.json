@@ -5,7 +5,8 @@
   ],
   "separateMinorPatch": true,
   "patch": {
-    "automerge": true
+    "automerge": true,
+    "labels": ["dependencies"]
   },
   "pin": {
     "automerge": true
@@ -15,5 +16,8 @@
   },
   "pipenv": {
     "enabled": true
+  },
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
   }
 }
