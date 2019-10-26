@@ -57,7 +57,7 @@ class TestWithPath(PathTest):
         expected = "test"
         with test_file.open("w") as w:
             w.write(expected)
-        actual = test_file.text()
+        actual = test_file.read_text()
         self.assertEqual(expected, actual)
 
     @file_test(equal=False)
@@ -190,7 +190,7 @@ class TestWithPath(PathTest):
         with test_file.copying() as mut:
             mut.stem = "new"
             mut.suffix = ".txt"
-        self.assertEqual(expected.text(), test_file.text())
+        self.assertEqual(expected.read_text(), test_file.read_text())
         return expected
 
     @file_test(equal=False, instance=False, exists=False)
@@ -205,3 +205,21 @@ class TestWithPath(PathTest):
         self.assertEqual(expected, from_here)
         self.assertIsInstance(from_here, Path)
         self.assertTrue(from_here.exists(), "File has to exist")
+
+    @file_test(equal=False)
+    def test_text(self, test_file: Path):
+        expected = "test"
+        with test_file.open("w") as w:
+            w.write(expected)
+        actual = test_file.text
+        actual2 = test_file.read_text()
+        self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual2)
+
+    @file_test(equal=False)
+    def test_bytes(self, test_file: Path):
+        with test_file.open("w") as w:
+            w.write("test")
+        expected = test_file.read_bytes()
+        actual = test_file.bytes
+        self.assertEqual(expected, actual)
