@@ -7,7 +7,10 @@ from docs.setup_helper import get_dependencies
 setup(
     name="mutapath",
     packages=find_packages(),
-    version_format="{tag}",
+    version_config={
+        "version_format": "{tag}",
+        "starting_version": "0.1.0"
+    },
     license="lgpl-3.0",
     description="Mutable Pathlib",
     long_description=Path("README.md").read_text(),
@@ -16,7 +19,7 @@ setup(
     author_email="matthias.fax@gmail.com",
     url="https://github.com/matfax/mutapath",
     keywords=["pathlib", "mutable", "path"],
-    setup_requires=["setuptools-git-version"],
+    setup_requires=["better-setuptools-git-version"],
     install_requires=get_dependencies(),
     classifiers=[
         "Development Status :: 4 - Beta",
