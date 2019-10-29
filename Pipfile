@@ -13,7 +13,7 @@ wheel = "==0.33.6"
 mashumaro = "==1.8"
 
 [packages]
-path-py = "==12.0.1"
+'path.py' = "==12.0.1"
 filelock = "==3.0.12"
 cached-property = "==1.5.1"
 singletons = "==0.2.3"
