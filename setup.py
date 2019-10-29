@@ -8,8 +8,9 @@ setup(
     name="mutapath",
     packages=find_packages(),
     version_config={
-        "version_format": "{tag}",
-        "starting_version": "0.1.0"
+        "template": "{tag}",
+        "dev_template": "{tag}.dev{ccount}+git.{sha}",
+        "dirty_template": "{tag}",
     },
     license="lgpl-3.0",
     description="Mutable Pathlib",
@@ -19,7 +20,7 @@ setup(
     author_email="matthias.fax@gmail.com",
     url="https://github.com/matfax/mutapath",
     keywords=["pathlib", "mutable", "path"],
-    setup_requires=["better-setuptools-git-version"],
+    setup_requires=["setuptools-git-ver"],
     install_requires=get_dependencies(),
     classifiers=[
         "Development Status :: 4 - Beta",
