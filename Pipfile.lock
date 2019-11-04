@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8a197dabc6e2af606cc616d1d25084074a934e2ac6bd940b3d9cc818cbd5d76f"
+            "sha256": "93858297935b8b91ff3195cb4fa0ac6d9072bd75fcf2a5c5b84e02ade922d25c"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -198,10 +198,10 @@
         },
         "mashumaro": {
             "hashes": [
-                "sha256:2e39d085408b52e98fd01df66609dbc33853498bb32a52862831792084036fb3"
+                "sha256:99e066ba40892ef77b589c91220b68780ed6160f6be707f39a2e60b7b885387e"
             ],
             "index": "pypi",
-            "version": "==1.8"
+            "version": "==1.9"
         },
         "msgpack": {
             "hashes": [
