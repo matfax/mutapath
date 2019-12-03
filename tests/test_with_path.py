@@ -85,16 +85,6 @@ class TestWithPath(PathTest):
         later = other.ctime
         self.assertGreater(later, actual)
 
-    @file_test(equal=False)
-    def test_atime(self, test_file: Path):
-        actual = test_file.atime
-        other = test_file.copy2(test_file.with_name("other.txt"))
-        later = other.atime
-        self.assertGreaterEqual(later, actual)
-        other.write_text("new")
-        later2 = other.atime
-        self.assertGreater(later2, later)
-
     @file_test(exists=False)
     def test_mutate(self, test_file: Path):
         expected = test_file.with_name("new.txt")
