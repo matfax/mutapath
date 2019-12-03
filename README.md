@@ -12,14 +12,12 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath?color=%232954A5)](https://github.com/matfax/mutapath/commits/master)
 
 
-This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases where paths are often changed.
-mutapath solves this by wrapping the extended pathlib library [path.py](https://pypi.org/project/path.py/) and updating the encapsulated object every time the path might be changed.
-
-mutapath also adds the possibility to delimit file and path modifications to a safe fallback context.
+This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases in which paths are often changed.
+mutapath solves this by wrapping both, the Python 3 pathlib library, and the alternate  [path library](https://pypi.org/project/path/), and providing a mutable context manager for them.
 
 ## MutaPath Class
 
-The MutaPath Class allows direct manipulation of its attributes at any time, just as any mutable object.
+The MutaPath Class allows direct mutation of its attributes at any time, just as any mutable object.
 Once a file operation is called that is intended to modify its path, the underlying path is also mutated.
 
 ```python
@@ -97,8 +95,20 @@ True
 False
 ```
 
-
 For more in-depth examples, check the tests folder.
+
+## Locks
+
+Soft Locks can easily be accessed via the lazy lock property.
+Moreover, the mutable context managers in `Path` (i.e., `renaming`, `moving`, `copying`) allow implicit locking.
+The lock object is cached as long as the file is not mutated. 
+Once the lock is mutated, it is released and regenerated, respecting the new file name.
+
+```python
+>>> my_path = Path('/home/doe/folder/sub')
+>>> with my_path.lock:
+...     my_path.write_text("I can write")
+```
 
 ## Hashing
 

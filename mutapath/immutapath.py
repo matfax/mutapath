@@ -451,7 +451,7 @@ class Path(SerializableType):
 
         .. seealso:: :class:`~filelock.SoftFileLock`, :class:`~mutapath.lock_dummy.DummyFileLock`
         """
-        lock_file = self._contained.with_suffix(self.suffix + ".lock")
+        lock_file = self.with_suffix(self.suffix + ".lock")
         if not self.isfile():
             return DummyFileLock(lock_file)
         return SoftFileLock(lock_file)

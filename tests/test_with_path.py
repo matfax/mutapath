@@ -177,6 +177,19 @@ class TestWithPath(PathTest):
         return expected
 
     @file_test()
+    def test_lock_changes_with_mutation(self, test_file: Path):
+        """Assure that the lock changes after the path has been mutated"""
+        expected = ~ test_file.with_name("target.txt")
+        first_lock = test_file.lock
+        with test_file.renaming(timeout=0.1) as mut:
+            mut.name = "target.txt"
+        second_lock = test_file.lock
+        self.assertNotEqual(first_lock.lock_file, second_lock.lock_file)
+        self.assertFalse(first_lock.is_locked, "the origin lock file should not be locked anymore")
+        self.assertFalse(second_lock.is_locked, "the target lock file should not be locked anymore")
+        return expected
+
+    @file_test()
     def test_copying(self, test_file: Path):
         """Try copying a file without issues"""
         expected = test_file.with_name("new.txt")
