@@ -39,7 +39,7 @@ jobs:
       - name: running tests
         run: pipenv run green
       - name: setting up install
-        run: sudo python37 setup.py install
+        run: python setup.py install
       - name: uploading coverage data
         run: |
           pipenv run coverage xml
