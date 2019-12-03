@@ -37,7 +37,7 @@ jobs:
           pipenv sync
           pipenv --venv
       - name: running tests
-        run: green
+        run: pipenv run green
       - name: setting up install
         run: sudo python setup.py install
       - name: uploading coverage data
