@@ -55,3 +55,5 @@ jobs:
             echo "::warning::upload failed (repeating in $WAITING seconds)"
             sleep $WAITING
           done
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
