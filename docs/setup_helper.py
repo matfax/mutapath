@@ -11,8 +11,8 @@ def get_dependencies(pipfile_lock: Optional[str] = None, develop: bool = False):
     if develop:
         result += [package_name for package_name in lock_data.get('develop', {}).keys()]
     for k in result:
-        if "path-py" in k:
-            new_key = k.replace("path-py", "path.py")
+        if "path.py" in k:
+            new_key = k.replace("path.py", "'path.py'")
             result.remove(k)
             result.append(new_key)
     return result

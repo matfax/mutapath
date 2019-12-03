@@ -36,6 +36,8 @@ jobs:
           pip install pipenv
           pipenv sync --dev
           pipenv --venv
+        env:
+          PIPENV_NOSPIN: 1
       - name: running tests
         run: pipenv run green
       - name: setting up install
