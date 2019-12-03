@@ -44,7 +44,7 @@ jobs:
         run: |
           pipenv run coverage xml
           max_retry=5
-          counter=0
+          counter=1
           until $(pipenv run codecov --required -X search gcov -f coverage.xml --flags unittests)
           do
             WAITING=$((10 * counter))
