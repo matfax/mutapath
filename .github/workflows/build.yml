@@ -26,7 +26,7 @@ jobs:
       - name: caching poetry environment
         uses: actions/cache@v1
         with:
-          path: ~/Library/Caches/pypoetry
+          path: ~/.cache/pypoetry
           key: ${{ runner.OS }}-${{ matrix.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.OS }}-${{ matrix.python-version }}-poetry
