@@ -44,12 +44,12 @@ jobs:
         run: |
           pipenv run coverage xml
           max_retry=5
-          counter=1
-          until $(pipenv run codecov --required -X search gcov -f coverage.xml --flags unittests)
+          counter=0
+          until pipenv run codecov --required -X search gcov -f coverage.xml --flags unittests
           do
-            WAITING=$((10 * counter))
-            echo "::warning::upload failed (repeating in $WAITING seconds)"
             [[ counter -eq $max_retry ]] && echo "::error::reached maximum retries" && exit 1
             ((counter++))
+            WAITING=$((10 * counter))
+            echo "::warning::upload failed (repeating in $WAITING seconds)"
             sleep $WAITING
           done
