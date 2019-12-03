@@ -14,9 +14,6 @@
   "lockFileMaintenance": {
     "automerge": true
   },
-  "pipenv": {
-    "enabled": true
-  },
   "vulnerabilityAlerts": {
     "labels": ["security"]
   }

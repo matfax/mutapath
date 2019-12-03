@@ -20,40 +20,31 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.cache/pip
-          key: ${{ runner.OS }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+          key: ${{ runner.OS }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.OS }}-${{ matrix.python-version }}-pip
       - name: caching virtualenv
         uses: actions/cache@v1
         with:
           path: ~/.local/share/virtualenvs
-          key: ${{ runner.OS }}-${{ matrix.python-version }}-virtualenvs-${{ hashFiles('**/Pipfile.lock') }}
+          key: ${{ runner.OS }}-${{ matrix.python-version }}-virtualenvs-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.OS }}-${{ matrix.python-version }}-virtualenvs
-      - name: installing pipenv
+      - name: installing poetry
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv sync --dev
-          pipenv --venv
-        env:
-          PIPENV_NOSPIN: 1
+          pip install -r requirements.txt
+      - name: installing dependencies
+        run: poetry install
       - name: running tests
-        run: pipenv run green
-      - name: setting up install
-        run: python setup.py install
-      - name: uploading coverage data
-        run: |
-          pipenv run coverage xml
-          max_retry=5
-          counter=0
-          until pipenv run codecov --required -X search gcov -f coverage.xml --flags unittests
-          do
-            [[ counter -eq $max_retry ]] && echo "::error::reached maximum retries" && exit 1
-            ((counter++))
-            WAITING=$((10 * counter))
-            echo "::warning::upload failed (repeating in $WAITING seconds)"
-            sleep $WAITING
-          done
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: poetry run green
+      - name: building
+        run: poetry build
+      - name: generate coverage xml
+        run: poetry run coverage xml
+      - name: uploading coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
