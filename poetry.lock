@@ -83,6 +83,7 @@ version = "2.8"
 [[package]]
 category = "main"
 description = "Read metadata from Python packages"
+marker = "python_version < \"3.8\""
 name = "importlib-metadata"
 optional = false
 python-versions = ">=2.7,!=3.0,!=3.1,!=3.2,!=3.3,!=3.4"
@@ -114,6 +115,7 @@ pyyaml = ">=3.13"
 [[package]]
 category = "main"
 description = "More routines for operating on iterables, beyond itertools"
+marker = "python_version < \"3.8\""
 name = "more-itertools"
 optional = false
 python-versions = ">=3.5"
@@ -130,20 +132,33 @@ version = "0.6.2"
 [[package]]
 category = "main"
 description = "A module wrapper for os.path"
+name = "path"
+optional = false
+python-versions = ">=3.5"
+version = "13.1.0"
+
+[package.dependencies]
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = ">=0.5"
+
+[[package]]
+category = "main"
+description = "A module wrapper for os.path"
 name = "path.py"
 optional = false
 python-versions = ">=3.5"
-version = "12.0.2"
+version = "12.4.0"
 
 [package.dependencies]
-importlib-metadata = ">=0.5"
+path = "<13.2"
 
 [[package]]
 category = "dev"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = "*"
 version = "5.2"
 
 [[package]]
@@ -187,6 +202,7 @@ version = "1.25.7"
 [[package]]
 category = "main"
 description = "Backport of pathlib-compatible object wrapper for zip files"
+marker = "python_version < \"3.8\""
 name = "zipp"
 optional = false
 python-versions = ">=2.7"
@@ -196,7 +212,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "970549064c7b7ee9669f81ef2b59ab626dfbbfd881afd353da756a0460c4fd2f"
+content-hash = "0a583f6f2f3b89abc3f9676a93d586fabe47d2c5c6e2bbdeb2e896bfd766e2c5"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -214,7 +230,8 @@ lxml = ["00ac0d64949fef6b3693813fe636a2d56d97a5a49b5bbb86e4cc4cc50ebc9ea2", "057
 mashumaro = ["99e066ba40892ef77b589c91220b68780ed6160f6be707f39a2e60b7b885387e"]
 more-itertools = ["53ff73f186307d9c8ef17a9600309154a6ae27f25579e80af4db8f047ba14bc2", "a0ea684c39bc4315ba7aae406596ef191fd84f873d2d2751f84d64e81a7a2d45"]
 msgpack = ["0cc7ca04e575ba34fea7cfcd76039f55def570e6950e4155a4174368142c8e1b", "187794cd1eb73acccd528247e3565f6760bd842d7dc299241f830024a7dd5610", "1904b7cb65342d0998b75908304a03cb004c63ef31e16c8c43fee6b989d7f0d7", "229a0ccdc39e9b6c6d1033cd8aecd9c296823b6c87f0de3943c59b8bc7c64bee", "24149a75643aeaa81ece4259084d11b792308a6cf74e796cbb35def94c89a25a", "30b88c47e0cdb6062daed88ca283b0d84fa0d2ad6c273aa0788152a1c643e408", "32fea0ea3cd1ef820286863a6202dcfd62a539b8ec3edcbdff76068a8c2cc6ce", "355f7fd0f90134229eaeefaee3cf42e0afc8518e8f3cd4b25f541a7104dcb8f9", "4abdb88a9b67e64810fb54b0c24a1fd76b12297b4f7a1467d85a14dd8367191a", "757bd71a9b89e4f1db0622af4436d403e742506dbea978eba566815dc65ec895", "76df51492bc6fa6cc8b65d09efdb67cbba3cbfe55004c3afc81352af92b4a43c", "774f5edc3475917cd95fe593e625d23d8580f9b48b570d8853d06cac171cd170", "8a3ada8401736df2bf497f65589293a86c56e197a80ae7634ec2c3150a2f5082", "a06efd0482a1942aad209a6c18321b5e22d64eb531ea20af138b28172d8f35ba", "b24afc52e18dccc8c175de07c1d680bdf315844566f4952b5bedb908894bec79", "b8b4bd3dafc7b92608ae5462add1c8cc881851c2d4f5d8977fdea5b081d17f21", "c6e5024fc0cdf7f83b6624850309ddd7e06c48a75fa0d1c5173de4d93300eb19", "db7ff14abc73577b0bcbcf73ecff97d3580ecaa0fc8724babce21fdf3fe08ef6", "dedf54d72d9e7b6d043c244c8213fe2b8bbfe66874b9a65b39c4cc892dd99dd4", "ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830", "f0f47bafe9c9b8ed03e19a100a743662dd8c6d0135e684feea720a0d0046d116"]
-"path.py" = ["45556ae7d59268a7d41ce5c43d53dc0fc7aab3f1028895003a8831d151a96f19", "ae48e0d34fc1fba673e7dc3f2fe93607a6340ee94a440c57cf17cba9d7f2ddf3"]
+path = ["41f0db0b6e32b3fc33c0bede630f6b58c7790af3a27c899e0c7ff69143d8696d", "97249b37e5e4017429a780920147200a2215e268c1a18fa549fec0b654ce99b7"]
+"path.py" = ["6647ca22523f5e868b110cc3d958be01aa92e662a8241e464f7416779427bf3e", "c88fb6073b955b2b2c9f3da61b94a2a4c61d722b776b562c26f29e05425eb55a"]
 pyyaml = ["0e7f69397d53155e55d10ff68fdfb2cf630a35e6daf65cf0bdeaf04f127c09dc", "2e9f0b7c5914367b0916c3c104a024bb68f269a486b9d04a2e8ac6f6597b7803", "35ace9b4147848cafac3db142795ee42deebe9d0dad885ce643928e88daebdcc", "38a4f0d114101c58c0f3a88aeaa44d63efd588845c5a2df5290b73db8f246d15", "483eb6a33b671408c8529106df3707270bfacb2447bf8ad856a4b4f57f6e3075", "4b6be5edb9f6bb73680f5bf4ee08ff25416d1400fbd4535fe0069b2994da07cd", "7f38e35c00e160db592091751d385cd7b3046d6d51f578b29943225178257b31", "8100c896ecb361794d8bfdb9c11fce618c7cf83d624d73d5ab38aef3bc82d43f", "c0ee8eca2c582d29c3c2ec6e2c4f703d1b7f1fb10bc72317355a746057e7346c", "e4c015484ff0ff197564917b4b4246ca03f411b9bd7f16e02a2f586eb48b6d04", "ebc4ed52dcc93eeebeae5cf5deb2ae4347b3a81c3fa12b0b8c976544829396a4"]
 requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", "9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"]
 singletons = ["94b7e8a3edbae48e05f0ac960c6bc0aa7820702584732149ac73e5f81f23abfb", "d1fa48be24bb301ae6f4a4be10f4a4535f4618b154aac26bb3b1d1e0996eb6cf"]
