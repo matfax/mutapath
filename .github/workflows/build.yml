@@ -23,17 +23,17 @@ jobs:
           key: ${{ runner.OS }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.OS }}-${{ matrix.python-version }}-pip
-      - name: caching virtualenv
+      - name: caching poetry environment
         uses: actions/cache@v1
         with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.OS }}-${{ matrix.python-version }}-virtualenvs-${{ hashFiles('**/poetry.lock') }}
+          path: ~/Library/Caches/pypoetry
+          key: ${{ runner.OS }}-${{ matrix.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            ${{ runner.OS }}-${{ matrix.python-version }}-virtualenvs
+            ${{ runner.OS }}-${{ matrix.python-version }}-poetry
       - name: installing poetry
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install poetry poetry-dynamic-versioning
       - name: installing dependencies
         run: poetry install
       - name: running tests
