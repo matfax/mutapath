@@ -31,6 +31,6 @@ jobs:
       - name: building
         run: poetry build
       - name: publishing
-        run: |
-          poetry config http-basic.pypi ${{ secrets.PYPI_TOKEN }}
-          poetry publish
+        run: poetry publish
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
