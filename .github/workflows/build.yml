@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
-          pipenv sync
+          pipenv sync --dev
           pipenv --venv
       - name: running tests
         run: pipenv run green
