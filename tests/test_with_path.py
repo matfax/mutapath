@@ -1,7 +1,6 @@
 import os
 import time
 from types import GeneratorType
-
 from typing import List
 
 from mutapath import Path
@@ -76,7 +75,7 @@ class TestWithPath(PathTest):
         self.assertGreater(later, actual)
         test_file.copystat(other)
         later = other.mtime
-        self.assertAlmostEqual(later, actual, places=4)
+        self.assertAlmostEqual(later, actual, places=2)
 
     @file_test(equal=False)
     def test_ctime(self, test_file: Path):
@@ -91,7 +90,10 @@ class TestWithPath(PathTest):
         actual = test_file.atime
         other = test_file.copy2(test_file.with_name("other.txt"))
         later = other.atime
-        self.assertAlmostEqual(later, actual, places=4)
+        self.assertGreaterEqual(later, actual)
+        other.write_text("new")
+        later2 = other.atime
+        self.assertGreater(later2, later)
 
     @file_test(exists=False)
     def test_mutate(self, test_file: Path):
