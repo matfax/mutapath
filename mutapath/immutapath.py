@@ -405,13 +405,17 @@ class Path(SerializableType):
         return self.clone(self._contained.dirname())
 
     def open(self, *args, **kwargs):
-        """ .. seealso:: :func:`pathlib.Path.open` """
+        """ .. seealso:: :func:`io.open` """
         return io.open(str(self), *args, **kwargs)
 
-    def glob(self, pattern):
-        """ .. seealso:: :func:`pathlib.Path.glob` """
+    def glob(self, pattern) -> Iterable[Path]:
+        """ .. seealso:: :meth:`pathlib.Path.glob` """
         paths = self.to_pathlib.glob(pattern)
         return (self.clone(g) for g in paths)
+
+    def startfile(self, **kwargs):
+        """ .. seealso:: :func:`os.startfile` """
+        os.startfile(self._contained, **kwargs)
 
     @cached_property
     def text(self):

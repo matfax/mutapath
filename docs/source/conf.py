@@ -10,7 +10,7 @@ project = "mutapath"
 copyright = "2019, 'matfax'"
 author = "'matfax'"
 
-release = re.sub('^', '', os.popen('git describe').read().strip())
+release = re.sub('^v', '', os.popen('git describe').read().strip())
 version = release
 
 # -- General configuration ---------------------------------------------------
