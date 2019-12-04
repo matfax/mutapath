@@ -1,0 +1,12 @@
+coverage:
+  range: "95...100"
+  status:
+    project:
+      default:
+        threshold: 1
+    patch:
+      default:
+        threshold: 1
+
+comment:
+  layout: "diff, files"
