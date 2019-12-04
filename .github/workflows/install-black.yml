@@ -34,7 +34,7 @@ jobs:
             This pull requests deploys the new Python code style [black][1].
 
             [1]: https://github.com/psf/black
-          labels: automated pr
+          labels: style
           branch: black
           branch-suffix: none
       - name: check pull request
