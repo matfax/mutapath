@@ -1,0 +1,35 @@
+name: deploy black
+
+on: [push]
+
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    name: enforce black
+    steps:
+      - uses: actions/checkout@v1
+      - name: setting up python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+      - name: installing poetry
+        run: pip install black
+      - name: running black
+        run: black --target-version py37 .
+      - name: creating pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(style): deploy black'
+          author-email: mat@fax.fyi
+          author-name: matfax
+          title: '[style] Deploy Black Style'
+          body: |
+            This pull requests deploys the new Python code style [black][1].
+
+            [1]: https://github.com/psf/black
+          labels: automated pr
+          branch: black
+      - name: check pull request
+        run: echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"
