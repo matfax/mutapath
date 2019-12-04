@@ -422,11 +422,11 @@ class Path(SerializableType):
         .. seealso:: :func:`os.startfile`
         """
         if os.name == "nt":
-            os.startfile(self._contained, **kwargs)
+            os.startfile(self.abspath(), **kwargs)
         elif sys.platform == "darwin":
-            subprocess.call(['open', self._contained], **kwargs)
+            subprocess.call(['open', self.abspath()], **kwargs)
         else:
-            subprocess.call(['xdg-open', self._contained], **kwargs)
+            subprocess.call(['xdg-open', self.abspath()], **kwargs)
 
     @cached_property
     def text(self):

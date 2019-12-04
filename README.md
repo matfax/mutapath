@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/gh/matfax/mutapath/branch/master/graph/badge.svg)](https://codecov.io/gh/matfax/mutapath)
 [![Renovate Status](https://badges.renovateapi.com/github/matfax/mutapath)](https://renovatebot.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/matfax/mutapath/badge)](https://www.codefactor.io/repository/github/matfax/mutapath)
+[![security: bandit](https://img.shields.io/badge/security-bandit-purple.svg)](https://github.com/PyCQA/bandit)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath)](https://pypi.org/project/mutapath/)
 [![PyPI](https://img.shields.io/pypi/v/mutapath?color=%2339A7A6)](https://pypi.org/project/mutapath/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/mutapath?color=%231447F9)](https://pypistats.org/packages/mutapath)
