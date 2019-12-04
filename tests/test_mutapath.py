@@ -1,7 +1,9 @@
 from mutapath import MutaPath, Path
 from tests.helper import PathTest, file_test
 
-file_test_no_asserts = file_test(equal=False, instance=False, exists=False, posix_test=False, string_test=False)
+file_test_no_asserts = file_test(
+    equal=False, instance=False, exists=False, posix_test=False, string_test=False
+)
 
 
 class TestMutaPath(PathTest):
@@ -10,7 +12,11 @@ class TestMutaPath(PathTest):
         super().__init__(*args)
 
     def _gen_start_path(self, posix: bool = False, use_string: bool = False):
-        return MutaPath(super(TestMutaPath, self)._gen_start_path(posix), posix=posix, string_repr=use_string)
+        return MutaPath(
+            super(TestMutaPath, self)._gen_start_path(posix),
+            posix=posix,
+            string_repr=use_string,
+        )
 
     @file_test_no_asserts
     def test_suffix(self, test_file: Path):
@@ -113,7 +119,7 @@ class TestMutaPath(PathTest):
 
     @file_test(equal=False)
     def test_copytree(self, test_file: Path):
-        from_here = ~ (self.test_base / "from/here")
+        from_here = ~(self.test_base / "from/here")
         from_here.makedirs()
         test_file.copy(from_here)
         expected = self.test_base / "to"
@@ -124,20 +130,22 @@ class TestMutaPath(PathTest):
     @file_test(equal=False, exists=False)
     def test_move(self, test_file: Path):
         from_here = self.test_base / "from/here"
-        current = ~ from_here
+        current = ~from_here
         current.makedirs()
         test_file.copy(current)
         expected = self.test_base / "to"
         current.move(expected)
         self.assertEqual(expected, current)
         self.assertIsInstance(current, MutaPath)
-        self.assertTrue(not from_here.exists(), "The moved file still exists in the source folder.")
+        self.assertTrue(
+            not from_here.exists(), "The moved file still exists in the source folder."
+        )
         target_not_empty = len(current.files("test.file*")) > 0
         self.assertTrue(target_not_empty, "The target file does not exist.")
 
     @file_test(equal=False)
     def test_merge_tree(self, test_file: Path):
-        from_here = ~ (self.test_base / "from/here")
+        from_here = ~(self.test_base / "from/here")
         from_here.makedirs()
         test_file.copy(from_here)
         expected = self.test_base / "to"

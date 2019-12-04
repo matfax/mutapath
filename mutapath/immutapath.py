@@ -33,14 +33,19 @@ except NotImplementedError:
 @path_wrapper
 class Path(SerializableType):
     """Immutable Path"""
+
     _contained: Union[path.Path, pathlib.PurePath, str] = path.Path("")
     __always_posix_format: bool
     __string_repr: bool
     __mutable: object
 
-    def __init__(self, contained: Union[Path, path.Path, pathlib.PurePath, str] = "", *,
-                 posix: Optional[bool] = None,
-                 string_repr: Optional[bool] = None):
+    def __init__(
+        self,
+        contained: Union[Path, path.Path, pathlib.PurePath, str] = "",
+        *,
+        posix: Optional[bool] = None,
+        string_repr: Optional[bool] = None,
+    ):
         if posix is None:
             posix = PathDefaults().posix
         self.__always_posix_format = posix
@@ -52,7 +57,11 @@ class Path(SerializableType):
         self._set_contained(contained, posix)
         super().__init__()
 
-    def _set_contained(self, contained: Union[Path, path.Path, pathlib.PurePath, str], posix: Optional[bool] = None):
+    def _set_contained(
+        self,
+        contained: Union[Path, path.Path, pathlib.PurePath, str],
+        posix: Optional[bool] = None,
+    ):
         if contained:
             if isinstance(contained, Path):
                 contained = contained._contained
@@ -85,15 +94,21 @@ class Path(SerializableType):
                 if self.lock.is_locked:
                     self.lock.release()
                     Path(self.lock.lock_file).remove_p()
-                del self.__dict__['lock']
+                del self.__dict__["lock"]
 
             if isinstance(value, Path):
                 value = value._contained
             self._set_contained(value)
-        elif key in ["_Path__mutable", "_Path__always_posix_format", "_Path__string_repr"]:
+        elif key in [
+            "_Path__mutable",
+            "_Path__always_posix_format",
+            "_Path__string_repr",
+        ]:
             super(Path, self).__setattr__(key, value)
         else:
-            raise AttributeError(f"attribute {key} can not be set because mutapath.Path is an immutable class.")
+            raise AttributeError(
+                f"attribute {key} can not be set because mutapath.Path is an immutable class."
+            )
 
     def __repr__(self):
         if self.__string_repr:
@@ -126,9 +141,11 @@ class Path(SerializableType):
         return str(self) == str(other)
 
     def __hash__(self):
-        warnings.warn(f"It is not advised to hash mutable path objects or to use them in sets or dicts. "
-                      f"Please use hash(str(path)) instead to make the actual hashing input transparent.",
-                      category=SyntaxWarning)
+        warnings.warn(
+            f"It is not advised to hash mutable path objects or to use them in sets or dicts. "
+            f"Please use hash(str(path)) instead to make the actual hashing input transparent.",
+            category=SyntaxWarning,
+        )
         return self._hash_cache
 
     @cached_property
@@ -191,6 +208,7 @@ class Path(SerializableType):
     def __invert__(self):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""
         from mutapath import MutaPath
+
         return MutaPath(self._contained, posix=self.posix_enabled)
 
     def _serialize(self) -> str:
@@ -214,13 +232,15 @@ class Path(SerializableType):
         :param contained: the new contained path element
         :return: the cloned path
         """
-        return Path(contained, posix=self.__always_posix_format, string_repr=self.__string_repr)
+        return Path(
+            contained, posix=self.__always_posix_format, string_repr=self.__string_repr
+        )
 
     @path.multimethod
     def _shorten_duplicates(self, input_path: str = "") -> str:
         if isinstance(input_path, Path):
             input_path = input_path._contained
-        return input_path.replace('\\\\', '\\')
+        return input_path.replace("\\\\", "\\")
 
     @path.multimethod
     def posix_string(self, input_path: str = "") -> str:
@@ -233,7 +253,7 @@ class Path(SerializableType):
         """
         if isinstance(input_path, Path):
             input_path = input_path._contained
-        return input_path.replace('\\\\', '\\').replace('\\', '/')
+        return input_path.replace("\\\\", "\\").replace("\\", "/")
 
     def with_poxis_enabled(self, enable: bool = True) -> Path:
         """
@@ -425,15 +445,15 @@ class Path(SerializableType):
         """
         if self.isfile():
             secure_path = self.abspath()
-            if ' ' in secure_path:
+            if " " in secure_path:
                 return
             if os.name == "nt":
                 os.startfile(secure_path)
             else:
                 if sys.platform == "darwin":
-                    args = ['open', secure_path]
+                    args = ["open", secure_path]
                 else:
-                    args = ['xdg-open', secure_path]
+                    args = ["xdg-open", secure_path]
                 subprocess.call(args, shell=False)
 
     @cached_property
@@ -494,9 +514,16 @@ class Path(SerializableType):
         self._contained = self.__mutable._contained
 
     @contextmanager
-    def _op_context(self, name: str, timeout: float, lock: bool,
-                    operation:
-                    Callable[[Union[os.PathLike, path.Path], Union[os.PathLike, path.Path]], Union[str, path.Path]]):
+    def _op_context(
+        self,
+        name: str,
+        timeout: float,
+        lock: bool,
+        operation: Callable[
+            [Union[os.PathLike, path.Path], Union[os.PathLike, path.Path]],
+            Union[str, path.Path],
+        ],
+    ):
         """
         Acquire a file mutation context that is bound to a file.
         
@@ -507,7 +534,9 @@ class Path(SerializableType):
         
         """
         if not self._contained.exists():
-            raise PathException(f"{name.capitalize()} {self._contained} failed because the file does not exist.")
+            raise PathException(
+                f"{name.capitalize()} {self._contained} failed because the file does not exist."
+            )
 
         try:
             if lock:
@@ -515,7 +544,8 @@ class Path(SerializableType):
                     self.lock.acquire(timeout)
                 except filelock.Timeout as t:
                     raise PathException(
-                        f"{name.capitalize()} {self._contained} failed because the file could not be locked.") from t
+                        f"{name.capitalize()} {self._contained} failed because the file could not be locked."
+                    ) from t
 
             self.__mutable = mutapath.MutaPath(self)
             yield self.__mutable
@@ -529,12 +559,14 @@ class Path(SerializableType):
             except FileExistsError as e:
                 raise PathException(
                     f"{name.capitalize()} to {current_file.normpath()} failed because the file already exists. "
-                    f"Falling back to original value {self._contained}.") from e
+                    f"Falling back to original value {self._contained}."
+                ) from e
 
             if not current_file.exists():
                 raise PathException(
                     f"{name.capitalize()} to {current_file.normpath()} failed because it can not be found. "
-                    f"Falling back to original value {self._contained}.")
+                    f"Falling back to original value {self._contained}."
+                )
 
             self._contained = current_file
 
@@ -542,7 +574,9 @@ class Path(SerializableType):
             if self.lock.is_locked:
                 self.lock.release()
 
-    def renaming(self, lock=True, timeout=1, method: Callable[[str, str], None] = os.rename):
+    def renaming(
+        self, lock=True, timeout=1, method: Callable[[str, str], None] = os.rename
+    ):
         """
         Create a renaming context for this immutable path.
         The external value is only changed if the renaming succeeds.
@@ -565,7 +599,8 @@ class Path(SerializableType):
                     target_lock.acquire(timeout)
                 except filelock.Timeout as t:
                     raise PathException(
-                        f"Renaming {self._contained} failed because the target {target} could not be locked.") from t
+                        f"Renaming {self._contained} failed because the target {target} could not be locked."
+                    ) from t
             try:
                 if target.exists():
                     raise FileExistsError(f"{target.name} already exists.")
@@ -576,9 +611,16 @@ class Path(SerializableType):
                     target_lock_file.remove_p()
             return target
 
-        return self._op_context("Renaming", lock=lock, timeout=timeout, operation=checked_rename)
+        return self._op_context(
+            "Renaming", lock=lock, timeout=timeout, operation=checked_rename
+        )
 
-    def moving(self, lock=True, timeout=1, method: Callable[[os.PathLike, os.PathLike], str] = shutil.move):
+    def moving(
+        self,
+        lock=True,
+        timeout=1,
+        method: Callable[[os.PathLike, os.PathLike], str] = shutil.move,
+    ):
         """
         Create a moving context for this immutable path.
         The external value is only changed if the moving succeeds.
@@ -594,7 +636,9 @@ class Path(SerializableType):
         """
         return self._op_context("Moving", operation=method, lock=lock, timeout=timeout)
 
-    def copying(self, lock=True, timeout=1, method: Callable[[Path, Path], Path] = shutil.copy):
+    def copying(
+        self, lock=True, timeout=1, method: Callable[[Path, Path], Path] = shutil.copy
+    ):
         """
         Create a copying context for this immutable path.
         The external value is only changed if the copying succeeds.

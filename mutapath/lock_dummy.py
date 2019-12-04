@@ -2,7 +2,6 @@ from filelock import BaseFileLock
 
 
 class DummyFileLock(BaseFileLock):
-
     def release(self, force=False):
         """Doing nothing"""
 
