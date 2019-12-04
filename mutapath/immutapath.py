@@ -415,18 +415,26 @@ class Path(SerializableType):
         paths = self.to_pathlib.glob(pattern)
         return (self.clone(g) for g in paths)
 
-    def startfile(self, **kwargs):
+    def startfile(self):
         """
         Open this path in a platform-dependant manner.
+        This method follows the best practice from `Openstack`_.
 
+        .. _Openstack: https://security.openstack.org/guidelines/dg_use-subprocess-securely.html
         .. seealso:: :func:`os.startfile`
         """
-        if os.name == "nt":
-            os.startfile(self.abspath(), **kwargs)
-        elif sys.platform == "darwin":
-            subprocess.call(['open', self.abspath()], **kwargs)
-        else:
-            subprocess.call(['xdg-open', self.abspath()], **kwargs)
+        if self.isfile():
+            secure_path = self.abspath()
+            if ' ' in secure_path:
+                return
+            if os.name == "nt":
+                os.startfile(secure_path)
+            else:
+                if sys.platform == "darwin":
+                    args = ['open', secure_path]
+                else:
+                    args = ['xdg-open', secure_path]
+                subprocess.call(args, shell=False)
 
     @cached_property
     def text(self):
