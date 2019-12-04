@@ -4,7 +4,7 @@ from types import GeneratorType
 from typing import List
 
 from mutapath import Path
-from mutapath.exceptions import PathException
+from mutapath import PathException
 from tests.helper import PathTest, file_test
 
 

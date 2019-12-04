@@ -5,6 +5,8 @@ import io
 import os
 import pathlib
 import shutil
+import subprocess
+import sys
 import warnings
 from contextlib import contextmanager
 from typing import Union, Iterable, Callable, Optional
@@ -414,8 +416,17 @@ class Path(SerializableType):
         return (self.clone(g) for g in paths)
 
     def startfile(self, **kwargs):
-        """ .. seealso:: :func:`os.startfile` """
-        os.startfile(self._contained, **kwargs)
+        """
+        Open this path in a platform-dependant manner.
+
+        .. seealso:: :func:`os.startfile`
+        """
+        if os.name == "nt":
+            os.startfile(self._contained, **kwargs)
+        elif sys.platform == "darwin":
+            subprocess.call(['open', self._contained], **kwargs)
+        else:
+            subprocess.call(['xdg-open', self._contained], **kwargs)
 
     @cached_property
     def text(self):
