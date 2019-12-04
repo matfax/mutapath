@@ -30,16 +30,21 @@ class PathTest(unittest.TestCase):
             self.assertIsInstance(i, Path)
             self.assertIsInstance(i._contained, path.Path)
 
-    def arg_with_matrix(self, with_func: Callable[[Path, bool], Path],
-                        test_func: Optional[Callable[[Path], bool]] = None,
-                        with_func_default: bool = True, **kwargs):
+    def arg_with_matrix(
+        self,
+        with_func: Callable[[Path, bool], Path],
+        test_func: Optional[Callable[[Path], bool]] = None,
+        with_func_default: bool = True,
+        **kwargs,
+    ):
         """
         Use a matrix of keyed init arguments with their immutable with methods.
         The first passed keyed argument should relate to the with method.
         """
         if len(kwargs) < 1:
             raise ValueError(
-                "The matrix requires at least the init value and its default that correlates with the with method.")
+                "The matrix requires at least the init value and its default that correlates with the with method."
+            )
 
         first_key = next(iter(kwargs))
         first_default = kwargs[first_key]
@@ -76,7 +81,9 @@ class PathTest(unittest.TestCase):
                 self.assertFalse(test_func(with_disabled.clone("/")))
 
 
-def file_test(equal=True, instance=True, exists=True, posix_test=True, string_test=True):
+def file_test(
+    equal=True, instance=True, exists=True, posix_test=True, string_test=True
+):
     def file_test_decorator(func):
         @wraps(func)
         def func_wrapper(cls: PathTest):
@@ -84,7 +91,10 @@ def file_test(equal=True, instance=True, exists=True, posix_test=True, string_te
                 actual = cls._gen_start_path(use_posix, use_string)
                 expected = func(cls, actual)
                 if equal:
-                    cls.assertIsNotNone(expected, "This test does not return the expected value. Fix the test.")
+                    cls.assertIsNotNone(
+                        expected,
+                        "This test does not return the expected value. Fix the test.",
+                    )
                     cls.assertEqual(expected, actual)
                 if instance:
                     cls.typed_instance_test(actual)
@@ -96,10 +106,15 @@ def file_test(equal=True, instance=True, exists=True, posix_test=True, string_te
                 test_case()
                 if posix_test:
                     test_path = test_case(use_posix=True)
-                    cls.assertTrue(test_path.posix_enabled, "the test file is not in posix format")
+                    cls.assertTrue(
+                        test_path.posix_enabled, "the test file is not in posix format"
+                    )
                 if string_test:
                     test_path = test_case(use_string=True)
-                    cls.assertTrue(test_path.string_repr_enabled, "the test file is not using string representation")
+                    cls.assertTrue(
+                        test_path.string_repr_enabled,
+                        "the test file is not using string representation",
+                    )
             finally:
                 cls._clean()
 
