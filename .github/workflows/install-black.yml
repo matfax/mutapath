@@ -12,6 +12,11 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: '3.7'
+      - name: caching pip storage
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.OS }}-${{ matrix.python-version }}-pip
       - name: installing black
         run: pip install black
       - name: running black
@@ -31,5 +36,6 @@ jobs:
             [1]: https://github.com/psf/black
           labels: automated pr
           branch: black
+          branch-suffix: none
       - name: check pull request
         run: echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"
