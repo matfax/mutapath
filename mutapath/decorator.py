@@ -15,16 +15,67 @@ import path
 import mutapath
 
 __EXCLUDE_FROM_WRAPPING = [
-    "__dir__", "__eq__", "__format__", "__repr__", "__str__", "__sizeof__", "__init__", "__getattribute__",
-    "__delattr__", "__setattr__", "__getattr__", "joinpath", "clone", "__exit__", "__fspath__",
-    "'_Path__wrap_attribute'", "__wrap_decorator", "_op_context", "__hash__", "__enter__", "_norm", "open", "lock",
-    "getcwd", "dirname", "owner", "uncshare", "posix_format", "posix_string", "__add__", "__radd__", "_set_contained",
-    "with_poxis_enabled", "_hash_cache", "_serialize", "_deserialize", "string_repr_enabled", "_shorten_duplicates",
-    "text", "bytes"
+    "__dir__",
+    "__eq__",
+    "__format__",
+    "__repr__",
+    "__str__",
+    "__sizeof__",
+    "__init__",
+    "__getattribute__",
+    "__delattr__",
+    "__setattr__",
+    "__getattr__",
+    "joinpath",
+    "clone",
+    "__exit__",
+    "__fspath__",
+    "'_Path__wrap_attribute'",
+    "__wrap_decorator",
+    "_op_context",
+    "__hash__",
+    "__enter__",
+    "_norm",
+    "open",
+    "lock",
+    "getcwd",
+    "dirname",
+    "owner",
+    "uncshare",
+    "posix_format",
+    "posix_string",
+    "__add__",
+    "__radd__",
+    "_set_contained",
+    "with_poxis_enabled",
+    "_hash_cache",
+    "_serialize",
+    "_deserialize",
+    "string_repr_enabled",
+    "_shorten_duplicates",
+    "text",
+    "bytes",
 ]
 
-__MUTABLE_FUNCTIONS = {"rename", "renames", "copy", "copy2", "copyfile", "copymode", "copystat", "copytree", "move",
-                       "basename", "abspath", "join", "joinpath", "normpath", "relpath", "realpath", "relpathto"}
+__MUTABLE_FUNCTIONS = {
+    "rename",
+    "renames",
+    "copy",
+    "copy2",
+    "copyfile",
+    "copymode",
+    "copystat",
+    "copytree",
+    "move",
+    "basename",
+    "abspath",
+    "join",
+    "joinpath",
+    "normpath",
+    "relpath",
+    "realpath",
+    "relpathto",
+}
 
 
 def __is_mbm(member):
@@ -77,7 +128,9 @@ def wrap_attribute(orig_attr, fetcher: Optional[Callable] = None):
         converter = __path_converter(self.clone)
         if isinstance(result, List) and not isinstance(result, (str, bytes, bytearray)):
             return list(map(converter, result))
-        if isinstance(result, Iterable) and not isinstance(result, (str, bytes, bytearray)):
+        if isinstance(result, Iterable) and not isinstance(
+            result, (str, bytes, bytearray)
+        ):
             return (converter(g) for g in result)
         return __path_converter(self.clone)(result)
 
@@ -94,17 +147,21 @@ def path_wrapper(cls):
             setattr(cls, name, __path_func(method))
             member_names.append(name)
     for name, _ in inspect.getmembers(path.Path, __is_mbm):
-        if not name.startswith("_") \
-                and name not in __EXCLUDE_FROM_WRAPPING \
-                and name not in member_names:
+        if (
+            not name.startswith("_")
+            and name not in __EXCLUDE_FROM_WRAPPING
+            and name not in member_names
+        ):
             method = getattr(path.Path, name)
             if not hasattr(cls, name):
                 setattr(cls, name, wrap_attribute(method))
                 member_names.append(name)
     for name, _ in inspect.getmembers(pathlib.Path, __is_mbm):
-        if not name.startswith("_") \
-                and name not in __EXCLUDE_FROM_WRAPPING \
-                and name not in member_names:
+        if (
+            not name.startswith("_")
+            and name not in __EXCLUDE_FROM_WRAPPING
+            and name not in member_names
+        ):
             method = getattr(pathlib.Path, name)
             if not hasattr(cls, name):
                 setattr(cls, name, wrap_attribute(method, pathlib.Path))

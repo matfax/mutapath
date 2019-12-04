@@ -15,7 +15,7 @@ class TestPath(PathTest):
         self.typed_instance_test(actual)
 
     def test_with_name_win(self):
-        if os.name == 'nt':
+        if os.name == "nt":
             expected = Path("C:/B/other")
             actual = Path("C:/B/test1.txt").with_name("other")
             self.assertEqual(expected, actual)
@@ -34,16 +34,18 @@ class TestPath(PathTest):
         self.typed_instance_test(actual)
 
     def test_with_base_win(self):
-        if os.name == 'nt':
+        if os.name == "nt":
             expected = Path("C:/Users/joe/folder/sub")
             actual = Path("C:/Users/doe/folder/sub").with_base("C:/Users/joe")
             self.assertEqual(expected, actual)
             self.typed_instance_test(actual)
 
     def test_with_base_length_win(self):
-        if os.name == 'nt':
+        if os.name == "nt":
             expected = Path("C:/Users/joe/doe/folder/sub").abspath()
-            actual = Path("C:/Users/doe/folder/sub").abspath().with_base("C:/Users/joe", 1)
+            actual = (
+                Path("C:/Users/doe/folder/sub").abspath().with_base("C:/Users/joe", 1)
+            )
             self.assertEqual(expected, actual)
             self.typed_instance_test(actual)
 
@@ -69,30 +71,54 @@ class TestPath(PathTest):
         return path.string_repr_enabled
 
     def test_with_string_repr_enabled(self):
-        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False)
-        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False, posix=False)
-        self.arg_with_matrix(Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False, posix=True)
+        self.arg_with_matrix(
+            Path.with_string_repr_enabled, self._string_repr_enabled, string_repr=False
+        )
+        self.arg_with_matrix(
+            Path.with_string_repr_enabled,
+            self._string_repr_enabled,
+            string_repr=False,
+            posix=False,
+        )
+        self.arg_with_matrix(
+            Path.with_string_repr_enabled,
+            self._string_repr_enabled,
+            string_repr=False,
+            posix=True,
+        )
 
     def test_defaults_with_string_repr(self):
         getter = lambda p: p.string_repr_enabled
         PathDefaults().string_repr = True
         self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True)
-        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True, posix=False)
-        self.arg_with_matrix(Path.with_string_repr_enabled, getter, string_repr=True, posix=True)
+        self.arg_with_matrix(
+            Path.with_string_repr_enabled, getter, string_repr=True, posix=False
+        )
+        self.arg_with_matrix(
+            Path.with_string_repr_enabled, getter, string_repr=True, posix=True
+        )
         PathDefaults().reset()
 
     def test_with_posix_enabled(self):
         getter = lambda p: p.posix_enabled
         self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False)
-        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False, string_repr=False)
-        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=False, string_repr=True)
+        self.arg_with_matrix(
+            Path.with_poxis_enabled, getter, posix=False, string_repr=False
+        )
+        self.arg_with_matrix(
+            Path.with_poxis_enabled, getter, posix=False, string_repr=True
+        )
 
     def test_defaults_with_posix(self):
         getter = lambda p: p.posix_enabled
         PathDefaults().posix = True
         self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True)
-        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True, string_repr=False)
-        self.arg_with_matrix(Path.with_poxis_enabled, getter, posix=True, string_repr=True)
+        self.arg_with_matrix(
+            Path.with_poxis_enabled, getter, posix=True, string_repr=False
+        )
+        self.arg_with_matrix(
+            Path.with_poxis_enabled, getter, posix=True, string_repr=True
+        )
         PathDefaults().reset()
 
     def test_static_joinpath(self):
@@ -135,7 +161,7 @@ class TestPath(PathTest):
         constructors = [posix_path, Path, MutaPath]
         comparable_constructors = constructors + [path.Path, pathlib.Path, str]
         containers = ["/A/B/other.txt"]
-        if os.name == 'nt':
+        if os.name == "nt":
             containers += ["/A\\B/other.txt", "\\A\\B\\other.txt"]
 
         paths = list()
@@ -151,7 +177,9 @@ class TestPath(PathTest):
 
         for l_const, l in paths:
             for r_const, r in comparables:
-                self.assertEqual(l, r, f"{l_const} is not equalling comparable {r_const}")
+                self.assertEqual(
+                    l, r, f"{l_const} is not equalling comparable {r_const}"
+                )
 
     def test_add(self):
         expected = "/A/B/other.txt"
@@ -205,7 +233,7 @@ class TestPath(PathTest):
         self.typed_instance_test(actual[0])
 
     def test_anchor(self):
-        if os.name == 'nt':
+        if os.name == "nt":
             excpected = "C:\\"
             actual = Path("C:/A/B/C").anchor
         else:
