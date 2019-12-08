@@ -1,4 +1,4 @@
-name: check black
+name: confirm black
 
 on: [push]
 
@@ -21,6 +21,8 @@ jobs:
         run: pip install black
       - name: running black
         run: black --target-version py37 .
+      - name: rebasing
+        run: git merge origin/black --strategy=ours
       - name: creating pull request
         id: cpr
         uses: peter-evans/create-pull-request@v1
