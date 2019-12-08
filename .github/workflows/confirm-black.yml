@@ -22,7 +22,10 @@ jobs:
       - name: running black
         run: black --target-version py37 .
       - name: rebasing
-        run: git merge origin/black --strategy=ours
+        run: |
+          git config --global user.email "mat@fax.fyi"
+          git config --global user.name "matfax"
+          git merge origin/black --strategy=ours
       - name: creating pull request
         id: cpr
         uses: peter-evans/create-pull-request@v1
