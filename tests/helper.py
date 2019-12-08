@@ -35,7 +35,7 @@ class PathTest(unittest.TestCase):
         with_func: Callable[[Path, bool], Path],
         test_func: Optional[Callable[[Path], bool]] = None,
         with_func_default: bool = True,
-        **kwargs,
+        **kwargs
     ):
         """
         Use a matrix of keyed init arguments with their immutable with methods.
