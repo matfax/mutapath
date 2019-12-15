@@ -20,7 +20,7 @@ class MutaPath(mutapath.Path):
         ] = "",
         *,
         posix: Optional[bool] = None,
-        string_repr: Optional[bool] = None
+        string_repr: Optional[bool] = None,
     ):
         if isinstance(contained, MutaPath):
             contained = contained._contained
