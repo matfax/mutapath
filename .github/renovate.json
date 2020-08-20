@@ -9,10 +9,12 @@
     "labels": ["dependencies"]
   },
   "pin": {
-    "automerge": true
+    "automerge": true,
+    "labels": ["dependencies"]
   },
   "lockFileMaintenance": {
-    "automerge": true
+    "automerge": true,
+    "labels": ["dependencies"]
   },
   "vulnerabilityAlerts": {
     "labels": ["security"]
