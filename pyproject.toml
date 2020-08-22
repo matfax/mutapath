@@ -21,7 +21,7 @@ path = ">=13.1,<16.0"
 green = "3.2.1"
 coverage = "5.2.1"
 codecov = "2.1.9"
-mashumaro = "1.9"
+mashumaro = "1.12"
 bandit = "^1.6.2"
 black = "^19.10b0"
 

@@ -190,7 +190,7 @@ description = "Fast serialization framework on top of dataclasses"
 name = "mashumaro"
 optional = false
 python-versions = ">=3.6"
-version = "1.9"
+version = "1.12"
 
 [package.dependencies]
 msgpack = ">=0.5.6"
@@ -344,7 +344,7 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "1bc05ac60f6fa492fbf385e6f5cd45d4da6d46bc9fc88c4bb6b510955a8155d4"
+content-hash = "e9c101a21c8d9240a0496a5eaec73edcae535a49e383043ab61ad7b3e62b5106"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -473,7 +473,7 @@ lxml = [
     {file = "lxml-4.4.2.tar.gz", hash = "sha256:eff69ddbf3ad86375c344339371168640951c302450c5d3e9936e98d6459db06"},
 ]
 mashumaro = [
-    {file = "mashumaro-1.9.tar.gz", hash = "sha256:99e066ba40892ef77b589c91220b68780ed6160f6be707f39a2e60b7b885387e"},
+    {file = "mashumaro-1.12.tar.gz", hash = "sha256:328bd252eeb51959a66c5a465a8ef4877f5ea8ac396af11278ac4bdb06cc49f8"},
 ]
 msgpack = [
     {file = "msgpack-0.6.2-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:774f5edc3475917cd95fe593e625d23d8580f9b48b570d8853d06cac171cd170"},
