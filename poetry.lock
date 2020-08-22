@@ -271,12 +271,12 @@ category = "main"
 description = "Singleton metaclasses and singleton factories"
 name = "singletons"
 optional = false
-python-versions = "*"
-version = "0.2.3"
+python-versions = ">=3.6,<4.0"
+version = "0.2.5"
 
 [package.extras]
-eventlet = ["eventlet"]
-gevent = ["gevent"]
+eventlet = ["eventlet (>=0.25.1,<0.26.0)"]
+gevent = ["gevent (>=1.4,<2.0)"]
 
 [[package]]
 category = "dev"
@@ -344,7 +344,7 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "259a7964c8703ac4a072b92dc3cdcfbb625dc19d4c97f54399deece88d4b3299"
+content-hash = "1bc05ac60f6fa492fbf385e6f5cd45d4da6d46bc9fc88c4bb6b510955a8155d4"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -542,8 +542,8 @@ requests = [
     {file = "requests-2.22.0.tar.gz", hash = "sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4"},
 ]
 singletons = [
-    {file = "singletons-0.2.3-py2.py3-none-any.whl", hash = "sha256:d1fa48be24bb301ae6f4a4be10f4a4535f4618b154aac26bb3b1d1e0996eb6cf"},
-    {file = "singletons-0.2.3.tar.gz", hash = "sha256:94b7e8a3edbae48e05f0ac960c6bc0aa7820702584732149ac73e5f81f23abfb"},
+    {file = "singletons-0.2.5-py3-none-any.whl", hash = "sha256:d367554d86865b50fff5bc59cdc3a7a2c50d370ca405d0fe4161073458ffc78c"},
+    {file = "singletons-0.2.5.tar.gz", hash = "sha256:17f827e4eb5aeae024509872325e78cdbb0c3d8183b763d2f3d3ae2bd5728f68"},
 ]
 six = [
     {file = "six-1.13.0-py2.py3-none-any.whl", hash = "sha256:1f1b7d42e254082a9db6279deae68afb421ceba6158efa6131de7b3003ee93fd"},
