@@ -13,9 +13,15 @@ from mutapath.decorator import mutable_path_wrapper
 class MutaPath(mutapath.Path):
     """Mutable Path"""
 
-    def __init__(self, contained: Union[MutaPath, mutapath.Path, path.Path, pathlib.PurePath, str] = "", *,
-                 posix: Optional[bool] = None,
-                 string_repr: Optional[bool] = None):
+    def __init__(
+        self,
+        contained: Union[
+            MutaPath, mutapath.Path, path.Path, pathlib.PurePath, str
+        ] = "",
+        *,
+        posix: Optional[bool] = None,
+        string_repr: Optional[bool] = None,
+    ):
         if isinstance(contained, MutaPath):
             contained = contained._contained
         super(MutaPath, self).__init__(contained, posix=posix, string_repr=string_repr)

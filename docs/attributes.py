@@ -49,7 +49,7 @@ class AppDocumenter(autodoc.ModuleDocumenter):
         if isinstance(self.object, mutapath.Path):
             for member in dir(mutapath.Path):
                 if member not in self.options.get("members") and not member.startswith(
-                        "_"
+                    "_"
                 ):
                     LOG.info(f"[attributes] adding wrapped member {member}")
                     self.options["members"].append(member)

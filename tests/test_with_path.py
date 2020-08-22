@@ -135,7 +135,7 @@ class TestWithPath(PathTest):
         """Try renaming when the source file is missing"""
         with test_file.mutate() as mut:
             mut.name = "wrong.txt"
-        expected = ~ test_file
+        expected = ~test_file
         with self.assertRaises(PathException):
             with test_file.renaming() as mut:
                 mut.name = expected.name
@@ -144,7 +144,7 @@ class TestWithPath(PathTest):
     @file_test()
     def test_renaming_source_lock_fail(self, test_file: Path):
         """Try renaming when there is already a lock on the source file"""
-        expected = ~ test_file
+        expected = ~test_file
         anything = test_file.with_name("anything.txt")
         with expected.lock:
             with self.assertRaises(PathException):
@@ -155,7 +155,7 @@ class TestWithPath(PathTest):
     @file_test()
     def test_renaming_without_lock(self, test_file: Path):
         """Try renaming when lock=False even though there is already a lock on the source and the target file"""
-        expected = ~ test_file
+        expected = ~test_file
         target = test_file.with_name("target.txt").touch()
         with expected.lock:
             with target.lock:
@@ -167,7 +167,7 @@ class TestWithPath(PathTest):
     @file_test()
     def test_renaming_target_lock_fail(self, test_file: Path):
         """Try renaming to a path for which there is already a lock but not a file itself"""
-        expected = ~ test_file
+        expected = ~test_file
         target = test_file.with_name("target.txt").touch()
         with target.lock:
             target.remove()
@@ -179,14 +179,18 @@ class TestWithPath(PathTest):
     @file_test()
     def test_lock_changes_with_mutation(self, test_file: Path):
         """Assure that the lock changes after the path has been mutated"""
-        expected = ~ test_file.with_name("target.txt")
+        expected = ~test_file.with_name("target.txt")
         first_lock = test_file.lock
         with test_file.renaming(timeout=0.1) as mut:
             mut.name = "target.txt"
         second_lock = test_file.lock
         self.assertNotEqual(first_lock.lock_file, second_lock.lock_file)
-        self.assertFalse(first_lock.is_locked, "the origin lock file should not be locked anymore")
-        self.assertFalse(second_lock.is_locked, "the target lock file should not be locked anymore")
+        self.assertFalse(
+            first_lock.is_locked, "the origin lock file should not be locked anymore"
+        )
+        self.assertFalse(
+            second_lock.is_locked, "the target lock file should not be locked anymore"
+        )
         return expected
 
     @file_test()
