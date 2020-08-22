@@ -19,7 +19,7 @@ path = "^13.1.0"
 
 [tool.poetry.dev-dependencies]
 green = "3.0.0"
-coverage = "4.5.4"
+coverage = "5.2.1"
 codecov = "2.0.15"
 mashumaro = "1.9"
 bandit = "^1.6.2"
