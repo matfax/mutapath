@@ -7,10 +7,10 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "mutapath"
-copyright = "2019, 'matfax'"
+copyright = "2020, 'matfax'"
 author = "'matfax'"
 
-release = re.sub("^v", "", os.popen("git describe").read().strip())
+release = re.sub("^v", "", os.popen("git describe --tags").read().strip())
 version = release
 
 # -- General configuration ---------------------------------------------------
