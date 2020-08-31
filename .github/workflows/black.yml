@@ -3,6 +3,11 @@ name: check black
 on:
   push:
     branches: [ master ]
+    paths:
+      - '**.py'
+      - '**/poetry.lock'
+      - '**/pyproject.toml'
+      - '**/black.yml'
   pull_request_target:
     branches: [ master ]
     paths:
@@ -36,10 +41,10 @@ jobs:
         uses: actions/cache@v2.1.1
         with:
           path: ${{ env.pip-cache }}
-          key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-${{ matrix.python-version }}-black-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
-            ${{ runner.os }}-${{ matrix.python-version }}-pip
+            ${{ runner.os }}-${{ matrix.python-version }}-black-${{ hashFiles('**/poetry.lock') }}
+            ${{ runner.os }}-${{ matrix.python-version }}-black
       - name: installing black
         run: pip install black
       - name: running black
