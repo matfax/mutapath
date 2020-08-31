@@ -31,6 +31,7 @@ jobs:
           path: ${{ env.pip-cache }}
           key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
+            ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.OS }}-${{ matrix.python-version }}-pip
       - name: installing poetry
         run: |
@@ -44,6 +45,7 @@ jobs:
           path: ${{ env.poetry-cache }}
           key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
+            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.OS }}-${{ matrix.python-version }}-poetry
       - name: installing dependencies
         run: poetry install -n -vv --no-ansi
