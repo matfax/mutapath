@@ -526,12 +526,12 @@ class Path(SerializableType):
     ):
         """
         Acquire a file mutation context that is bound to a file.
-        
+
         :param name: the human readable name of the operation
         :param timeout: the timeout in seconds how long the lock file should be acquired
         :param lock: if the source file should be locked as long as this context is open
         :param operation: the callable operation that gets the source and target file passed as argument
-        
+
         """
         if not self._contained.exists():
             raise PathException(
