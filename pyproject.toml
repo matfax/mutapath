@@ -18,7 +18,7 @@ filelock = "3.0.12"
 path = ">=13.1,<16.0"
 
 [tool.poetry.dev-dependencies]
-green = "3.2.2"
+green = "3.2.3"
 coverage = "5.3"
 codecov = "2.1.10"
 mashumaro = "1.13"
