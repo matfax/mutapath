@@ -79,4 +79,4 @@ def linkcode_resolve(domain, info):
     if not info["module"]:
         return None
     filename = info["module"].replace(".", "/")
-    return "https://github.com/matfax/mutapath/blob/master/mutapath/%s.py" % filename
+    return "https://github.com/matfax/mutapath/blob/main/mutapath/%s.py" % filename

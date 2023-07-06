@@ -2,14 +2,14 @@ name: check black
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - '**.py'
       - '**/poetry.lock'
       - '**/pyproject.toml'
       - '**/black.yml'
   pull_request_target:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - '**.py'
       - '**/poetry.lock'

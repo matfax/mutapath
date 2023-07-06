@@ -1,6 +1,6 @@
 # mutapath
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/matfax/mutapath/build/master?style=for-the-badge)](https://github.com/matfax/mutapath/actions)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/matfax/mutapath/build/main?style=for-the-badge)](https://github.com/matfax/mutapath/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/matfax/mutapath?style=for-the-badge)](https://codecov.io/gh/matfax/mutapath)
 [![Documentation Status](https://readthedocs.org/projects/mutapath/badge/?version=latest&style=for-the-badge)](https://mutapath.readthedocs.io/en/latest/?badge=latest)
 [![Dependabot Status](https://img.shields.io/badge/dependabot-enabled-blue?style=for-the-badge&logo=dependabot&color=0366d6)](https://github.com/matfax/mutapath/network/updates)
@@ -11,8 +11,8 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath?style=for-the-badge)](https://pypi.org/project/mutapath/)
 [![PyPI](https://img.shields.io/pypi/v/mutapath?color=%2339A7A6&style=for-the-badge)](https://pypi.org/project/mutapath/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/mutapath?color=ff69b4&style=for-the-badge)](https://pypistats.org/packages/mutapath)
-[![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg?style=for-the-badge)](https://github.com/matfax/mutapath/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath?color=9cf&style=for-the-badge)](https://github.com/matfax/mutapath/commits/master)
+[![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg?style=for-the-badge)](https://github.com/matfax/mutapath/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath?color=9cf&style=for-the-badge)](https://github.com/matfax/mutapath/commits/main)
 
 
 This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases in which paths are often changed.
