@@ -60,7 +60,6 @@ class PathTest(unittest.TestCase):
         disabled = Path("/A/B/other.txt", **disabled_kwarg, **remaining_kwargs)
 
         for path in default_path, enabled, disabled:
-
             default_case = with_func(path)
             with_enabled = with_func(path, True)
             with_disabled = with_func(path, False)

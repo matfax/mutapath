@@ -276,7 +276,7 @@ class Path(SerializableType):
         return Path(self, posix=self.__always_posix_format, string_repr=enable)
 
     def with_name(self, new_name) -> Path:
-        """ .. seealso:: :func:`pathlib.PurePath.with_name` """
+        """.. seealso:: :func:`pathlib.PurePath.with_name`"""
         return self.base.joinpath(str(new_name))
 
     def with_stem(self, new_stem) -> Path:
@@ -317,17 +317,17 @@ class Path(SerializableType):
 
     @classmethod
     def getcwd(cls) -> Path:
-        """ .. seealso:: :func:`pathlib.Path.cwd` """
+        """.. seealso:: :func:`pathlib.Path.cwd`"""
         return Path(os.getcwd())
 
     @property
     def cwd(self):
-        """ .. seealso:: :func:`pathlib.Path.cwd` """
+        """.. seealso:: :func:`pathlib.Path.cwd`"""
         return self.getcwd()
 
     @path.multimethod
     def joinpath(self, first, *others) -> Path:
-        """ .. seealso:: :func:`pathlib.PurePath.joinpath` """
+        """.. seealso:: :func:`pathlib.PurePath.joinpath`"""
         contained_others = map(str, others)
         safe_instance = first
         if not isinstance(safe_instance, Path):
@@ -374,7 +374,7 @@ class Path(SerializableType):
 
     @property
     def suffix(self) -> str:
-        """ .. seealso:: :attr:`pathlib.PurePath.suffix` """
+        """.. seealso:: :attr:`pathlib.PurePath.suffix`"""
         return self.ext
 
     @suffix.setter
@@ -383,7 +383,7 @@ class Path(SerializableType):
 
     @property
     def name(self) -> Path:
-        """ .. seealso:: :attr:`pathlib.PurePath.name` """
+        """.. seealso:: :attr:`pathlib.PurePath.name`"""
         return self.clone(self._contained.name)
 
     @name.setter
@@ -405,7 +405,7 @@ class Path(SerializableType):
 
     @property
     def stem(self) -> str:
-        """ .. seealso:: :attr:`pathlib.PurePath.stem` """
+        """.. seealso:: :attr:`pathlib.PurePath.stem`"""
         return self._contained.stem
 
     @stem.setter
@@ -414,7 +414,7 @@ class Path(SerializableType):
 
     @property
     def parent(self) -> Path:
-        """ .. seealso:: :attr:`pathlib.PurePath.parent` """
+        """.. seealso:: :attr:`pathlib.PurePath.parent`"""
         return self.clone(self._contained.parent)
 
     @parent.setter
@@ -423,15 +423,15 @@ class Path(SerializableType):
 
     @property
     def dirname(self) -> Path:
-        """ .. seealso:: :func:`os.path.dirname` """
+        """.. seealso:: :func:`os.path.dirname`"""
         return self.clone(self._contained.dirname())
 
     def open(self, *args, **kwargs):
-        """ .. seealso:: :func:`io.open` """
+        """.. seealso:: :func:`io.open`"""
         return io.open(str(self), *args, **kwargs)
 
     def glob(self, pattern) -> Iterable[Path]:
-        """ .. seealso:: :meth:`pathlib.Path.glob` """
+        """.. seealso:: :meth:`pathlib.Path.glob`"""
         paths = self.to_pathlib.glob(pattern)
         return (self.clone(g) for g in paths)
 
