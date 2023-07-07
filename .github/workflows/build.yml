@@ -10,7 +10,7 @@ on:
       - '**.py'
       - '**/poetry.lock'
       - '**/pyproject.toml'
-
+      - '.github/workflows/build.yml'
 jobs:
   build:
     runs-on: ${{ matrix.os }}
