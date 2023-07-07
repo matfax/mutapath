@@ -8,7 +8,7 @@ on:
       - '**/poetry.lock'
       - '**/pyproject.toml'
       - '**/black.yml'
-  pull_request_target:
+  pull_request:
     branches: [ main ]
     paths:
       - '**.py'
@@ -28,31 +28,18 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v3.5.3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v2.3.4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: "set pip cache dir"
-        run: echo "::set-env name=pip-cache::$(pip cache dir)"
-      - name: caching pip storage
-        uses: actions/cache@v2.1.8
+      - name: check python formatting using black
+        uses: rickstaa/action-black@v1.3.1
+        id: action_black
         with:
-          path: ${{ env.pip-cache }}
-          key: ${{ runner.os }}-${{ matrix.python-version }}-black-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-black-${{ hashFiles('**/poetry.lock') }}
-            ${{ runner.os }}-${{ matrix.python-version }}-black
-      - name: installing black
-        run: pip install black
-      - name: running black
-        run: black --target-version py38 .
+          black_args: "--target-version py38 ."
       - name: creating pull request
-        if: ${{ github.head_ref == '' }}
-        uses: peter-evans/create-pull-request@v3.4.1
+        if: steps.action_black.outputs.is_formatted == 'true' && github.head_ref == ''
+        uses: peter-evans/create-pull-request@v5.0.2
         with:
           commit-message: 'style(format): reformat with black'
           title: 'Update black code style'
@@ -64,10 +51,10 @@ jobs:
             chore
             black
           branch: black
-      - name: committing changed files
-        if: ${{ github.head_ref != '' }}
-        uses: stefanzweifel/git-auto-commit-action@v4.7.2
+          delete-branch: true
+          branch-suffix: short-commit-hash
+      - name: Annotate diff changes using reviewdog
+        if: steps.action_black.outputs.is_formatted == 'true' && github.head_ref != ''
+        uses: reviewdog/action-suggester@v1.7.1
         with:
-          commit_message: 'style(format): reformat with black'
-          branch: ${{ github.head_ref }}
-          file_pattern: '*.py'
+          tool_name: blackfmt
