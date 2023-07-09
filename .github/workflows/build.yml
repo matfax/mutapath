@@ -35,7 +35,6 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - uses: allanchain/poetry-cache-action@release
         with:
-          ensure-module: green
           install-args: -n -vv
       - name: running tests
         run: poetry run green -vv
