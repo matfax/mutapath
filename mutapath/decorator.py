@@ -55,6 +55,7 @@ __EXCLUDE_FROM_WRAPPING = [
     "_shorten_duplicates",
     "text",
     "bytes",
+    "__init_subclass__",
 ]
 
 __MUTABLE_FUNCTIONS = {
