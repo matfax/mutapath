@@ -328,18 +328,19 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "mashumaro"
-version = "1.24"
+version = "2.11"
 description = "Fast serialization framework on top of dataclasses"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "mashumaro-1.24.tar.gz", hash = "sha256:5b517060e4e06c951bff7befe5c906f2c322dc25142114c1090c5c6dcc927c8d"},
+    {file = "mashumaro-2.11-py3-none-any.whl", hash = "sha256:63ea9036ff07ff3c7c9cfdbf4fc29b563d99ea483dbe21bd8e7dcc3c18ceda34"},
+    {file = "mashumaro-2.11.tar.gz", hash = "sha256:0ead94075840ab4bbeb14138b8470fe99627dc209cd85020c37827b2a9364ed4"},
 ]
 
 [package.dependencies]
 msgpack = ">=0.5.6"
 pyyaml = ">=3.13"
-typing_extensions = "*"
+typing-extensions = "*"
 
 [[package]]
 name = "msgpack"
@@ -685,4 +686,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "21afcab1bf19fcbed097b85f120dab28870c90cb4243736b039f6eb44ba55e49"
+content-hash = "7a4b4273de37959c91e7552f6e42e913a02e857987cfd4e20830fe458bc9ecd6"
