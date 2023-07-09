@@ -14,7 +14,7 @@ readme = "README.md"
 python = "^3.7"
 singletons = "0.2.5"
 cached-property = "1.5.2"
-filelock = "3.0.12"
+filelock = "3.12.2"
 path = ">=13.1,<16.0"
 
 [tool.poetry.dev-dependencies]
