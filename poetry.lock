@@ -202,15 +202,15 @@ python-versions = "*"
 
 [[package]]
 name = "path"
-version = "15.0.0"
+version = "15.1.2"
 description = "A module wrapper for os.path"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-docs = ["jaraco.packaging (>=3.2)", "rst.linker (>=1.9)", "sphinx"]
-testing = ["appdirs", "packaging", "pygments", "pytest (>=3.5,!=3.7.3)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=1.2.3)", "pytest-cov", "pytest-flake8", "pytest-mypy"]
+docs = ["jaraco.packaging (>=8.2)", "rst.linker (>=1.9)", "sphinx"]
+testing = ["appdirs", "packaging", "pygments", "pytest (>=3.5,!=3.7.3)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=1.2.3)", "pytest-cov", "pytest-enabler", "pytest-flake8", "pytest-mypy"]
 
 [[package]]
 name = "pathspec"
@@ -517,8 +517,8 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 path = [
-    {file = "path-15.0.0-py3-none-any.whl", hash = "sha256:f4582f9745fa4f6d640211e1e51f5a050453239ce1d68e2205ac0e633fafc935"},
-    {file = "path-15.0.0.tar.gz", hash = "sha256:521aa0632faea3dbf7bc15549524cfc0f5d62b9a311508e562598f65c8dfda92"},
+    {file = "path-15.1.2-py3-none-any.whl", hash = "sha256:e07601c83ae394cb05298c96e073c251d185599ecbf3cf7110b00f4d1898d53e"},
+    {file = "path-15.1.2.tar.gz", hash = "sha256:bb629aefd86825bf21c8bcfa0f8691a6e5abdc3e43d50b626fe6aac5b13f60b7"},
 ]
 pathspec = [
     {file = "pathspec-0.6.0.tar.gz", hash = "sha256:e285ccc8b0785beadd4c18e5708b12bb8fcf529a1e61215b3feff1d1e559ea5c"},
