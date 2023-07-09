@@ -1,4 +1,4 @@
 sphinx==3.5.4
 sphinx-rtd-theme==1.2.2
 sphinx-fakeinv==1.0.0
-m2r2==0.2.8
+m2r2==0.3.2
