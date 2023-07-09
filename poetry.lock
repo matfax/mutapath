@@ -138,7 +138,7 @@ gitdb2 = ">=2.0.0"
 
 [[package]]
 name = "green"
-version = "3.2.2"
+version = "3.2.6"
 description = "Green is a clean, colorful, fast python test runner."
 category = "dev"
 optional = false
@@ -350,7 +350,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "00f22f3ad47d0cd930b01ede550fdbb8be481da0e2ce8367c889c2dcac183996"
+content-hash = "6802805fa10e2b663b97c60f3dde697270e7e6fa0bb981383c6214462ecc3129"
 
 [metadata.files]
 appdirs = [
@@ -452,7 +452,7 @@ gitpython = [
     {file = "GitPython-3.0.5.tar.gz", hash = "sha256:9c2398ffc3dcb3c40b27324b316f08a4f93ad646d5a6328cafbb871aa79f5e42"},
 ]
 green = [
-    {file = "green-3.2.2.tar.gz", hash = "sha256:a7cc909290019903323481a1819addefb9d32b4868773326dec4648c63bbc071"},
+    {file = "green-3.2.6.tar.gz", hash = "sha256:e51d4ff6e6885942d944304fedc7440a8f87917aa09526beeecb31a0dae655b8"},
 ]
 idna = [
     {file = "idna-2.8-py2.py3-none-any.whl", hash = "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"},
