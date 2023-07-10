@@ -69,7 +69,7 @@ autosummary_imported_members = True
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "path": ("https://path.readthedocs.io/en/stable/", None),
-    "filelock": ("https://filelock.readthedocs.io/en/latest/", None),
+    "filelock": ("https://py-filelock.readthedocs.io/en/latest/", None),
 }
 
 
