@@ -13,6 +13,7 @@ from typing import Union, Iterable, Callable, Optional
 
 import filelock
 import path
+from path import multimethod
 from cached_property import cached_property
 from filelock import SoftFileLock
 
@@ -236,13 +237,13 @@ class Path(SerializableType):
             contained, posix=self.__always_posix_format, string_repr=self.__string_repr
         )
 
-    @path.multimethod
+    @multimethod
     def _shorten_duplicates(self, input_path: str = "") -> str:
         if isinstance(input_path, Path):
             input_path = input_path._contained
         return input_path.replace("\\\\", "\\")
 
-    @path.multimethod
+    @multimethod
     def posix_string(self, input_path: str = "") -> str:
         """
         Get this path as string with posix-like separators (i.e., '/').
@@ -325,7 +326,7 @@ class Path(SerializableType):
         """.. seealso:: :func:`pathlib.Path.cwd`"""
         return self.getcwd()
 
-    @path.multimethod
+    @multimethod
     def joinpath(self, first, *others) -> Path:
         """.. seealso:: :func:`pathlib.PurePath.joinpath`"""
         contained_others = map(str, others)

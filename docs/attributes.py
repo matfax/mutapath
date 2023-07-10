@@ -3,7 +3,8 @@ import re
 from sphinx.application import Sphinx
 from sphinx.errors import ExtensionError
 from sphinx.ext import autodoc
-from sphinx.util import logging, import_object, inspect
+from sphinx.util import logging, import_object
+import inspect
 
 import mutapath
 
@@ -37,9 +38,9 @@ def setup(app: Sphinx):
     LOG.info("[attributes] starting attributes extension")
     app.add_autodocumenter(AppDocumenter, override=True)
 
-    for name, member in inspect.safe_getmembers(mutapath.Path):
+    for name, member in inspect.getmembers(mutapath.Path):
         _import_wrapped_members(mutapath.Path, name, member, "mutapath.Path")
-    for name, member in inspect.safe_getmembers(mutapath.MutaPath):
+    for name, member in inspect.getmembers(mutapath.MutaPath):
         _import_wrapped_members(mutapath.MutaPath, name, member, "mutapath.MutaPath")
 
 

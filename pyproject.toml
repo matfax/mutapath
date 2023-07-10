@@ -11,11 +11,11 @@ documentation = "https://mutapath.readthedocs.io/en/latest/"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 singletons = "0.2.5"
 cached-property = "1.5.2"
 filelock = "3.12.2"
-path = ">=13.1,<16.0"
+path = ">=14,<=16.6.0"
 
 [tool.poetry.dev-dependencies]
 green = "3.4.3"
@@ -24,6 +24,11 @@ codecov = "2.1.13"
 mashumaro = "3.8.1"
 bandit = "^1.6.2"
 black = "^23.3.0"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "6.2.1"
+sphinx-rtd-theme = "1.2.2"
+m2r2 = "0.3.2"
 
 [tool.poetry-dynamic-versioning]
 enable = true
