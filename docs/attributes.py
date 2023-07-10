@@ -3,7 +3,8 @@ import re
 from sphinx.application import Sphinx
 from sphinx.errors import ExtensionError
 from sphinx.ext import autodoc
-from sphinx.util import logging, import_object, inspect
+from sphinx.util import logging, import_object
+import inspect
 
 import mutapath
 
