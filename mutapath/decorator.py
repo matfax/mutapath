@@ -56,6 +56,7 @@ __EXCLUDE_FROM_WRAPPING = [
     "text",
     "bytes",
     "__init_subclass__",
+    "splitunc",
 ]
 
 __MUTABLE_FUNCTIONS = {
