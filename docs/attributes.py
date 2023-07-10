@@ -37,9 +37,9 @@ def setup(app: Sphinx):
     LOG.info("[attributes] starting attributes extension")
     app.add_autodocumenter(AppDocumenter, override=True)
 
-    for name, member in inspect.safe_getmembers(mutapath.Path):
+    for name, member in inspect.getmembers(mutapath.Path):
         _import_wrapped_members(mutapath.Path, name, member, "mutapath.Path")
-    for name, member in inspect.safe_getmembers(mutapath.MutaPath):
+    for name, member in inspect.getmembers(mutapath.MutaPath):
         _import_wrapped_members(mutapath.MutaPath, name, member, "mutapath.MutaPath")
 
 
