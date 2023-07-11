@@ -1,0 +1,38 @@
+on:
+  pull_request:
+    paths:
+      - '**/poetry.lock'
+      - '**/pyproject.toml'
+      - '.github/workflows/audit.yml'
+
+jobs:
+  audit:
+    strategy:
+      matrix:
+        python-version: [ 3.11 ]
+        poetry-version: [ 1.5.1 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    name: audit dependencies
+    steps:
+      - uses: GitHubSecurityLab/actions-permissions/monitor@v1.0.0
+        with:
+          config: ${{ vars.PERMISSIONS_CONFIG }}
+      - uses: actions/checkout@v3.5.3
+      - name: setting up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4.6.1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: setting up poetry ${{ matrix.poetry-version }}
+        uses: Gr1N/setup-poetry@v8
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: export poetry locks
+        run: poetry export -f requirements.txt --output requirements.txt
+      - name: audit poetry locks
+        uses: ossillate-inc/packj-github-action@v0.0.11-beta
+        with:
+          DEPENDENCY_FILES: pypi:requirements.txt
