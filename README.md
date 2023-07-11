@@ -1,6 +1,6 @@
 # mutapath
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/matfax/mutapath/build/main?style=for-the-badge)](https://github.com/matfax/mutapath/actions)
+[![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/matfax/mutapath/build.yml?branch=main&style=for-the-badge)](https://github.com/matfax/mutapath/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/matfax/mutapath?style=for-the-badge)](https://codecov.io/gh/matfax/mutapath)
 [![Documentation Status](https://readthedocs.org/projects/mutapath/badge/?version=latest&style=for-the-badge)](https://mutapath.readthedocs.io/en/latest/?badge=latest)
 [![Dependabot Status](https://img.shields.io/badge/dependabot-enabled-blue?style=for-the-badge&logo=dependabot&color=0366d6)](https://github.com/matfax/mutapath/network/updates)
@@ -11,9 +11,9 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mutapath?style=for-the-badge)](https://pypi.org/project/mutapath/)
 [![PyPI](https://img.shields.io/pypi/v/mutapath?color=%2339A7A6&style=for-the-badge)](https://pypi.org/project/mutapath/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/mutapath?color=ff69b4&style=for-the-badge)](https://pypistats.org/packages/mutapath)
-[![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg?style=for-the-badge)](https://github.com/matfax/mutapath/blob/main/LICENSE)
+[![GitHub Release Date](https://img.shields.io/github/release-date/matfax/mutapath?color=%23986293&style=for-the-badge)](https://github.com/matfax/mutapath/releases)
 [![GitHub last commit](https://img.shields.io/github/last-commit/matfax/mutapath?color=9cf&style=for-the-badge)](https://github.com/matfax/mutapath/commits/main)
-
+[![GitHub License](https://img.shields.io/github/license/matfax/mutapath.svg?style=for-the-badge)](https://github.com/matfax/mutapath/blob/main/LICENSE)
 
 This library is for you if you are also annoyed that there is no mutable pathlib wrapper for use cases in which paths are often changed.
 mutapath solves this by wrapping both, the Python 3 pathlib library, and the alternate  [path library](https://pypi.org/project/path/), and providing a mutable context manager for them.
