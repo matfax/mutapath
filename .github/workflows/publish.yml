@@ -10,6 +10,7 @@ jobs:
     environment: publishing
     permissions:
       id-token: write
+      contents: read
     strategy:
       matrix:
         python-version: [3.8]
@@ -53,5 +54,8 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: python ${{ matrix.python-version }} on ${{ runner.os }}
+      - name: generate mint token
+        id: mint
+        uses: tschm/token-mint-action@v1.0.2
       - name: publishing to PyPi
-        run: poetry publish -n -vv
+        run: poetry publish -n -vv -u __token__ -p '${{ steps.mint.outputs.api-token }}'
