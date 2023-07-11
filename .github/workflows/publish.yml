@@ -30,11 +30,13 @@ jobs:
         with:
           ensure-module: green
           install-args: -n -vv
-      - name: install dynamic versioning plugin
-        run: pip install poetry-dynamic-versioning
       - name: running tests
         run: poetry run green -vv
-      - name: building
+      - name: install poetry git version plugin
+        run: poetry self add poetry-git-version-plugin
+      - name: write package version
+        run: poetry git-version
+      - name: build with git version
         run: poetry build -n -vv
       - name: generate coverage xml
         run: poetry run coverage xml

@@ -30,12 +30,6 @@ sphinx = "~6.2.1"
 sphinx-rtd-theme = "~1.2.2"
 m2r2 = "~0.3.2"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
-pattern = '^v?(?P<base>\d+\.\d+\.\d+)(-?((?P<stage>[a-zA-Z]+)\.?(?P<revision>\d+)?))?$'
-
 [build-system]
-requires = ["poetry>=1.0", "poetry-dynamic-versioning"]
+requires = ["poetry>=1.2"]
 build-backend = "poetry.masonry.api"
