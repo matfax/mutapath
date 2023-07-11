@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "mutapath"
-copyright = "2020, 'matfax'"
+copyright = "2023, 'matfax'"
 author = "'matfax'"
 
 release = re.sub("^v", "", os.popen("git describe --tags").read().strip())
