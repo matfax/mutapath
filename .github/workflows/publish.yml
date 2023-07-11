@@ -7,11 +7,12 @@ on:
 
 jobs:
   publish:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: [3.8]
+        poetry-version: [1.5.1]
         os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash
@@ -21,36 +22,18 @@ jobs:
         uses: actions/setup-python@v4.6.1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: "set pip cache dir"
-        run: echo "::set-env name=pip-cache::$(pip cache dir)"
-      - name: caching pip storage
-        uses: actions/cache@v3.3.1
+      - name: setting up poetry ${{ matrix.poetry-version }}
+        uses: Gr1N/setup-poetry@v8
         with:
-          path: ${{ env.pip-cache }}
-          key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
-      - name: installing poetry
-        run: |
-          pip install poetry
-          pip install poetry-dynamic-versioning
-      - name: "set poetry cache dir"
-        run: |
-          echo "::set-env name=poetry-cache::$(poetry config cache-dir)"
-          echo "::set-env name=poetry-version::$(poetry --version)"
-      - name: caching poetry environment
-        uses: actions/cache@v3.3.1
+          poetry-version: ${{ matrix.poetry-version }}
+      - uses: allanchain/poetry-cache-action@release
         with:
-          path: ${{ env.poetry-cache }}
-          key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ env.poetry-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ env.poetry-version }}-${{ hashFiles('**/poetry.lock') }}
-      - name: installing dependencies
-        run: poetry install -n -vv --no-ansi
+          ensure-module: green
+          install-args: -n -vv
       - name: running tests
         run: poetry run green -vv
       - name: building
-        run: poetry build -n -vv --no-ansi
+        run: poetry build -n -vv
       - name: generate coverage xml
         run: poetry run coverage xml
       - name: uploading coverage to codecov
@@ -60,7 +43,7 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: python ${{ matrix.python-version }} on ${{ runner.os }}
-      - name: publishing
-        run: poetry publish -n -vv --no-ansi
+      - name: publishing to PyPi
+        run: poetry publish -n -vv
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
