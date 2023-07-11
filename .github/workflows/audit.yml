@@ -9,6 +9,8 @@ on:
 
 jobs:
   audit:
+    permissions:
+      pull-requests: write
     strategy:
       matrix:
         python-version: [ 3.11 ]
