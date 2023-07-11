@@ -2,7 +2,7 @@
 name = "mutapath"
 description = "mutable pathlib"
 version = '0.0.1'
-authors = ["matfax <matthias.fax@gmail.com>"]
+authors = ["matfax <mat@fax.fyi>"]
 license = "lgpl-3.0"
 keywords = ["pathlib", "mutable", "path"]
 repository = "https://github.com/matfax/mutapath"
