@@ -5,15 +5,12 @@ on:
     branches: [ main ]
     paths:
       - '**.py'
-      - '**/poetry.lock'
-      - '**/pyproject.toml'
-      - '**/black.yml'
+      - '.github/workflows/black.yml'
   pull_request:
     branches: [ main ]
     paths:
       - '**.py'
-      - '**/poetry.lock'
-      - '**/pyproject.toml'
+      - '.github/workflows/black.yml'
 
 jobs:
   black:
@@ -42,7 +39,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5.0.2
         with:
           commit-message: 'style(format): reformat with black'
-          title: 'Update black code style'
+          title: 'style(format): reformat with black'
           body: |
             This pull requests deploys the new Python code style [black][1].
             [1]: https://github.com/psf/black
@@ -53,7 +50,7 @@ jobs:
           branch: black
           delete-branch: true
           branch-suffix: short-commit-hash
-      - name: Annotate diff changes using reviewdog
+      - name: annotate diff changes using reviewdog
         if: steps.action_black.outputs.is_formatted == 'true' && github.head_ref != ''
         uses: reviewdog/action-suggester@v1.7.1
         with:
