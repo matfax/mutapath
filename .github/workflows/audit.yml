@@ -1,3 +1,5 @@
+name: audit
+
 on:
   pull_request:
     paths:
