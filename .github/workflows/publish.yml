@@ -30,6 +30,8 @@ jobs:
         with:
           ensure-module: green
           install-args: -n -vv
+      - name: install dynamic versioning plugin
+        run: pip install poetry-dynamic-versioning
       - name: running tests
         run: poetry run green -vv
       - name: building
