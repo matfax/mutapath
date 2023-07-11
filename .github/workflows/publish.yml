@@ -50,5 +50,3 @@ jobs:
           name: python ${{ matrix.python-version }} on ${{ runner.os }}
       - name: publishing to PyPi
         run: poetry publish -n -vv
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
