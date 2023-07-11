@@ -11,9 +11,11 @@ on:
       - '**/poetry.lock'
       - '**/pyproject.toml'
       - '.github/workflows/build.yml'
+
 jobs:
   build:
     permissions:
+      contents: none
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
