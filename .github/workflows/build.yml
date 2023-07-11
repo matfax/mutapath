@@ -13,6 +13,7 @@ on:
       - '.github/workflows/build.yml'
 jobs:
   build:
+    permissions:
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
@@ -24,10 +25,6 @@ jobs:
         shell: bash
     name: python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
-      - uses: GitHubSecurityLab/actions-permissions/monitor@v1.0.0
-        if: matrix.os == 'ubuntu-latest'
-        with:
-          config: ${{ vars.PERMISSIONS_CONFIG }}
       - uses: actions/checkout@v3.5.3
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.6.1
