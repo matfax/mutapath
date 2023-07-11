@@ -23,7 +23,7 @@ coverage = "~7.2.7"
 codecov = "~2.1.13"
 mashumaro = "~3.8.1"
 bandit = "~1.7.5"
-black = "~23.3.0"
+black = "~23.7.0"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "~6.2.1"
