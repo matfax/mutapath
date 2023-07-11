@@ -24,6 +24,9 @@ jobs:
         shell: bash
     name: python ${{ matrix.python-version }} on ${{ matrix.os }}
     steps:
+      - uses: GitHubSecurityLab/actions-permissions/monitor@v1.0.0
+        with:
+          config: ${{ vars.PERMISSIONS_CONFIG }}
       - uses: actions/checkout@v3.5.3
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.6.1
