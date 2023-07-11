@@ -3,9 +3,9 @@ name: build
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
   pull_request:
-    branches: [ main ]
     paths:
       - '**.py'
       - '**/poetry.lock'
