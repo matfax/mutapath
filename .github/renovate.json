@@ -1,7 +1,6 @@
 {
   "extends": [
-    "config:base",
-    ":semanticCommitType(chore)",
+    "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
   "separateMinorPatch": true,
