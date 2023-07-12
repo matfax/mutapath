@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 try:
     from mashumaro import DataClassDictMixin
+
     import_success = True
 except ImportError:
     import_success = False
@@ -12,6 +13,7 @@ from tests.helper import PathTest
 
 
 if import_success:
+
     @dataclass
     class DataClass(DataClassDictMixin):
         path: Path = Path()
