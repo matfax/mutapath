@@ -1,4 +1,4 @@
-name: check black
+name: check format
 
 on:
   push:
@@ -14,19 +14,19 @@ on:
 
 jobs:
   black:
-    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+      pull-requests: write
     strategy:
       matrix:
         python-version: [3.8]
         os: [ubuntu-latest]
-    name: check black style
+    runs-on: ${{ matrix.os }}
+    name: black style
     defaults:
       run:
         shell: bash
     steps:
-      - uses: GitHubSecurityLab/actions-permissions/monitor@v1.0.0
-        with:
-          config: ${{ vars.PERMISSIONS_CONFIG }}
       - uses: actions/checkout@v3.5.3
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.6.1
