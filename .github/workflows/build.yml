@@ -47,6 +47,7 @@ jobs:
         name: install dependencies with extra ${{ matrix.extras }}
         uses: allanchain/poetry-cache-action@54a8477b640e34d95162dfe42d291c1c3f439adc
         with:
+          cache-key-prefix: poetry-${{ matrix.extras }}
           ensure-module: green
           install-args: -n -vv -E ${{ matrix.extras }}
       - name: running tests
