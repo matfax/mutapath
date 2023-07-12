@@ -6,8 +6,8 @@ authors = ["matfax <mat@fax.fyi>"]
 license = "lgpl-3.0"
 keywords = ["pathlib", "mutable", "path"]
 repository = "https://github.com/matfax/mutapath"
-homepage = "https://github.com/matfax/mutapath"
-documentation = "https://mutapath.readthedocs.io/en/latest/"
+homepage = "https://mutapath.fax.fyi"
+documentation = "https://mutapath.fax.fyi"
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -15,13 +15,16 @@ python = "^3.8"
 singletons = "~0.2.5"
 cached-property = "~1.5.2"
 filelock = "~3.12.2"
-path = ">=14,<=16.6.0"
+path = ">=16.2,<=16.7.1"
+mashumaro = {version = ">=3,<=3.8.1", optional = true}
+
+[tool.poetry.extras]
+mashumaro = ["mashumaro"]
 
 [tool.poetry.dev-dependencies]
 green = "~3.4.3"
 coverage = "~7.2.7"
 codecov = "~2.1.13"
-mashumaro = "~3.8.1"
 bandit = "~1.7.5"
 black = "~23.7.0"
 

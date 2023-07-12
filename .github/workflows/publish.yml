@@ -30,10 +30,8 @@ jobs:
         uses: Gr1N/setup-poetry@v8
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - uses: allanchain/poetry-cache-action@release
-        with:
-          ensure-module: green
-          install-args: -n -vv
+      - name: install dependencies
+        run: poetry install -n -vv --all-extras
       - name: running tests
         run: poetry run green -vv
       - name: install poetry git version plugin
