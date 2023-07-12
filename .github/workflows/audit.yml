@@ -7,6 +7,10 @@ on:
       - '**/pyproject.toml'
       - '.github/workflows/audit.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   audit:
     permissions:
@@ -22,6 +26,9 @@ jobs:
         shell: bash
     name: audit dependencies
     steps:
+      - uses: int128/hide-comment-action@v1.23.0
+        with:
+          contains: Packj Audit Report
       - uses: actions/checkout@v3.5.3
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.6.1
