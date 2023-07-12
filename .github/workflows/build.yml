@@ -21,6 +21,7 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11']
         poetry-version: [1.5.1]
         os: [ubuntu-latest, macos-latest, windows-latest]
+        extras: ['', '-E mashumaro']
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -36,10 +37,10 @@ jobs:
         uses: Gr1N/setup-poetry@v8
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - uses: allanchain/poetry-cache-action@release
+      - uses: allanchain/poetry-cache-action@230f759485b96b4186f5210c3a24d9d0351f5a6a
         with:
           ensure-module: green
-          install-args: -n -vv
+          install-args: -n -vv ${{ matrix.extras }}
       - name: running tests
         run: poetry run green -vv
       - name: building

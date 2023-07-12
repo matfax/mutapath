@@ -13,7 +13,7 @@ from typing import Union, Iterable, Callable, Optional
 
 import filelock
 import path
-from path import multimethod
+from path.classes import multimethod
 from cached_property import cached_property
 from filelock import SoftFileLock
 
@@ -204,7 +204,7 @@ class Path(SerializableType):
         self._contained.__exit__()
 
     def __fspath__(self):
-        return self._contained.__fspath__()
+        return os.fspath(self._contained)
 
     def __invert__(self):
         """Create a cloned :class:`~mutapath.MutaPath` from this immutable Path."""

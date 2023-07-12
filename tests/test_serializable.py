@@ -1,16 +1,23 @@
+import unittest
 from dataclasses import dataclass
 
-from mashumaro import DataClassDictMixin
+try:
+    from mashumaro import DataClassDictMixin
+    import_success = True
+except ImportError:
+    import_success = False
 
 from mutapath import Path
 from tests.helper import PathTest
 
 
-@dataclass
-class DataClass(DataClassDictMixin):
-    path: Path = Path()
+if import_success:
+    @dataclass
+    class DataClass(DataClassDictMixin):
+        path: Path = Path()
 
 
+@unittest.skipIf(not import_success, "mashumaro extra is not installed")
 class TestSerialization(PathTest):
     def test_empty_serialization(self):
         expected = {"path": ""}
