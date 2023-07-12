@@ -39,13 +39,13 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - if: matrix.extras == ''
         name: install dependencies without extras
-        uses: allanchain/poetry-cache-action@54a8477b640e34d95162dfe42d291c1c3f439adc # release
+        uses: allanchain/poetry-cache-action@230f759485b96b4186f5210c3a24d9d0351f5a6a # release
         with:
           ensure-module: green
           install-args: -n -vv
       - if: matrix.extras != ''
         name: install dependencies with extra ${{ matrix.extras }}
-        uses: allanchain/poetry-cache-action@54a8477b640e34d95162dfe42d291c1c3f439adc # release
+        uses: allanchain/poetry-cache-action@230f759485b96b4186f5210c3a24d9d0351f5a6a # release
         with:
           cache-key-prefix: poetry-${{ matrix.extras }}
           ensure-module: green
