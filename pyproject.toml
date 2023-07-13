@@ -33,6 +33,9 @@ sphinx = "~6.2.1"
 sphinx-rtd-theme = "~1.2.2"
 m2r2 = "~0.3.2"
 
+[tool.black]
+target-version = ['py38']
+
 [build-system]
 requires = ["poetry>=1.2"]
 build-backend = "poetry.masonry.api"
