@@ -11,25 +11,20 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    strategy:
-      matrix:
-        python-version: [3.8]
-        poetry-version: [1.5.1]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
       - uses: actions/checkout@v3.5.3
-      - name: setting up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4.6.1
+      - name: setting up python
+        uses: actions/setup-python@v4.7.0
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: setting up poetry ${{ matrix.poetry-version }}
+          python-version-file: pyproject.toml
+      - name: setting up poetry
         uses: Gr1N/setup-poetry@v8
         with:
-          poetry-version: ${{ matrix.poetry-version }}
+          poetry-version: 1.5.1
       - name: install dependencies
         run: poetry install -n -vv --all-extras
       - name: running tests
@@ -48,7 +43,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           flags: unittests
-          name: python ${{ matrix.python-version }} on ${{ runner.os }}
       - name: generate mint token
         id: mint
         uses: tschm/token-mint-action@v1.0.2
