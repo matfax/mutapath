@@ -1,9 +1,0 @@
-runners:
-  - name: "codeql-runner"
-    cloud: "gcp"
-    instance_type: "e2-standard-8"
-    machine_image: "ubuntu-2204-lts"
-    preemptible: true
-    region: "europe-north1"
-    labels:
-      - "codeql-runner"
