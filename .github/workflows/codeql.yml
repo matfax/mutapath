@@ -17,7 +17,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    runs-on: 'codeql-runner'
+    runs-on: [self-hosted, codeql-runner]
     timeout-minutes: 10
     permissions:
       actions: read
