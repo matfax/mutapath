@@ -1,33 +1,25 @@
 runners:
-  - name: "codeql-runner"
-    cloud: "gcp"
-    instance_type:
-      - "e2-standard-8"
-      - "e2-standard-8"
-      - "e2-standard-8"
-      - "e2-standard-8"
-      - "e2-standard-4"
-      - "e2-standard-4"
-      - "e2-standard-4"
-      - "e2-standard-4"
-      - "e2-standard-16"
-      - "e2-standard-16"
-      - "e2-standard-16"
-      - "e2-standard-16"
-    machine_image: "ubuntu-2204-jammy-v20230714"
+  - name: codeql-runner
+    cloud: gcp
+    instance_type: e2-standard-8
+    machine_image: ubuntu-2204-jammy-v20230714
     preemptible: true
     region:
-      - "europe-north1"
-      - "europe-west4"
-      - "europe-west1"
-      - "europe-west3"
-      - "europe-north1"
-      - "europe-west4"
-      - "europe-west1"
-      - "europe-west3"
-      - "europe-north1"
-      - "europe-west4"
-      - "europe-west1"
-      - "europe-west3"
+      - europe-north1-a
+      - europe-north1-b
+      - europe-north1-c
+      - europe-west4-a
+      - europe-southwest1-a
+      - europe-southwest1-b
+      - europe-southwest1-c
+      - europe-west1-b
+      - europe-west1-c
+      - europe-west1-d
+      - europe-west9-a
+      - europe-west9-b
+      - europe-west9-c
+      - europe-west6-a
+      - europe-west6-b
+      - europe-west6-c
     labels:
-      - "codeql-runner"
+      - codeql-runner
