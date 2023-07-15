@@ -27,8 +27,8 @@ jobs:
           image: projects/github-matfax/global/images/gh-ubuntu-2204-jammy-v20230715
           runner_ver: 2.306.0
           machine_zone: europe-north1-b
-          machine_type: t2d-standard-4
-          shutdown_timeout: 30
+          machine_type: t2d-standard-8
+          shutdown_timeout: 20
           actions_preinstalled: true
           boot_disk_type: pd-ssd
   analyze:
