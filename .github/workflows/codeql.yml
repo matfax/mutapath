@@ -61,7 +61,6 @@ jobs:
       uses: actions/setup-python@v4.7.0
       with:
         python-version-file: pyproject.toml
-        cache: poetry
     - name: initialize CodeQL
       uses: github/codeql-action/init@v2.20.4
       with:
