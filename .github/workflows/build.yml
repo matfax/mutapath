@@ -29,16 +29,17 @@ jobs:
     name: 'python ${{ matrix.python-version }} on ${{ matrix.os }} [${{ matrix.extras }}]'
     steps:
       - uses: actions/checkout@v3.5.3
-      - name: install and configure Poetry ${{ matrix.poetry-version }}
-        uses: snok/install-poetry@v1.3.3
-        with:
-          version: ${{ matrix.poetry-version }}
-          installer-parallel: true
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.7.0
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
+      - name: install and configure Poetry ${{ matrix.poetry-version }}
+        uses: pronovic/setup-poetry@v1.2.0
+        with:
+          version: ${{ matrix.poetry-version }}
+          cache-venv: "true"
+          cache-poetry: "true"
+          cache-suffix: ${{ matrix.extras }}
       - if: matrix.extras == ''
         name: install dependencies without extras
         run: poetry install -n -vv
