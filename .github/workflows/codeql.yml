@@ -24,8 +24,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           #image_project: ubuntu-os-cloud
           #image_family: ubuntu-2204-lts
-          image: projects/github-matfax/global/images/gh-ubuntu-2204-jammy-v20230715
-          runner_ver: 2.306.0
+          image: projects/github-matfax/global/images/gh-python-ubuntu-2204-jammy-v20230716
           machine_zone: europe-north1-b
           machine_type: t2d-standard-4
           shutdown_timeout: 20
