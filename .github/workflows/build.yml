@@ -34,6 +34,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
+      - name: install and configure Poetry ${{ matrix.poetry-version }}
+        uses: snok/install-poetry@v1.3.3
+        with:
+          version: ${{ matrix.poetry-version }}
+          installer-parallel: true
       - if: matrix.extras == ''
         name: install dependencies without extras
         run: poetry install -n -vv
