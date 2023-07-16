@@ -62,15 +62,14 @@ jobs:
       uses: actions/setup-python@v4.7.0
       with:
         python-version-file: pyproject.toml
-    - name: setting up poetry
-      uses: Gr1N/setup-poetry@v8
+    - name: install and configure poetry
+      uses: pronovic/setup-poetry@v1.2.0
       with:
-        poetry-version: 1.5.1
-    - name: install dependencies with all extras
-      uses: allanchain/poetry-cache-action@54a8477b640e34d95162dfe42d291c1c3f439adc # v0.2.3
-      with:
-        ensure-module: green
-        install-args: -n -vv
+        version: 1.5.1
+        cache-venv: "true"
+        cache-poetry: "true"
+    - name: install dependencies
+      run: poetry install -n -vv
     - name: initialize CodeQL
       uses: github/codeql-action/init@v2.20.4
       with:

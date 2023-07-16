@@ -21,16 +21,15 @@ jobs:
         uses: actions/setup-python@v4.7.0
         with:
           python-version-file: pyproject.toml
-      - name: setting up poetry
-        uses: Gr1N/setup-poetry@v8
+      - name: install and configure poetry
+        uses: pronovic/setup-poetry@v1.2.0
         with:
-          poetry-version: 1.5.1
+          version: 1.5.1
+          plugins: poetry-git-version-plugin
       - name: install dependencies
         run: poetry install -n -vv --all-extras
       - name: running tests
         run: poetry run green -vv
-      - name: install poetry git version plugin
-        run: poetry self add poetry-git-version-plugin
       - name: write package version
         run: poetry git-version
       - name: build with git version
