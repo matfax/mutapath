@@ -2,6 +2,9 @@
   "extends": [
     "config:recommended"
   ],
+  "github-actions": {
+    "enabled": false
+  }
   "separateMinorPatch": true,
   "patch": {
     "automerge": true
