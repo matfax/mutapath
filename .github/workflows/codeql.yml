@@ -62,10 +62,10 @@ jobs:
       with:
         python-version-file: pyproject.toml
     - name: initialize CodeQL
-      uses: github/codeql-action/init@v2.21.0
+      uses: github/codeql-action/init@v2.21.1
       with:
         languages: ${{ matrix.language }}
     - name: perform CodeQL analysis
-      uses: github/codeql-action/analyze@v2.21.0
+      uses: github/codeql-action/analyze@v2.21.1
       with:
         category: "/language:${{matrix.language}}"
