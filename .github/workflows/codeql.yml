@@ -10,35 +10,14 @@ on:
     - cron: '37 22 * * 3'
 
 jobs:
-  create-runner:
-    environment: google cloud
-    runs-on: ubuntu-latest
-    outputs:
-      label: ${{ steps.create-runner.outputs.label }}
-    steps:
-      - id: create-runner
-        uses: related-sciences/gce-github-runner@v0.8
-        with:
-          token: ${{ secrets.GH_SA_TOKEN }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          #image_project: ubuntu-os-cloud
-          #image_family: ubuntu-2204-lts
-          image: projects/github-matfax/global/images/gh-python-ubuntu-2204-jammy-v20230716
-          machine_zone: europe-north1-b
-          machine_type: t2d-standard-4
-          shutdown_timeout: 20
-          actions_preinstalled: true
-          boot_disk_type: pd-ssd
   analyze:
-    needs: create-runner
     name: analyze
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    runs-on: ${{ needs.create-runner.outputs.label }}
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       actions: read
