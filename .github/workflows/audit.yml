@@ -24,7 +24,7 @@ jobs:
       - uses: int128/hide-comment-action@v1.23.0
         with:
           contains: Packj Audit Report
-      - uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@v3.6.0
       - name: setting up python
         uses: actions/setup-python@v4.7.0
         with:
