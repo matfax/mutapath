@@ -49,6 +49,6 @@ jobs:
           branch-suffix: short-commit-hash
       - name: annotate diff changes using reviewdog
         if: steps.action_black.outputs.is_formatted == 'true' && github.head_ref != ''
-        uses: reviewdog/action-suggester@v1.7.1
+        uses: reviewdog/action-suggester@v1.7.5
         with:
           tool_name: blackfmt
