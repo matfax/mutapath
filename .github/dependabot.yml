@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    labels:
+      - chore
+      - github_actions
+    schedule:
+      interval: daily
