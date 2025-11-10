@@ -28,7 +28,7 @@ jobs:
         shell: bash
     name: 'python ${{ matrix.python-version }} on ${{ matrix.os }} [${{ matrix.extras }}]'
     steps:
-      - uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@v3.6.0
       - name: setting up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4.7.0
         with:
