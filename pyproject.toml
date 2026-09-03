@@ -14,7 +14,7 @@ readme = "README.md"
 python = "^3.8"
 singletons = "~0.2.5"
 cached-property = "~1.5.2"
-filelock = "~3.12.2"
+filelock = "~3.20.0"
 path = ">=16.2,<=16.7.1"
 mashumaro = {version = ">=3,<=3.8.1", optional = true}
 
